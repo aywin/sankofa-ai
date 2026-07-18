@@ -258,3 +258,37 @@ donner à Lafi une identité qui ne ressemble pas à un starter template.
 - Capture d'écran comparée à la v1 : la différence de personnalité visuelle doit
   être immédiatement perceptible, sans sacrifier la lisibilité ni la légèreté de
   la page (pas de librairie d'animation lourde).
+
+---
+
+## Retour après premier test live (ajouts post-prompt 6)
+
+Trois retours après avoir testé la v2 en conditions réelles :
+
+1. **Le texte était devenu trop court.** Le prompt 5 (cartes de plantes)
+   demandait au modèle de ne pas réénumérer les détails déjà affichés dans les
+   cartes — mais la formulation initiale le bridait trop ("courte synthèse").
+   Corrigé dans le system prompt : Lafi reste totalement libre de sa réponse
+   (expliquer, comparer, développer), les cartes ne sont qu'un complément
+   visuel, pas une contrainte sur le texte. Ce n'est pas une interface de
+   recherche, c'est une conversation.
+2. **"Cliquer un mot-clé pour plus de détails"** — clarifié : pas de mécanisme
+   hardcodé (pas de lien systématique nom-de-plante → carte). L'intelligence
+   doit venir du modèle lui-même : la conversation libre (point 1) et la
+   boucle d'outils déjà en place suffisent à ce que Lafi développe quand on le
+   lui demande.
+3. **Historique de conversations, comme Claude/ChatGPT** — nouvelle
+   fonctionnalité (pas dans le plan initial) :
+   - Panel latéral (icône historique dans le header) : nouvelle conversation,
+     liste des conversations passées, suppression. Fermé par défaut, pas de
+     chrome permanent.
+   - Mode invité : historique dans le `localStorage` du navigateur (comme
+     avant, rien ne change si on ne se connecte pas).
+   - Compte optionnel (email + mot de passe, via Supabase Auth) : une fois
+     connecté, l'historique passe en base (table `conversations`, RLS scoped
+     par `user_id` — voir `supabase/schema_users.sql`), synchronisé entre
+     appareils. L'historique invité existant est migré automatiquement vers
+     le compte à la première connexion.
+   - Nouvelle variable d'env requise : `NEXT_PUBLIC_SUPABASE_ANON_KEY` (clé
+     anon, utilisée uniquement pour l'auth et cette table — jamais pour
+     maladies/plantes/usages, qui restent access service-role uniquement).
