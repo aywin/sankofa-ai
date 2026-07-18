@@ -1,8 +1,8 @@
 export function DisclaimerBanner() {
   return (
-    <div className="border-b border-amber-200 bg-amber-50 px-4 py-2 text-center text-xs text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200">
-      Lafi IA documente des usages traditionnels de plantes médicinales et ne
-      remplace pas un avis médical professionnel.
-    </div>
+    <p className="mx-auto max-w-2xl px-4 pb-3 text-center text-[11px] text-neutral-400 dark:text-neutral-500">
+      Lafi partage des usages traditionnels, pas un diagnostic — en cas de doute,
+      va voir quelqu&apos;un.
+    </p>
   );
 }

@@ -1,2 +1,37 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+@theme {
+  /* Vert mousse/Sahel — remplace le vert "santé" générique de Tailwind
+     (toutes les classes emerald-* de l'app héritent de cette palette). */
+  --color-emerald-50: #f4f7f0;
+  --color-emerald-100: #e5ecdc;
+  --color-emerald-200: #cddbbe;
+  --color-emerald-300: #aac293;
+  --color-emerald-400: #82a266;
+  --color-emerald-500: #62864a;
+  --color-emerald-600: #4c6c39;
+  --color-emerald-700: #3d572e;
+  --color-emerald-800: #334528;
+  --color-emerald-900: #2c3a23;
+  --color-emerald-950: #161f10;
+
+  /* Sable chaud — remplace le blanc/noir pur du fond de page. */
+  --color-sand-50: #faf8f3;
+  --color-sand-950: #16130e;
+}
+
+@keyframes message-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-message-in {
+  animation: message-in 0.25s ease-out both;
+}

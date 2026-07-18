@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Lafi IA — Assistant plantes médicinales",
-  description:
-    "Chat IA sur les usages traditionnels des plantes médicinales africaines, ancré dans une base de données validée.",
+  title: "Lafi",
+  description: "Se soigner naturellement et efficacement.",
 };
 
 export default function RootLayout({
@@ -14,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className="antialiased bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
+      <body className="bg-sand-50 text-neutral-900 antialiased dark:bg-sand-950 dark:text-neutral-100">
         {children}
       </body>
     </html>
