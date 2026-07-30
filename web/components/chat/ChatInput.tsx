@@ -1,8 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { ArrowUpIcon, MicIcon, PlusIcon, StopIcon } from "./icons";
+
+export interface ChatInputHandle {
+  openFilePicker: () => void;
+}
 
 interface SpeechRecognitionEventLike extends Event {
   results: { [index: number]: { [index: number]: { transcript: string } } };
@@ -43,15 +47,14 @@ function speechRecognitionAvailable(): boolean {
   return !!(w.SpeechRecognition ?? w.webkitSpeechRecognition);
 }
 
-export function ChatInput({
-  onSend,
-  onStop,
-  disabled,
-}: {
-  onSend: (input: { text: string; files?: FileList }) => void;
-  onStop: () => void;
-  disabled: boolean;
-}) {
+export const ChatInput = forwardRef<
+  ChatInputHandle,
+  {
+    onSend: (input: { text: string; files?: FileList }) => void;
+    onStop: () => void;
+    disabled: boolean;
+  }
+>(function ChatInput({ onSend, onStop, disabled }, ref) {
   const [input, setInput] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
@@ -63,6 +66,10 @@ export function ChatInput({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+
+  useImperativeHandle(ref, () => ({
+    openFilePicker: () => fileInputRef.current?.click(),
+  }));
 
   useEffect(() => {
     if (!speechRecognitionAvailable()) return;
@@ -134,7 +141,7 @@ export function ChatInput({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mx-auto w-full max-w-2xl px-4 pb-2">
+    <form onSubmit={handleSubmit} className="mx-auto w-full max-w-[880px] px-4 pb-2">
       {pendingFile && previewUrl && (
         <div className="mb-2 flex items-center gap-2 rounded-xl bg-neutral-100 p-2 dark:bg-neutral-900">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -215,4 +222,4 @@ export function ChatInput({
       </div>
     </form>
   );
-}
+});

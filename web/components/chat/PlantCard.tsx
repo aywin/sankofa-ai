@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
 import { LeafIcon } from "./icons";
+import { ConfidenceBadge } from "./ConfidenceBadge";
+import { FavoriteButton } from "./FavoriteButton";
+import { slugify } from "@/lib/slug";
 import type { MatchUsageResult } from "@/lib/types";
 
 const NIVEAU_STYLES: Record<string, string> = {
@@ -18,23 +21,34 @@ const NIVEAU_LABELS: Record<string, string> = {
   scientifique: "Scientifique",
 };
 
-export function PlantCard({ usage }: { usage: MatchUsageResult }) {
-  const [open, setOpen] = useState(false);
+export function PlantCard({
+  usage,
+  onFavoriteChange,
+}: {
+  usage: MatchUsageResult;
+  onFavoriteChange?: () => void;
+}) {
   const niveauClass = NIVEAU_STYLES[usage.niveau_de_preuve] ?? NIVEAU_STYLES.traditionnel;
   const niveauLabel = NIVEAU_LABELS[usage.niveau_de_preuve] ?? usage.niveau_de_preuve;
 
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-950">
+    <div className="rounded-2xl border border-neutral-200/70 bg-neutral-50/60 p-3 dark:border-neutral-800/70 dark:bg-neutral-900/40">
       <div className="flex items-start justify-between gap-2">
-        <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+        <Link
+          href={`/plants/${slugify(usage.plante_nom)}`}
+          className="flex items-center gap-1.5 text-emerald-700 hover:underline dark:text-emerald-400"
+        >
           <LeafIcon className="h-4 w-4 shrink-0" />
           <span className="font-semibold text-neutral-900 dark:text-neutral-100">
             {usage.plante_nom}
           </span>
+        </Link>
+        <div className="flex shrink-0 items-center gap-1.5">
+          <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${niveauClass}`}>
+            {niveauLabel}
+          </span>
+          <FavoriteButton planteNom={usage.plante_nom} onChange={onFavoriteChange} />
         </div>
-        <span className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium ${niveauClass}`}>
-          {niveauLabel}
-        </span>
       </div>
 
       <dl className="mt-2 space-y-1 text-sm text-neutral-700 dark:text-neutral-300">
@@ -55,25 +69,21 @@ export function PlantCard({ usage }: { usage: MatchUsageResult }) {
       </dl>
 
       {usage.plante_precautions && (
-        <div className="mt-2">
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            className="text-xs font-medium text-neutral-400 underline-offset-2 hover:text-neutral-600 hover:underline dark:text-neutral-500 dark:hover:text-neutral-300"
-          >
-            {open ? "Masquer les précautions" : "Voir les précautions"}
-          </button>
-          <div
-            className={`grid transition-all duration-200 ease-out ${
-              open ? "mt-1 grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-            }`}
-          >
-            <p className="overflow-hidden text-xs text-neutral-500 dark:text-neutral-400">
-              {usage.plante_precautions}
-            </p>
-          </div>
-        </div>
+        <p className="mt-2 rounded-lg bg-amber-50 px-2 py-1.5 text-xs text-amber-800 dark:bg-amber-950 dark:text-amber-200">
+          <span className="font-medium">Précautions : </span>
+          {usage.plante_precautions}
+        </p>
       )}
+
+      <div className="mt-2">
+        <ConfidenceBadge
+          counts={{
+            tradipraticien_count: usage.tradipraticien_count,
+            scientifique_count: usage.scientifique_count,
+            institution_count: usage.institution_count,
+          }}
+        />
+      </div>
     </div>
   );
 }

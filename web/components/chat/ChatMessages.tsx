@@ -62,6 +62,14 @@ function stepForToolPart(part: ToolPart, index: number): ToolStep {
   return { key, done: isDone, label: isDone ? "Étape terminée" : "Étape en cours…" };
 }
 
+function hasEmptySearch(parts: ToolPart[]): boolean {
+  return parts.some((part) => {
+    if (part.type !== "tool-rechercher_par_symptome" || part.state !== "output-available") return false;
+    const output = part.output as { resultats?: MatchUsageResult[] } | undefined;
+    return (output?.resultats?.length ?? 0) === 0;
+  });
+}
+
 function collectPlantResults(parts: ToolPart[]): MatchUsageResult[] {
   const seen = new Set<string>();
   const results: MatchUsageResult[] = [];
@@ -108,14 +116,18 @@ export function ChatMessages({
   messages,
   status,
   onExampleClick,
+  onContribute,
+  onFavoriteChange,
 }: {
   messages: UIMessage[];
   status: "submitted" | "streaming" | "ready" | "error";
   onExampleClick: (text: string) => void;
+  onContribute: () => void;
+  onFavoriteChange: () => void;
 }) {
   if (messages.length === 0) {
     return (
-      <div className="mx-auto flex h-full max-w-2xl flex-col items-center justify-center gap-4 px-4 text-center">
+      <div className="mx-auto flex h-full max-w-[880px] flex-col items-center justify-center gap-4 px-4 text-center">
         <LafiMark className="h-10 w-10 text-emerald-600 dark:text-emerald-400" />
         <div>
           <p className="text-lg font-medium text-neutral-700 dark:text-neutral-300">
@@ -141,7 +153,7 @@ export function ChatMessages({
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-6">
+    <div className="mx-auto flex w-full max-w-[880px] flex-col gap-6 px-4 py-6">
       {messages.map((message) => {
         const isUser = message.role === "user";
         const textParts = message.parts.filter((p) => p.type === "text");
@@ -153,6 +165,7 @@ export function ChatMessages({
             p.type === "file" && !!p.mediaType?.startsWith("image/")
         );
         const plantResults = isUser ? [] : collectPlantResults(toolParts);
+        const showContributeCta = !isUser && status === "ready" && hasEmptySearch(toolParts);
 
         return (
           <div
@@ -160,11 +173,11 @@ export function ChatMessages({
             className={`animate-message-in flex ${isUser ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-[85%] rounded-2xl px-4 py-2.5 ${
+              className={
                 isUser
-                  ? "bg-emerald-600 text-white"
-                  : "bg-transparent text-neutral-900 dark:text-neutral-100"
-              }`}
+                  ? "max-w-[85%] rounded-2xl bg-emerald-600 px-4 py-2.5 text-white"
+                  : "w-full text-neutral-900 dark:text-neutral-100"
+              }
             >
               {imageParts.length > 0 && (
                 <div className="mb-2 flex flex-wrap gap-2">
@@ -189,9 +202,19 @@ export function ChatMessages({
                     Ce que dit le savoir traditionnel
                   </p>
                   {plantResults.map((usage) => (
-                    <PlantCard key={usage.usage_id} usage={usage} />
+                    <PlantCard key={usage.usage_id} usage={usage} onFavoriteChange={onFavoriteChange} />
                   ))}
                 </div>
+              )}
+
+              {showContributeCta && (
+                <button
+                  type="button"
+                  onClick={onContribute}
+                  className="mb-2 rounded-xl border border-dashed border-emerald-300 px-3 py-2 text-xs font-medium text-emerald-700 transition hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-950"
+                >
+                  ➕ Tu connais un remède pour ça ? Signale-le à Lafi
+                </button>
               )}
 
               {textParts.map((part, i) =>
@@ -202,7 +225,7 @@ export function ChatMessages({
                 ) : (
                   <div
                     key={i}
-                    className="prose prose-sm prose-neutral dark:prose-invert max-w-none rounded-2xl bg-neutral-100 px-4 py-2.5 prose-p:my-1.5 prose-headings:mt-3 prose-headings:mb-1.5 dark:bg-neutral-900"
+                    className="prose prose-sm prose-neutral dark:prose-invert max-w-none prose-p:my-1.5 prose-headings:mt-3 prose-headings:mb-1.5"
                   >
                     <ReactMarkdown>{part.text}</ReactMarkdown>
                   </div>

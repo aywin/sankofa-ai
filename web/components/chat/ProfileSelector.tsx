@@ -16,7 +16,7 @@ export function ProfileSelector({
   onChange: (profil: Profil) => void;
 }) {
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-wrap justify-center gap-1.5 px-4 pb-2">
+    <div className="mx-auto flex w-full max-w-[880px] flex-wrap justify-center gap-1.5 px-4 pb-2">
       {PROFILES.map((p) => (
         <button
           key={p.id}
