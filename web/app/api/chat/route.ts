@@ -99,7 +99,7 @@ export async function POST(req: Request) {
   const profilInstruction = PROFIL_INSTRUCTIONS[profil ?? "particulier"] ?? PROFIL_INSTRUCTIONS.particulier;
 
   const result = streamText({
-    model: google("gemini-3.5-flash"),
+    model: google("gemini-2.5-flash"),
     system: `${SYSTEM_PROMPT}\n\nÀ qui tu t'adresses maintenant : ${profilInstruction}`,
     messages: await convertToModelMessages(messages),
     stopWhen: stepCountIs(5),
