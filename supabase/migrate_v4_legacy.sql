@@ -133,13 +133,19 @@ insert into _legacy_map (plante_nom, maladie_nom, partie_nom, mode) values
   ('Citronnelle',                'Insomnie',                         'feuille', 'infusion'),
   ('Bissap (Oseille de Guinée)', 'Insomnie',                         'calice',  'infusion');
 
--- 7. Une Préparation par usage — texte original intégralement préservé
---    dans description_libre (rien n'est perdu de la donnée existante).
---    u.preparation est unique sur les 24 lignes de seed.sql : sert de clé
---    de rapprochement au step 8 sans avoir besoin d'une colonne technique
---    supplémentaire sur la table preparation.
+-- 7. Une Préparation par texte distinct — u.preparation N'EST PAS
+--    unique sur les 24 lignes de seed.sql (Néré réutilise mot pour mot
+--    "Décoction de l'écorce de néré." pour ses deux usages). Le SELECT
+--    DISTINCT est nécessaire : un simple NOT EXISTS ne protège pas
+--    contre deux lignes sources identiques traitées dans le même
+--    INSERT...SELECT (Postgres évalue NOT EXISTS sur l'état de la table
+--    au début de la requête, pas au fil des lignes insérées par cette
+--    même requête — sans DISTINCT, les deux lignes Néré passent toutes
+--    les deux le filtre et créent un doublon). Le texte sert ensuite de
+--    clé de rapprochement au step 8, donc son unicité ici est
+--    structurante, pas cosmétique.
 insert into preparation (partie_id, mode, description_libre)
-select part.id, lm.mode, u.preparation
+select distinct part.id, lm.mode, u.preparation
 from usages u
 join plantes pl on pl.id = u.plante_id
 join maladies ma on ma.id = u.maladie_id

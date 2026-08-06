@@ -102,13 +102,19 @@ create table if not exists taxon (
 );
 create index if not exists taxon_slug_idx on taxon(slug);
 
--- 7. Médias de la galerie (une ligne par vue étiquetée)
+-- 7. Médias de la galerie (une ligne par vue étiquetée). credit_auteur/
+--    licence/source_url ne sont pas décoratifs : une image sous licence
+--    CC-BY(-SA) doit afficher son attribution pour être réutilisée
+--    légalement — jamais d'image sans ces trois champs renseignés.
 create table if not exists taxon_media (
   id uuid primary key default gen_random_uuid(),
   taxon_id uuid not null references taxon(id) on delete cascade,
   partie_id uuid references partie(id), -- nullable : "plante entière" n'a pas de partie
   url text not null,
   label text not null,
+  credit_auteur text not null,
+  licence text not null,
+  source_url text not null,
   created_at timestamptz not null default now()
 );
 create index if not exists taxon_media_taxon_idx on taxon_media(taxon_id);

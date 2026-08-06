@@ -16,7 +16,7 @@ const ETUDE_TYPE_LABELS: Record<string, string> = {
 
 // Une ligne par indication, chacune avec son propre statut de synthèse —
 // jamais agrégées en un niveau global par plante (§4 du brief).
-export function IndicationsList({ taxonSlug, claims }: { taxonSlug: string; claims: ClaimDetail[] }) {
+export function IndicationsList({ claims }: { claims: ClaimDetail[] }) {
   if (claims.length === 0) {
     return (
       <p className="text-sm text-neutral-500 dark:text-neutral-400">
@@ -35,10 +35,10 @@ export function IndicationsList({ taxonSlug, claims }: { taxonSlug: string; clai
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="font-semibold text-neutral-900 dark:text-neutral-100">{claim.indication.nom}</span>
             <Link
-              href={`/chat?contexte=${taxonSlug}:${claim.indication.id}`}
+              href={`/laboratoire/${claim.id}`}
               className="text-xs text-emerald-700 hover:underline dark:text-emerald-400"
             >
-              En discuter avec Lafi →
+              Voir le raisonnement →
             </Link>
           </div>
 

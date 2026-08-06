@@ -22,6 +22,16 @@ export function PlantGallery({ media }: { media: TaxonMedia[] }) {
           <figcaption className="mt-1 truncate text-center text-[11px] text-neutral-500 dark:text-neutral-400">
             {m.label}
           </figcaption>
+          {/* Attribution obligatoire pour une image sous licence CC-BY(-SA) — ne jamais l'omettre. */}
+          <a
+            href={m.source_url}
+            target="_blank"
+            rel="noreferrer"
+            className="block truncate text-center text-[9px] text-neutral-400 hover:underline dark:text-neutral-500"
+            title={`${m.credit_auteur} — ${m.licence}`}
+          >
+            {m.credit_auteur} — {m.licence}
+          </a>
         </figure>
       ))}
     </div>

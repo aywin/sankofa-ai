@@ -97,7 +97,8 @@ join (values
   (null::text, 'Inhibition of the growth and development of asexual and sexual stages of drug-sensitive and resistant strains of the human malaria parasite Plasmodium falciparum by Neem (Azadirachta indica) fractions', 'preclinique_in_vitro', 1998, 'https://pubmed.ncbi.nlm.nih.gov/9687079/'),
   (null::text, 'Transmission blocking activity of Azadirachta indica and Guiera senegalensis extracts on the sporogonic development of Plasmodium falciparum field isolates in Anopheles coluzzii mosquitoes', 'preclinique_animal', 2014, 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3996177/')
 ) as v(doi, titre, type, annee, url) on true
-where t.slug = 'neem-margousier' and i.nom = 'Paludisme';
+where t.slug = 'neem-margousier' and i.nom = 'Paludisme'
+  and not exists (select 1 from etude e where e.claim_id = c.id and e.titre = v.titre);
 
 insert into attestation (claim_id, lignee_id, region, niveau_divulgation, consentement)
 select c.id, l.id, v.region, 'documente', true
@@ -140,7 +141,8 @@ join (values
   (null::text, 'A Randomized, Double-Blind, Placebo-Controlled Trial to Determine the Effectiveness of a Polyphenolic Extract (Hibiscus sabdariffa and Lippia citriodora) for Reducing Blood Pressure', 'essai_clinique_humain', 2021, 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8005037/'),
   (null::text, 'The effectiveness of Hibiscus sabdariffa in the treatment of hypertension: a systematic review', 'revue_systematique', null, 'https://www.ncbi.nlm.nih.gov/books/NBK79564/')
 ) as v(doi, titre, type, annee, url) on true
-where t.slug = 'bissap-oseille-de-guinee' and i.nom = 'Hypertension';
+where t.slug = 'bissap-oseille-de-guinee' and i.nom = 'Hypertension'
+  and not exists (select 1 from etude e where e.claim_id = c.id and e.titre = v.titre);
 
 insert into attestation (claim_id, lignee_id, region, niveau_divulgation, consentement)
 select c.id, l.id, 'Sahel', 'documente', true
@@ -178,7 +180,8 @@ join (values
   (null::text, 'Antidiarrhoeal activity of Psidium guajava Linn. (Myrtaceae) leaf aqueous extract in rodents', 'preclinique_animal', 2009, 'https://pubmed.ncbi.nlm.nih.gov/19234374/'),
   (null::text, 'Ethnobotany, phytochemistry, and biological activities of Psidium guajava in the treatment of diarrhea: a review', 'revue_narrative', 2024, 'https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2024.1459066/full')
 ) as v(doi, titre, type, annee, url) on true
-where t.slug = 'goyavier' and i.nom = 'Diarrhée';
+where t.slug = 'goyavier' and i.nom = 'Diarrhée'
+  and not exists (select 1 from etude e where e.claim_id = c.id and e.titre = v.titre);
 
 insert into attestation (claim_id, lignee_id, region, niveau_divulgation, consentement)
 select c.id, l.id, v.region, 'documente', true
@@ -217,7 +220,11 @@ from cible_claim where c.id = cible_claim.claim_id;
 insert into etude (claim_id, doi, titre, type, annee, url)
 select c.id, '10.3390/molecules28207227', 'Antiplasmodial and Antileishmanial Activities of a New Limonoid and Other Constituents from the Stem Bark of Khaya senegalensis', 'preclinique_in_vitro', 2023, 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10609173/'
 from claim c join taxon t on t.id = c.taxon_id join indication i on i.id = c.indication_id
-where t.slug = 'cailcedrat' and i.nom = 'Paludisme';
+where t.slug = 'cailcedrat' and i.nom = 'Paludisme'
+  and not exists (
+    select 1 from etude e where e.claim_id = c.id
+    and e.titre = 'Antiplasmodial and Antileishmanial Activities of a New Limonoid and Other Constituents from the Stem Bark of Khaya senegalensis'
+  );
 
 -- Composé/cible mentionnés explicitement dans l'étude ci-dessus.
 insert into compose (taxon_id, nom, methode_identification)
@@ -258,7 +265,8 @@ join (values
   (null::text, 'Consumption of Moringa oleifera Lam Leaves Lowers Postprandial Blood Pressure', 'etude_experimentale_humaine', 2019, 'https://pubmed.ncbi.nlm.nih.gov/31063434/'),
   (null::text, 'Moringa oleifera and Blood Pressure: Evidence and Potential Mechanisms', 'revue_narrative', null, 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11990149/')
 ) as v(doi, titre, type, annee, url) on true
-where t.slug = 'moringa' and i.nom = 'Hypertension';
+where t.slug = 'moringa' and i.nom = 'Hypertension'
+  and not exists (select 1 from etude e where e.claim_id = c.id and e.titre = v.titre);
 
 -- ============================================================
 -- 7. Papayer × Paludisme
@@ -288,7 +296,8 @@ join (values
   (null::text, 'Antimalarial activity of Carica papaya (Family: Caricaceae) leaf extract against Plasmodium falciparum', 'preclinique_in_vitro', 2012, 'https://www.sciencedirect.com/science/article/abs/pii/S2222180812601716'),
   ('10.9734/arrb/2020/v35i1230323', 'GC–MS Analysis and Antimalarial Activity of Methanolic Leaf Extract of Carica papaya against Plasmodium berghei NK65 Infection in Swiss Mice', 'preclinique_animal', 2020, null)
 ) as v(doi, titre, type, annee, url) on true
-where t.slug = 'papayer' and i.nom = 'Paludisme';
+where t.slug = 'papayer' and i.nom = 'Paludisme'
+  and not exists (select 1 from etude e where e.claim_id = c.id and e.titre = v.titre);
 
 insert into attestation (claim_id, lignee_id, region, niveau_divulgation, consentement)
 select c.id, l.id, 'Centre', 'documente', true
@@ -322,7 +331,11 @@ from cible_claim where c.id = cible_claim.claim_id;
 insert into etude (claim_id, doi, titre, type, annee, url)
 select c.id, '10.2147/JEP.S282669', 'Evaluation of Anti-Diarrheal Activity of 80% Methanol Extracts of Vernonia amygdalina Delile (Asteraceae) Leaves in Mice', 'preclinique_animal', 2020, 'https://www.tandfonline.com/doi/full/10.2147/JEP.S282669'
 from claim c join taxon t on t.id = c.taxon_id join indication i on i.id = c.indication_id
-where t.slug = 'vernonia-ndole' and i.nom = 'Diarrhée';
+where t.slug = 'vernonia-ndole' and i.nom = 'Diarrhée'
+  and not exists (
+    select 1 from etude e where e.claim_id = c.id
+    and e.titre = 'Evaluation of Anti-Diarrheal Activity of 80% Methanol Extracts of Vernonia amygdalina Delile (Asteraceae) Leaves in Mice'
+  );
 
 -- ============================================================
 -- 9. Karité × Plaies et infections cutanées
@@ -352,7 +365,8 @@ join (values
   (null::text, 'A review of ethnomedicinal uses of shea butter for dermatoses in Sub-Saharan Africa', 'revue_narrative', 2021, 'https://pubmed.ncbi.nlm.nih.gov/33480103/'),
   (null::text, 'Experimental study comparing burn healing effects of raw South African Shea butter and the samples from a Libyan market', 'etude_experimentale_humaine', 2021, 'https://pubmed.ncbi.nlm.nih.gov/33614438/')
 ) as v(doi, titre, type, annee, url) on true
-where t.slug = 'karite' and i.nom = 'Plaies et infections cutanées';
+where t.slug = 'karite' and i.nom = 'Plaies et infections cutanées'
+  and not exists (select 1 from etude e where e.claim_id = c.id and e.titre = v.titre);
 
 insert into attestation (claim_id, lignee_id, region, niveau_divulgation, consentement)
 select c.id, l.id, 'Hauts-Bassins', 'documente', true

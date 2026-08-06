@@ -75,7 +75,7 @@ export default async function PlantDetailPage({
       <h2 className="mb-3 mt-8 text-sm font-medium uppercase tracking-wide text-neutral-400 dark:text-neutral-500">
         Maladies traitées
       </h2>
-      <IndicationsList taxonSlug={taxon.slug} claims={claims} />
+      <IndicationsList claims={claims} />
 
       <h2 className="mb-3 mt-8 flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-neutral-400 dark:text-neutral-500">
         <LeafIcon className="h-3.5 w-3.5" />

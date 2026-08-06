@@ -51,6 +51,9 @@ export interface TaxonMedia {
   partie_id: string | null;
   url: string;
   label: string;
+  credit_auteur: string;
+  licence: string;
+  source_url: string;
 }
 
 export interface Partie {

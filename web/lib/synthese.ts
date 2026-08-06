@@ -47,6 +47,20 @@ export const STATUT_LABELS: Record<StatutSynthese, string> = {
   contre_indique: "Contre-indiqué",
 };
 
+// Styles partagés entre SyntheseBadge (fiche, cartes) et OutputPanel
+// (laboratoire) — une seule source de vérité pour l'identité visuelle
+// d'un statut.
+export const STATUT_STYLES: Record<StatutSynthese, string> = {
+  convergent: "bg-emerald-600 text-white",
+  plausible: "bg-sky-50 text-sky-700 ring-1 ring-sky-200 dark:bg-sky-950 dark:text-sky-300 dark:ring-sky-800",
+  atteste_seul:
+    "bg-amber-50 text-amber-700 ring-1 ring-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:ring-amber-800",
+  divergent:
+    "bg-orange-50 text-orange-700 ring-1 ring-orange-200 dark:bg-orange-950 dark:text-orange-300 dark:ring-orange-800",
+  non_soutenu: "bg-neutral-100 text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400",
+  contre_indique: "bg-red-600 text-white",
+};
+
 // Règle explicite (choix produit, pas une évidence — documentée ici pour
 // qu'elle reste traçable, comme l'était computeConfidence) :
 // - ≥3 lignées distinctes -> "Multi-traditions".
@@ -91,16 +105,68 @@ export function computeSyntheseStatus(
   contreIndicationForte: boolean,
   divergenceNote: string | null
 ): StatutSynthese {
-  if (contreIndicationForte) return "contre_indique";
-  if (force === "contredite" || divergenceNote) return "divergent";
-  if (qualite !== null && ["elevee", "moderee"].includes(qualite) && ["multi_traditions", "convergente"].includes(force)) {
-    return "convergent";
+  return explainSyntheseStatus(qualite, force, contreIndicationForte, divergenceNote).statut;
+}
+
+// Nœud ⑩ Agrégation du laboratoire de simulation : "pondération explicite
+// et affichée" (§5 du brief) — donc la même fonction qui décide du statut
+// produit aussi la trace texte de la règle appliquée, pour que rien ne
+// reste une boîte noire. computeSyntheseStatus délègue ici pour ne
+// jamais dupliquer la logique.
+export function explainSyntheseStatus(
+  qualite: GradeTier | null,
+  force: ForceAttestation,
+  contreIndicationForte: boolean,
+  divergenceNote: string | null
+): { statut: StatutSynthese; raisonnement: string[] } {
+  const raisonnement: string[] = [];
+
+  if (contreIndicationForte) {
+    raisonnement.push(
+      "Le nœud sécurité a détecté une contre-indication forte pour cette préparation — cette sortie prime toujours sur le reste du pipeline."
+    );
+    return { statut: "contre_indique", raisonnement };
   }
+
+  if (force === "contredite" || divergenceNote) {
+    raisonnement.push(
+      divergenceNote
+        ? `Divergence relevée entre les sources : ${divergenceNote}`
+        : "Les traditions ou les sources scientifiques se contredisent sur ce couple."
+    );
+    return { statut: "divergent", raisonnement };
+  }
+
+  raisonnement.push(
+    `Qualité de la preuve scientifique (nœud Littérature) : ${qualite ? GRADE_LABELS[qualite] : "non évaluée"}.`
+  );
+  raisonnement.push(`Force de l'attestation traditionnelle (nœud Attestation) : ${FORCE_LABELS[force]}.`);
+
+  if (
+    qualite !== null &&
+    ["elevee", "moderee"].includes(qualite) &&
+    ["multi_traditions", "convergente"].includes(force)
+  ) {
+    raisonnement.push(
+      "Règle appliquée : preuve scientifique au moins modérée ET attestation convergente ou multi-traditions ⇒ Convergent."
+    );
+    return { statut: "convergent", raisonnement };
+  }
+
   if (qualite === null && ["multi_traditions", "convergente", "tradition_unique"].includes(force)) {
-    return "atteste_seul";
+    raisonnement.push("Règle appliquée : aucune étude recensée, mais une attestation traditionnelle existe ⇒ Attesté seul.");
+    return { statut: "atteste_seul", raisonnement };
   }
-  if (qualite !== null) return "plausible";
-  return "non_soutenu";
+
+  if (qualite !== null) {
+    raisonnement.push(
+      "Règle appliquée : au moins une étude existe, mais la condition de convergence n'est pas remplie ⇒ Plausible."
+    );
+    return { statut: "plausible", raisonnement };
+  }
+
+  raisonnement.push("Règle appliquée : ni étude ni attestation traditionnelle solide ⇒ Non soutenu.");
+  return { statut: "non_soutenu", raisonnement };
 }
 
 export function describeAttestationStats(stats: AttestationStats): string {

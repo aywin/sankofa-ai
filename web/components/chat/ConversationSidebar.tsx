@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { StoredConversation } from "@/lib/conversations";
 import type { FavoritePlant } from "@/lib/favorites";
 import { slugify } from "@/lib/slug";
-import { ActivityIcon, CameraIcon, LeafIcon, PlusIcon, StarIcon } from "./icons";
+import { ActivityIcon, CameraIcon, LeafIcon, PlusIcon, SearchIcon, StarIcon } from "./icons";
 
 function TrashIcon() {
   return (
@@ -101,6 +101,13 @@ export function ConversationSidebar({
             Explorer
           </p>
           <Link
+            href="/decouverte"
+            className="flex items-center gap-2 rounded-xl px-2 py-2 text-sm text-neutral-600 transition hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-900"
+          >
+            <SearchIcon className="h-4 w-4" />
+            Découverte
+          </Link>
+          <Link
             href="/plants"
             className="flex items-center gap-2 rounded-xl px-2 py-2 text-sm text-neutral-600 transition hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-900"
           >
@@ -113,6 +120,13 @@ export function ConversationSidebar({
           >
             <ActivityIcon className="h-4 w-4" />
             Maladies
+          </Link>
+          <Link
+            href="/laboratoire"
+            className="flex items-center gap-2 rounded-xl px-2 py-2 text-sm text-neutral-600 transition hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-900"
+          >
+            <span aria-hidden>🧪</span>
+            Laboratoire
           </Link>
           <button
             type="button"
