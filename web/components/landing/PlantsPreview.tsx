@@ -13,31 +13,31 @@ interface PreviewRow {
 // plantes pilotes (vraies données, vraies photos) sont mises en avant
 // ici — pas les 16 plantes du corpus démonstratif, pour ne pas donner
 // une fausse impression de profondeur dès le premier écran.
-export async function PlantsPreview() {
+export async function PlantsPreview({ limit = 6 }: { limit?: number }) {
   const { data } = await supabaseServer
     .from("taxon")
     .select("slug, nom_scientifique, noms_vernaculaires:nom_vernaculaire(libelle, est_principal), media:taxon_media(url, label)")
     .not("media", "is", null)
     .returns<PreviewRow[]>();
 
-  const withPhotos = (data ?? []).filter((t) => t.media.length > 0).slice(0, 6);
+  const withPhotos = (data ?? []).filter((t) => t.media.length > 0).slice(0, limit);
   if (withPhotos.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+    <div className="grid grid-cols-2 gap-2.5">
       {withPhotos.map((t) => {
         const nom = t.noms_vernaculaires.find((n) => n.est_principal)?.libelle ?? t.nom_scientifique;
         return (
           <Link
             key={t.slug}
             href={`/plants/${t.slug}`}
-            className="group overflow-hidden rounded-2xl border border-neutral-200 transition hover:border-emerald-300 dark:border-neutral-800 dark:hover:border-emerald-800"
+            className="group overflow-hidden rounded-xl border border-neutral-200 transition hover:border-emerald-300 dark:border-neutral-800 dark:hover:border-emerald-800"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={t.media[0].url} alt={t.media[0].label} className="h-28 w-full object-cover" />
-            <div className="flex items-center gap-1.5 p-2.5">
-              <LeafIcon className="h-3.5 w-3.5 shrink-0 text-emerald-700 dark:text-emerald-400" />
-              <span className="truncate text-sm font-medium text-neutral-800 dark:text-neutral-200">{nom}</span>
+            <img src={t.media[0].url} alt={t.media[0].label} className="h-20 w-full object-cover" />
+            <div className="flex items-center gap-1.5 p-2">
+              <LeafIcon className="h-3 w-3 shrink-0 text-emerald-700 dark:text-emerald-400" />
+              <span className="truncate text-xs font-medium text-neutral-800 dark:text-neutral-200">{nom}</span>
             </div>
           </Link>
         );

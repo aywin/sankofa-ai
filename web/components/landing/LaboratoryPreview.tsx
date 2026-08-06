@@ -37,13 +37,16 @@ export async function LaboratoryPreview() {
   const nom = taxon.noms_vernaculaires.find((n) => n.est_principal)?.libelle ?? "Bissap";
 
   return (
-    <div className="rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5 dark:border-emerald-900 dark:bg-emerald-950/20">
-      <p className="text-sm text-neutral-600 dark:text-neutral-300">
-        {nom} × {indication.nom} — le pipeline complet, nœud par nœud, données réelles à l&apos;appui.
+    <div>
+      <p className="text-sm text-neutral-700 dark:text-neutral-300">
+        <span className="font-medium">
+          {nom} × {indication.nom}
+        </span>{" "}
+        — le pipeline complet, nœud par nœud, données réelles à l&apos;appui.
       </p>
       <Link
         href={`/laboratoire/${claim.id}`}
-        className="mt-3 inline-block rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700"
+        className="mt-4 inline-block rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700"
       >
         Lancer cette simulation →
       </Link>

@@ -7,7 +7,7 @@ import { LafiMark } from "@/components/chat/icons";
 // vivait auparavant sans aucun moyen de circuler ailleurs dans le site.
 export function SiteHeader() {
   return (
-    <header className="border-b border-neutral-200/70 dark:border-neutral-800/70">
+    <header className="sticky top-0 z-40 border-b border-neutral-200/70 bg-sand-50/90 backdrop-blur dark:border-neutral-800/70 dark:bg-sand-950/90">
       <div className="mx-auto flex max-w-[1100px] items-center justify-between px-4 py-4">
         <Link
           href="/"
