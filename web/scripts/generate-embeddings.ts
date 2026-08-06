@@ -16,39 +16,39 @@ async function main() {
 
   const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-  const { data: usages, error } = await supabase
-    .from("usages")
+  const { data: claims, error } = await supabase
+    .from("claim")
     .select(
-      "id, contenu_pour_recherche, plantes(nom_local), maladies(nom)"
+      "id, contenu_pour_recherche, taxon(nom_scientifique), indication(nom)"
     )
     .is("embedding", null);
 
   if (error) {
-    throw new Error(`Impossible de récupérer les usages : ${error.message}`);
+    throw new Error(`Impossible de récupérer les claims : ${error.message}`);
   }
 
-  if (!usages || usages.length === 0) {
-    console.log("Rien à faire : tous les usages ont déjà un embedding.");
+  if (!claims || claims.length === 0) {
+    console.log("Rien à faire : tous les claims ont déjà un embedding.");
     return;
   }
 
-  console.log(`${usages.length} usage(s) à traiter.`);
+  console.log(`${claims.length} claim(s) à traiter.`);
 
   let done = 0;
   let failed = 0;
 
-  for (const usage of usages) {
-    const plante = (usage as unknown as { plantes: { nom_local: string } | null }).plantes;
-    const maladie = (usage as unknown as { maladies: { nom: string } | null }).maladies;
-    const label = `${plante?.nom_local ?? "?"} → ${maladie?.nom ?? "?"}`;
+  for (const claim of claims) {
+    const taxon = (claim as unknown as { taxon: { nom_scientifique: string } | null }).taxon;
+    const indication = (claim as unknown as { indication: { nom: string } | null }).indication;
+    const label = `${taxon?.nom_scientifique ?? "?"} → ${indication?.nom ?? "?"}`;
 
     try {
-      const embedding = await generateWithRetry(usage.contenu_pour_recherche);
+      const embedding = await generateWithRetry(claim.contenu_pour_recherche);
 
       const { error: updateError } = await supabase
-        .from("usages")
+        .from("claim")
         .update({ embedding })
-        .eq("id", usage.id);
+        .eq("id", claim.id);
 
       if (updateError) throw new Error(updateError.message);
 

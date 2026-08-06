@@ -1,12 +1,12 @@
 import { supabaseServer } from "@/lib/supabase";
-import type { Maladie } from "@/lib/types";
+import type { Indication } from "@/lib/types";
 
 export async function GET() {
   const { data, error } = await supabaseServer
-    .from("maladies")
+    .from("indication")
     .select("id, nom, symptomes, description")
     .order("nom", { ascending: true })
-    .returns<Maladie[]>();
+    .returns<Indication[]>();
 
   if (error) {
     return Response.json({ message: error.message }, { status: 500 });

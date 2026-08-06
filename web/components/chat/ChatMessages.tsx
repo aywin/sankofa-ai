@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 import type { UIMessage } from "ai";
 import { PlantCard } from "./PlantCard";
 import { LafiMark, LeafIcon } from "./icons";
-import type { MatchUsageResult, Plante } from "@/lib/types";
+import type { MatchClaimResult, Taxon } from "@/lib/types";
 
 const EXEMPLES = [
   "J'ai de la fièvre et des frissons depuis 2 jours",
@@ -31,7 +31,7 @@ function stepForToolPart(part: ToolPart, index: number): ToolStep {
 
   if (part.type === "tool-rechercher_par_symptome") {
     if (isDone) {
-      const output = part.output as { resultats?: MatchUsageResult[] } | undefined;
+      const output = part.output as { resultats?: MatchClaimResult[] } | undefined;
       const count = output?.resultats?.length ?? 0;
       return {
         key,
@@ -47,12 +47,12 @@ function stepForToolPart(part: ToolPart, index: number): ToolStep {
 
   if (part.type === "tool-obtenir_details_plante") {
     if (isDone) {
-      const output = part.output as { plante?: Plante | null } | undefined;
+      const output = part.output as { plante?: Taxon | null } | undefined;
       return {
         key,
         done: true,
         label: output?.plante
-          ? `Fiche de ${output.plante.nom_local} consultée`
+          ? `Fiche de ${output.plante.nom_scientifique} consultée`
           : "Plante introuvable",
       };
     }
@@ -65,21 +65,21 @@ function stepForToolPart(part: ToolPart, index: number): ToolStep {
 function hasEmptySearch(parts: ToolPart[]): boolean {
   return parts.some((part) => {
     if (part.type !== "tool-rechercher_par_symptome" || part.state !== "output-available") return false;
-    const output = part.output as { resultats?: MatchUsageResult[] } | undefined;
+    const output = part.output as { resultats?: MatchClaimResult[] } | undefined;
     return (output?.resultats?.length ?? 0) === 0;
   });
 }
 
-function collectPlantResults(parts: ToolPart[]): MatchUsageResult[] {
+function collectPlantResults(parts: ToolPart[]): MatchClaimResult[] {
   const seen = new Set<string>();
-  const results: MatchUsageResult[] = [];
+  const results: MatchClaimResult[] = [];
 
   for (const part of parts) {
     if (part.type === "tool-rechercher_par_symptome" && part.state === "output-available") {
-      const output = part.output as { resultats?: MatchUsageResult[] } | undefined;
+      const output = part.output as { resultats?: MatchClaimResult[] } | undefined;
       for (const r of output?.resultats ?? []) {
-        if (!seen.has(r.usage_id)) {
-          seen.add(r.usage_id);
+        if (!seen.has(r.claim_id)) {
+          seen.add(r.claim_id);
           results.push(r);
         }
       }
@@ -202,7 +202,7 @@ export function ChatMessages({
                     Ce que dit le savoir traditionnel
                   </p>
                   {plantResults.map((usage) => (
-                    <PlantCard key={usage.usage_id} usage={usage} onFavoriteChange={onFavoriteChange} />
+                    <PlantCard key={usage.claim_id} usage={usage} onFavoriteChange={onFavoriteChange} />
                   ))}
                 </div>
               )}

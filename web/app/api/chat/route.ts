@@ -11,7 +11,8 @@ import {
 import { z } from "zod";
 import { supabaseServer } from "@/lib/supabase";
 import { embedQuery } from "@/lib/embedding";
-import type { MatchUsageResult, Plante } from "@/lib/types";
+import { getTaxonByVernacularName } from "@/lib/taxon";
+import type { MatchClaimResult } from "@/lib/types";
 
 // Calibrage du ton — ne pas envoyer ces exemples au modèle, ils servent de repère
 // pour quiconque retouche SYSTEM_PROMPT :
@@ -55,8 +56,11 @@ Règles impératives (le fond ne change jamais, seule la manière de les dire ch
   plutôt que d'improviser.
 - Tu peux appeler "obtenir_details_plante" pour approfondir une plante déjà
   trouvée (précautions notamment).
-- Mentionne toujours le niveau de preuve (traditionnel / scientifique / les_deux)
-  de chaque recommandation — c'est une information utile, pas une excuse.
+- Mentionne, quand elles sont disponibles, la force de l'attestation
+  traditionnelle (combien de traditions indépendantes) ET la qualité de la
+  preuve scientifique séparément — jamais fusionnées en un seul chiffre ou
+  pourcentage. Un pourcentage de chance de guérison n'existe pas dans les
+  données que tu reçois : ne l'invente jamais, même si on te le demande.
 - L'interface affiche en plus une fiche par plante trouvée (préparation,
   posologie, niveau de preuve) : pas besoin de recopier ces informations en
   liste mécanique dans ton texte. Mais ça ne te limite pas — tu restes
@@ -120,7 +124,7 @@ export async function POST(req: Request) {
           // Envoyé en JSON stringifié (text) et casté en vector() côté SQL :
           // PostgREST ne lie pas toujours correctement un paramètre RPC de
           // type extension (vector) — voir supabase/schema.sql.
-          const { data, error } = await supabaseServer.rpc("match_usages", {
+          const { data, error } = await supabaseServer.rpc("match_claims", {
             query_embedding: JSON.stringify(queryEmbedding),
             match_count: 5,
             match_threshold: 0.3,
@@ -130,7 +134,7 @@ export async function POST(req: Request) {
             return { erreur: error.message, resultats: [] };
           }
 
-          return { resultats: (data ?? []) as MatchUsageResult[] };
+          return { resultats: (data ?? []) as MatchClaimResult[] };
         },
       }),
       obtenir_details_plante: tool({
@@ -140,21 +144,16 @@ export async function POST(req: Request) {
           nom: z
             .string()
             .describe(
-              "Nom local exact de la plante, tel que retourné par rechercher_par_symptome (champ plante_nom)."
+              "Nom local exact de la plante, tel que retourné par rechercher_par_symptome (champ nom_principal)."
             ),
         }),
         execute: async ({ nom }) => {
-          const { data, error } = await supabaseServer
-            .from("plantes")
-            .select("id, nom_local, nom_scientifique, description, precautions")
-            .eq("nom_local", nom)
-            .maybeSingle<Plante>();
-
-          if (error) {
-            return { erreur: error.message, plante: null };
+          try {
+            const taxon = await getTaxonByVernacularName(nom);
+            return { plante: taxon };
+          } catch (error) {
+            return { erreur: error instanceof Error ? error.message : String(error), plante: null };
           }
-
-          return { plante: data };
         },
       }),
     },

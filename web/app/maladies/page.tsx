@@ -1,15 +1,15 @@
 import { supabaseServer } from "@/lib/supabase";
 import { ActivityIcon } from "@/components/chat/icons";
-import type { Maladie } from "@/lib/types";
+import type { Indication } from "@/lib/types";
 
 export const metadata = { title: "Maladies — Lafi" };
 
 export default async function MaladiesIndexPage() {
-  const { data: maladies, error } = await supabaseServer
-    .from("maladies")
+  const { data: indications, error } = await supabaseServer
+    .from("indication")
     .select("id, nom, symptomes, description")
     .order("nom", { ascending: true })
-    .returns<Maladie[]>();
+    .returns<Indication[]>();
 
   if (error) throw new Error(error.message);
 
@@ -24,15 +24,15 @@ export default async function MaladiesIndexPage() {
       </p>
 
       <div className="space-y-3">
-        {(maladies ?? []).map((m) => (
+        {(indications ?? []).map((i) => (
           <div
-            key={m.id}
+            key={i.id}
             className="rounded-2xl border border-neutral-200/70 bg-neutral-50/60 p-4 dark:border-neutral-800/70 dark:bg-neutral-900/40"
           >
-            <p className="font-medium text-neutral-900 dark:text-neutral-100">{m.nom}</p>
-            <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">{m.symptomes}</p>
-            {m.description && (
-              <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">{m.description}</p>
+            <p className="font-medium text-neutral-900 dark:text-neutral-100">{i.nom}</p>
+            <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">{i.symptomes}</p>
+            {i.description && (
+              <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">{i.description}</p>
             )}
           </div>
         ))}

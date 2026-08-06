@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { supabaseServer } from "@/lib/supabase";
-import { slugify } from "@/lib/slug";
 import { LeafIcon } from "@/components/chat/icons";
-import type { Plante } from "@/lib/types";
+import type { NomVernaculaire, Taxon } from "@/lib/types";
 
 export const metadata = { title: "Plantes — Lafi" };
 
 const PAGE_SIZE = 24;
+
+interface TaxonRow extends Taxon {
+  noms_vernaculaires: NomVernaculaire[];
+}
 
 export default async function PlantsIndexPage({
   searchParams,
@@ -18,12 +21,14 @@ export default async function PlantsIndexPage({
   const from = (page - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
 
-  const { data: plantes, error, count } = await supabaseServer
-    .from("plantes")
-    .select("id, nom_local, nom_scientifique, description, precautions, photo_url", { count: "exact" })
-    .order("nom_local", { ascending: true })
+  const { data: taxons, error, count } = await supabaseServer
+    .from("taxon")
+    .select("id, slug, nom_scientifique, description, precautions, photo_url, noms_vernaculaires:nom_vernaculaire(libelle, langue, est_principal)", {
+      count: "exact",
+    })
+    .order("nom_scientifique", { ascending: true })
     .range(from, to)
-    .returns<Plante[]>();
+    .returns<TaxonRow[]>();
 
   if (error) throw new Error(error.message);
 
@@ -41,25 +46,27 @@ export default async function PlantsIndexPage({
       </p>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        {(plantes ?? []).map((plante) => (
-          <Link
-            key={plante.id}
-            href={`/plants/${slugify(plante.nom_local)}`}
-            className="rounded-2xl border border-neutral-200 p-4 transition hover:border-emerald-300 hover:bg-emerald-50/50 dark:border-neutral-800 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/40"
-          >
-            <p className="font-medium text-neutral-900 dark:text-neutral-100">{plante.nom_local}</p>
-            {plante.nom_scientifique && (
-              <p className="text-sm italic text-neutral-500 dark:text-neutral-400">
-                {plante.nom_scientifique}
-              </p>
-            )}
-            {plante.description && (
-              <p className="mt-1 line-clamp-2 text-sm text-neutral-600 dark:text-neutral-300">
-                {plante.description}
-              </p>
-            )}
-          </Link>
-        ))}
+        {(taxons ?? []).map((taxon) => {
+          const nomPrincipal =
+            taxon.noms_vernaculaires.find((n) => n.est_principal)?.libelle ?? taxon.nom_scientifique;
+          return (
+            <Link
+              key={taxon.id}
+              href={`/plants/${taxon.slug}`}
+              className="rounded-2xl border border-neutral-200 p-4 transition hover:border-emerald-300 hover:bg-emerald-50/50 dark:border-neutral-800 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/40"
+            >
+              <p className="font-medium text-neutral-900 dark:text-neutral-100">{nomPrincipal}</p>
+              {taxon.nom_scientifique && (
+                <p className="text-sm italic text-neutral-500 dark:text-neutral-400">{taxon.nom_scientifique}</p>
+              )}
+              {taxon.description && (
+                <p className="mt-1 line-clamp-2 text-sm text-neutral-600 dark:text-neutral-300">
+                  {taxon.description}
+                </p>
+              )}
+            </Link>
+          );
+        })}
       </div>
 
       {totalPages > 1 && (
