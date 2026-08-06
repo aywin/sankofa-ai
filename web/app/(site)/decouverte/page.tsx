@@ -29,8 +29,8 @@ export default async function DecouvertePage({
       </h1>
       <p className="mb-6 text-sm text-neutral-500 dark:text-neutral-400">
         {results.length} usage{results.length > 1 ? "s" : ""} traditionnel{results.length > 1 ? "s" : ""}
-        {results.length !== totalCount ? ` sur ${totalCount} au total` : ""} — triés par niveau de preuve, jamais
-        par popularité.
+        {results.length !== totalCount ? ` sur ${totalCount} au total` : ""} — classés du niveau de preuve le
+        plus solide au moins solide.
       </p>
 
       <div className="mb-6">

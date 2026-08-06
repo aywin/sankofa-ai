@@ -90,7 +90,8 @@ export function LaboratoirePipeline({ data }: { data: LaboratoireData }) {
         >
           {data.autresNoms.length > 0 && (
             <p className="text-xs text-neutral-500 dark:text-neutral-400">
-              Autres noms connus : {data.autresNoms.map((n) => `${n.libelle} (${n.langue})`).join(", ")}
+              Autres noms connus :{" "}
+              {data.autresNoms.map((n) => (n.langue !== "non précisé" ? `${n.libelle} (${n.langue})` : n.libelle)).join(", ")}
             </p>
           )}
         </PipelineNode>

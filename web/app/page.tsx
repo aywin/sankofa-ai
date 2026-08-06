@@ -12,11 +12,13 @@ import { LaboratoryPreview } from "@/components/landing/LaboratoryPreview";
 import { ContributeSection } from "@/components/landing/ContributeSection";
 import { WhatWeDontDoSection } from "@/components/landing/WhatWeDontDoSection";
 
-export const metadata = { title: "Lafi — Le savoir thérapeutique africain, rendu calculable" };
+export const metadata = { title: "Lafi — Le savoir des tradipraticiens, documenté et accessible" };
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="mb-4 text-center text-xl font-semibold text-neutral-900 dark:text-neutral-100">{children}</h2>
+    <h2 className="mb-5 text-center font-serif text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
+      {children}
+    </h2>
   );
 }
 
@@ -27,34 +29,35 @@ export default async function LandingPage() {
     <div className="min-h-dvh">
       <SiteHeader />
 
-      {/* 1. Entrée directe */}
-      <section className="px-4 py-16 text-center sm:py-20">
-        <h1 className="mx-auto max-w-2xl text-3xl font-semibold text-neutral-900 sm:text-4xl dark:text-neutral-100">
-          Le savoir thérapeutique africain n&apos;a jamais été calculable. On le rend calculable.
-        </h1>
-        <p className="mx-auto mt-4 max-w-xl text-base text-neutral-700 dark:text-neutral-300">
-          Lafi croise les usages traditionnels des plantes médicinales africaines avec ce qu&apos;en dit la
-          science.
-        </p>
-        <div className="mt-8">
-          <HeroSearch />
+      {/* 1. Entrée directe — le moment "manifeste" : fond encre profond,
+          serif, le graphe comme preuve visuelle plutôt que décor. */}
+      <section className="relative overflow-hidden bg-ink-950 px-4 py-20 text-center sm:py-28">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-90">
+          <div className="h-[420px] w-[420px] sm:h-[620px] sm:w-[620px]">
+            <KnowledgeGraph />
+          </div>
+        </div>
+        <div className="relative">
+          <h1 className="mx-auto max-w-2xl font-serif text-4xl font-semibold leading-tight text-sand-50 sm:text-5xl">
+            On documente le savoir des tradipraticiens. On le rend{" "}
+            <span className="text-laterite-400">accessible</span> à tous.
+          </h1>
+          <p className="mx-auto mt-5 max-w-xl text-base text-sand-50/80">
+            Des soins simples et efficaces par les plantes, croisés avec la science — enfin réunis au même
+            endroit, alors qu&apos;il fallait autrefois les chercher ville par ville, guérisseur par guérisseur.
+          </p>
+          <div className="mt-9">
+            <HeroSearch />
+          </div>
         </div>
       </section>
 
-      {/* Le graphe : un vrai bandeau visuel, pas un filigrane — la donnée
-          elle-même comme preuve, pas une image d'ambiance. */}
-      <section className="border-y border-neutral-200/70 bg-white/60 px-4 py-8 dark:border-neutral-800/70 dark:bg-neutral-950/40">
-        <p className="mx-auto mb-2 max-w-md text-center text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-          Le savoir documenté par Lafi, en un coup d&apos;œil
-        </p>
-        <div className="mx-auto h-[380px] w-full max-w-[640px] sm:h-[480px]">
-          <KnowledgeGraph />
-        </div>
-        <p className="mx-auto mt-2 max-w-md text-center text-xs text-neutral-500 dark:text-neutral-400">
-          Points verts : plantes documentées. Points ambre : indications. Traits pleins : couples pilotes
-          enrichis de vraies données ; traits fins : corpus documentaire initial.
-        </p>
-      </section>
+      <p className="bg-ink-900 px-4 py-2.5 text-center text-xs text-sand-50/70">
+        <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 align-middle" /> plantes documentées
+        &nbsp;·&nbsp;
+        <span className="inline-block h-2 w-2 rounded-full bg-laterite-400 align-middle" /> indications
+        &nbsp;·&nbsp; traits pleins : couples pilotes enrichis de vraies données
+      </p>
 
       {/* 2. Les chiffres */}
       <section className="mx-auto max-w-[880px] px-4 py-10">

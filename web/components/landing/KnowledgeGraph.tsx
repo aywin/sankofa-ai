@@ -2,9 +2,9 @@ import { supabaseServer } from "@/lib/supabase";
 
 // Visuel signature du hero : le graphe plante↔indication réellement en
 // base, pas une illustration de stock — "montrer la donnée, pas
-// l'interface". Rendu comme un vrai bandeau visuel à part entière (pas
-// un filigrane derrière le texte) : c'est ce qui le rend lisible plutôt
-// que décoratif.
+// l'interface". Pensé pour vivre sur le fond encre du hero (§ identité
+// visuelle) : vert émeraude clair pour les plantes, doré de latérite
+// pour les indications, forts assez pour porter la section à eux seuls.
 
 interface Point {
   x: number;
@@ -52,14 +52,14 @@ export async function KnowledgeGraph() {
             x2={to.x}
             y2={to.y}
             stroke="currentColor"
-            strokeWidth={c.est_pilote ? 1.6 : 0.9}
-            className={c.est_pilote ? "text-emerald-600/80 dark:text-emerald-400/80" : "text-emerald-600/35 dark:text-emerald-400/35"}
+            strokeWidth={c.est_pilote ? 1.8 : 1}
+            className={c.est_pilote ? "text-emerald-400/90" : "text-emerald-400/30"}
           />
         );
       })}
 
       {taxonPoints.map((p, i) => (
-        <circle key={`t-${i}`} cx={p.x} cy={p.y} r={4.5} className="fill-emerald-700 dark:fill-emerald-400" />
+        <circle key={`t-${i}`} cx={p.x} cy={p.y} r={5} className="fill-emerald-400" />
       ))}
 
       {indicationRows.map((row, i) => {
@@ -67,12 +67,12 @@ export async function KnowledgeGraph() {
         const labelAbove = p.y < center;
         return (
           <g key={row.id}>
-            <circle cx={p.x} cy={p.y} r={7} className="fill-amber-500" stroke="var(--color-sand-50)" strokeWidth={3} />
+            <circle cx={p.x} cy={p.y} r={7.5} className="fill-laterite-400" stroke="var(--color-ink-950)" strokeWidth={3} />
             <text
               x={p.x}
-              y={labelAbove ? p.y - 14 : p.y + 22}
+              y={labelAbove ? p.y - 14 : p.y + 24}
               textAnchor="middle"
-              className="fill-neutral-700 text-[15px] font-medium dark:fill-neutral-200"
+              className="fill-sand-50 text-[15px] font-medium"
             >
               {row.nom}
             </text>

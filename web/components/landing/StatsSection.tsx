@@ -15,9 +15,12 @@ export function StatsSection({ stats }: { stats: LafiStats }) {
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
       {items.map((item) => (
-        <div key={item.label} className="text-center">
-          <p className="text-3xl font-semibold text-emerald-700 dark:text-emerald-400">{item.value}</p>
-          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{item.label}</p>
+        <div
+          key={item.label}
+          className="rounded-2xl border border-neutral-200/70 bg-white/60 py-5 text-center dark:border-neutral-800/70 dark:bg-neutral-900/40"
+        >
+          <p className="font-serif text-4xl font-semibold text-emerald-700 dark:text-emerald-400">{item.value}</p>
+          <p className="mt-1.5 text-sm font-medium text-neutral-600 dark:text-neutral-300">{item.label}</p>
         </div>
       ))}
     </div>

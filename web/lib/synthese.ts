@@ -52,12 +52,10 @@ export const STATUT_LABELS: Record<StatutSynthese, string> = {
 // d'un statut.
 export const STATUT_STYLES: Record<StatutSynthese, string> = {
   convergent: "bg-emerald-600 text-white",
-  plausible: "bg-sky-50 text-sky-700 ring-1 ring-sky-200 dark:bg-sky-950 dark:text-sky-300 dark:ring-sky-800",
-  atteste_seul:
-    "bg-amber-50 text-amber-700 ring-1 ring-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:ring-amber-800",
-  divergent:
-    "bg-orange-50 text-orange-700 ring-1 ring-orange-200 dark:bg-orange-950 dark:text-orange-300 dark:ring-orange-800",
-  non_soutenu: "bg-neutral-100 text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400",
+  plausible: "bg-sky-600 text-white",
+  atteste_seul: "bg-laterite-500 text-white",
+  divergent: "bg-ink-800 text-laterite-300 ring-1 ring-laterite-700",
+  non_soutenu: "bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300",
   contre_indique: "bg-red-600 text-white",
 };
 

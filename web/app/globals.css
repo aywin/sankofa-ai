@@ -19,6 +19,38 @@
   /* Sable chaud — remplace le blanc/noir pur du fond de page. */
   --color-sand-50: #faf8f3;
   --color-sand-950: #16130e;
+
+  /* Doré de latérite — deuxième accent chaud (statuts intermédiaires,
+     moments "manifeste" sur fond sombre). Jamais l'amber générique de
+     Tailwind, trop jaune/citron pour l'identité du projet. */
+  --color-laterite-50: #fdf4ee;
+  --color-laterite-100: #fae2d0;
+  --color-laterite-200: #f3c299;
+  --color-laterite-300: #e89f66;
+  --color-laterite-400: #d67d3e;
+  --color-laterite-500: #bd5f26;
+  --color-laterite-600: #9c4a1d;
+  --color-laterite-700: #7a3a1a;
+  --color-laterite-800: #5c2f1a;
+  --color-laterite-900: #452617;
+  --color-laterite-950: #26130c;
+
+  /* Encre — fond profond réservé aux moments de rupture visuelle (hero,
+     sections manifeste) ; --color-ink-950 est volontairement proche de
+     sand-950 (même famille chromatique chaude, pas un noir neutre). */
+  --color-ink-800: #241f17;
+  --color-ink-900: #1a1610;
+  --color-ink-950: #100d09;
+
+  /* Serif pour les moments manifeste (hero, titres de section) — le
+     texte courant reste en grotesque (sans-serif). La double nature du
+     projet, patrimoine + calcul, passe aussi par la typo. */
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
 }
 
 @keyframes message-in {

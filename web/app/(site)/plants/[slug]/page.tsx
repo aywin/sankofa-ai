@@ -42,7 +42,8 @@ export default async function PlantDetailPage({
           </div>
           {autresNoms.length > 0 && (
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              Aussi appelée {autresNoms.map((n) => `${n.libelle} (${n.langue})`).join(", ")}
+              Aussi appelée{" "}
+              {autresNoms.map((n) => (n.langue !== "non précisé" ? `${n.libelle} (${n.langue})` : n.libelle)).join(", ")}
             </p>
           )}
           <p className="italic text-neutral-500 dark:text-neutral-400">

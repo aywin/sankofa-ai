@@ -55,6 +55,7 @@ function ChatSession({
     id: conversationId,
     messages: initialMessages,
   });
+  const initialQuerySent = useRef(false);
 
   useEffect(() => {
     saveConversation(userId, conversationId, messages).then(onMessagesChange);
@@ -62,9 +63,13 @@ function ChatSession({
 
   // Arrivée depuis la landing (ou depuis "En discuter avec Lafi" du
   // laboratoire) avec une question déjà formulée dans l'URL (?q=...) —
-  // ne se déclenche que sur une conversation neuve, une seule fois.
+  // ne se déclenche que sur une conversation neuve, une seule fois. Le
+  // ref (plutôt qu'un simple test sur initialMessages.length) protège
+  // contre un double-appel de l'effet — Strict Mode en dev, ou tout
+  // autre remount — qui enverrait sinon le même message deux fois.
   useEffect(() => {
-    if (initialQuery && initialMessages.length === 0) {
+    if (initialQuery && initialMessages.length === 0 && !initialQuerySent.current) {
+      initialQuerySent.current = true;
       sendMessage({ text: initialQuery }, { body: { profil } });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

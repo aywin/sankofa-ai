@@ -103,7 +103,10 @@ export async function POST(req: Request) {
   const profilInstruction = PROFIL_INSTRUCTIONS[profil ?? "particulier"] ?? PROFIL_INSTRUCTIONS.particulier;
 
   const result = streamText({
-    model: google("gemini-2.5-flash"),
+    // gemini-2.5-flash a été mis en retrait (l'API renvoie AI_APICallError
+    // "This model ... is no longer available") — gemini-3.6-flash est le
+    // modèle Flash stable actuel.
+    model: google("gemini-3.6-flash"),
     system: `${SYSTEM_PROMPT}\n\nÀ qui tu t'adresses maintenant : ${profilInstruction}`,
     messages: await convertToModelMessages(messages),
     stopWhen: stepCountIs(5),

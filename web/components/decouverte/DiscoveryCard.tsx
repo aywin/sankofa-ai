@@ -14,7 +14,7 @@ export function DiscoveryCard({ result }: { result: DiscoveryResult }) {
         <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
           <LeafIcon className="h-4 w-4 shrink-0" />
           <span className="font-semibold text-neutral-900 dark:text-neutral-100">{result.nomPrincipal}</span>
-          {result.langue && (
+          {result.langue && result.langue !== "non précisé" && (
             <span className="text-xs font-normal text-neutral-500 dark:text-neutral-500">({result.langue})</span>
           )}
         </div>
