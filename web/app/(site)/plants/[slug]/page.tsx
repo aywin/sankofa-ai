@@ -50,7 +50,7 @@ export default async function PlantDetailPage({
             {taxon.autorite ? ` ${taxon.autorite}` : ""}
             {taxon.famille ? ` — ${taxon.famille}` : ""}
           </p>
-          <p className="mt-1 text-xs text-neutral-400 dark:text-neutral-500">
+          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-500">
             {taxon.voucher_reference
               ? `Spécimen déposé : ${taxon.voucher_reference}${taxon.herbier ? ` (${taxon.herbier})` : ""}`
               : "Aucun spécimen déposé en herbier — donnée non publiable en l'état."}
@@ -72,12 +72,12 @@ export default async function PlantDetailPage({
         </div>
       )}
 
-      <h2 className="mb-3 mt-8 text-sm font-medium uppercase tracking-wide text-neutral-400 dark:text-neutral-500">
+      <h2 className="mb-3 mt-8 text-sm font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
         Maladies traitées
       </h2>
       <IndicationsList claims={claims} />
 
-      <h2 className="mb-3 mt-8 flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-neutral-400 dark:text-neutral-500">
+      <h2 className="mb-3 mt-8 flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
         <LeafIcon className="h-3.5 w-3.5" />
         Ce que dit la science
       </h2>

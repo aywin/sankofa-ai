@@ -95,7 +95,7 @@ export function ContributeModal({ onClose }: { onClose: () => void }) {
             <p className="mb-2 text-sm text-neutral-600 dark:text-neutral-300">
               On vérifie ça avant de l&apos;ajouter au savoir traditionnel de Lafi.
             </p>
-            <p className="mb-4 text-xs text-neutral-400 dark:text-neutral-500">
+            <p className="mb-4 text-xs text-neutral-500 dark:text-neutral-500">
               Envie de compléter cette info plus tard (préparation, région...) ? Ressoumets le formulaire en le
               précisant — on ne sait pas encore relier deux envois entre eux automatiquement.
             </p>
@@ -173,7 +173,7 @@ export function ContributeModal({ onClose }: { onClose: () => void }) {
                   </button>
                 ))}
               </div>
-              <p className="text-[11px] text-neutral-400 dark:text-neutral-500">
+              <p className="text-[11px] text-neutral-500 dark:text-neutral-500">
                 {NIVEAU_OPTIONS.find((o) => o.value === niveau)?.description}
               </p>
 

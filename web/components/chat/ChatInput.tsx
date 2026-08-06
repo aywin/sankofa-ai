@@ -191,7 +191,7 @@ export const ChatInput = forwardRef<
           placeholder="Décris tes symptômes, ou envoie une photo…"
           rows={1}
           disabled={disabled}
-          className="max-h-40 flex-1 resize-none bg-transparent px-1 py-1.5 text-sm text-neutral-900 outline-none placeholder:text-neutral-400 disabled:opacity-60 dark:text-neutral-100"
+          className="max-h-40 flex-1 resize-none bg-transparent px-1 py-1.5 text-sm text-neutral-900 outline-none placeholder:text-neutral-500 disabled:opacity-60 dark:text-neutral-100"
         />
 
         {speechSupported && (

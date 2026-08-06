@@ -38,7 +38,7 @@ export function SyntheseBadge({
         traditionnelle : {FORCE_LABELS[force]}
       </span>
       {!estPilote && (
-        <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[10px] font-medium text-neutral-400 dark:bg-neutral-900 dark:text-neutral-500">
+        <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[10px] font-medium text-neutral-500 dark:bg-neutral-900 dark:text-neutral-500">
           Démonstration — terrain non réalisé
         </span>
       )}

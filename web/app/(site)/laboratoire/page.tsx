@@ -30,7 +30,7 @@ export default async function LaboratoireIndexPage() {
           >
             <span className="flex items-center gap-1.5 text-neutral-800 dark:text-neutral-200">
               <LeafIcon className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400" />
-              {r.nomPrincipal} <span className="text-neutral-400 dark:text-neutral-500">× {r.indicationNom}</span>
+              {r.nomPrincipal} <span className="text-neutral-500 dark:text-neutral-500">× {r.indicationNom}</span>
             </span>
             <span className="text-emerald-700 dark:text-emerald-400">Lancer →</span>
           </Link>

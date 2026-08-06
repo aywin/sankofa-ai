@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.join(__dirname),
   },
+  // La liste A-Z des plantes faisait doublon avec /decouverte (mêmes
+  // plantes, sans les filtres ni le niveau de preuve) — /plants/[slug]
+  // (la fiche) reste inchangée, seul l'index disparaît.
+  async redirects() {
+    return [{ source: "/plants", destination: "/decouverte", permanent: false }];
+  },
 };
 
 export default nextConfig;

@@ -133,7 +133,7 @@ export function ChatMessages({
           <p className="text-lg font-medium text-neutral-700 dark:text-neutral-300">
             Décris un symptôme, une maladie — ou envoie une photo.
           </p>
-          <p className="mt-1 text-sm text-neutral-400 dark:text-neutral-500">
+          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-500">
             Se soigner naturellement et efficacement.
           </p>
         </div>
@@ -197,7 +197,7 @@ export function ChatMessages({
 
               {!isUser && plantResults.length > 0 && (
                 <div className="mb-2 space-y-2">
-                  <p className="flex items-center gap-1.5 text-xs font-medium text-neutral-400 dark:text-neutral-500">
+                  <p className="flex items-center gap-1.5 text-xs font-medium text-neutral-500 dark:text-neutral-500">
                     <LeafIcon className="h-3.5 w-3.5" />
                     Ce que dit le savoir traditionnel
                   </p>

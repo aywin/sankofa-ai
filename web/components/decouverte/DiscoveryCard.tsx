@@ -15,7 +15,7 @@ export function DiscoveryCard({ result }: { result: DiscoveryResult }) {
           <LeafIcon className="h-4 w-4 shrink-0" />
           <span className="font-semibold text-neutral-900 dark:text-neutral-100">{result.nomPrincipal}</span>
           {result.langue && (
-            <span className="text-xs font-normal text-neutral-400 dark:text-neutral-500">({result.langue})</span>
+            <span className="text-xs font-normal text-neutral-500 dark:text-neutral-500">({result.langue})</span>
           )}
         </div>
         <p className="text-xs italic text-neutral-500 dark:text-neutral-400">
@@ -25,7 +25,7 @@ export function DiscoveryCard({ result }: { result: DiscoveryResult }) {
 
         <p className="mt-2 text-sm text-neutral-700 dark:text-neutral-300">
           Pour : <span className="font-medium">{result.indicationNom}</span>{" "}
-          <span className="text-neutral-400 dark:text-neutral-500">({result.partieNom})</span>
+          <span className="text-neutral-500 dark:text-neutral-500">({result.partieNom})</span>
         </p>
 
         <div className="mt-2">

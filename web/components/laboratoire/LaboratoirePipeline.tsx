@@ -123,7 +123,7 @@ export function LaboratoirePipeline({ data }: { data: LaboratoireData }) {
               ))}
             </ul>
           ) : (
-            <p className="text-xs italic text-neutral-400 dark:text-neutral-500">
+            <p className="text-xs italic text-neutral-500 dark:text-neutral-500">
               Aucune attestation traditionnelle enregistrée pour l&apos;instant.
             </p>
           )}
@@ -245,7 +245,7 @@ export function LaboratoirePipeline({ data }: { data: LaboratoireData }) {
           }
         >
           {mode === "expert" && (
-            <p className="mb-1.5 text-xs italic text-neutral-400 dark:text-neutral-500">
+            <p className="mb-1.5 text-xs italic text-neutral-500 dark:text-neutral-500">
               Non manipulable — la sortie de ce nœud prime toujours sur le reste (§8 du brief).
             </p>
           )}
@@ -267,7 +267,7 @@ export function LaboratoirePipeline({ data }: { data: LaboratoireData }) {
       </div>
 
       {mode === "expert" && (
-        <p className="mt-4 text-center text-xs text-neutral-400 dark:text-neutral-500">
+        <p className="mt-4 text-center text-xs text-neutral-500 dark:text-neutral-500">
           <Link href={`/laboratoire/${data.claimId}`} className="hover:underline">
             Réinitialiser la simulation
           </Link>

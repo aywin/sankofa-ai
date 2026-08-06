@@ -16,7 +16,7 @@ export function EmptyState({ suggestions }: { suggestions: FilterOption[] }) {
 
       {suggestions.length > 0 && (
         <div className="mt-4">
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-neutral-400 dark:text-neutral-500">
+          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
             Indications couvertes actuellement
           </p>
           <div className="flex flex-wrap justify-center gap-1.5">

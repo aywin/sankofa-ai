@@ -27,7 +27,7 @@ export function PlantGallery({ media }: { media: TaxonMedia[] }) {
             href={m.source_url}
             target="_blank"
             rel="noreferrer"
-            className="block truncate text-center text-[9px] text-neutral-400 hover:underline dark:text-neutral-500"
+            className="block truncate text-center text-[9px] text-neutral-500 hover:underline dark:text-neutral-500"
             title={`${m.credit_auteur} — ${m.licence}`}
           >
             {m.credit_auteur} — {m.licence}

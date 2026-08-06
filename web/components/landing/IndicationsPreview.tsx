@@ -26,7 +26,7 @@ export async function IndicationsPreview() {
           href={`/decouverte?indication=${i.id}`}
           className="rounded-full border border-neutral-200 px-3 py-1.5 text-sm text-neutral-600 transition hover:border-emerald-300 hover:text-emerald-700 dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-emerald-800 dark:hover:text-emerald-400"
         >
-          {i.nom} <span className="text-neutral-400 dark:text-neutral-500">({i.claims[0]?.count ?? 0})</span>
+          {i.nom} <span className="text-neutral-500 dark:text-neutral-500">({i.claims[0]?.count ?? 0})</span>
         </Link>
       ))}
     </div>

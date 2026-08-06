@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { StoredConversation } from "@/lib/conversations";
 import type { FavoritePlant } from "@/lib/favorites";
 import { slugify } from "@/lib/slug";
-import { ActivityIcon, CameraIcon, LeafIcon, PlusIcon, SearchIcon, StarIcon } from "./icons";
+import { CameraIcon, PlusIcon, SearchIcon, StarIcon } from "./icons";
 
 function TrashIcon() {
   return (
@@ -97,7 +97,7 @@ export function ConversationSidebar({
         </button>
 
         <div className="shrink-0 space-y-0.5 border-b border-neutral-200 pb-2 dark:border-neutral-800">
-          <p className="px-2 pb-1 text-[11px] font-medium uppercase tracking-wide text-neutral-400 dark:text-neutral-500">
+          <p className="px-2 pb-1 text-[11px] font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
             Explorer
           </p>
           <Link
@@ -106,20 +106,6 @@ export function ConversationSidebar({
           >
             <SearchIcon className="h-4 w-4" />
             Découverte
-          </Link>
-          <Link
-            href="/plants"
-            className="flex items-center gap-2 rounded-xl px-2 py-2 text-sm text-neutral-600 transition hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-900"
-          >
-            <LeafIcon className="h-4 w-4" />
-            Plantes
-          </Link>
-          <Link
-            href="/maladies"
-            className="flex items-center gap-2 rounded-xl px-2 py-2 text-sm text-neutral-600 transition hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-900"
-          >
-            <ActivityIcon className="h-4 w-4" />
-            Maladies
           </Link>
           <Link
             href="/laboratoire"
@@ -148,7 +134,7 @@ export function ConversationSidebar({
 
         {favorites.length > 0 && (
           <div className="shrink-0 space-y-0.5 border-b border-neutral-200 py-2 dark:border-neutral-800">
-            <p className="px-2 pb-1 text-[11px] font-medium uppercase tracking-wide text-neutral-400 dark:text-neutral-500">
+            <p className="px-2 pb-1 text-[11px] font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
               Favoris
             </p>
             <div className="max-h-32 space-y-0.5 overflow-y-auto">
@@ -168,7 +154,7 @@ export function ConversationSidebar({
 
         <div className="flex-1 space-y-1 overflow-y-auto pt-2">
           {conversations.length === 0 && (
-            <p className="px-2 py-4 text-center text-xs text-neutral-400 dark:text-neutral-500">
+            <p className="px-2 py-4 text-center text-xs text-neutral-500 dark:text-neutral-500">
               Pas encore d&apos;historique.
             </p>
           )}
@@ -187,7 +173,7 @@ export function ConversationSidebar({
                 className="flex-1 truncate text-left"
               >
                 <span className="block truncate">{c.title}</span>
-                <span className="block text-[11px] text-neutral-400 dark:text-neutral-500">
+                <span className="block text-[11px] text-neutral-500 dark:text-neutral-500">
                   {relativeDate(c.updatedAt)}
                 </span>
               </button>
@@ -195,7 +181,7 @@ export function ConversationSidebar({
                 type="button"
                 onClick={() => onDelete(c.id)}
                 aria-label="Supprimer la conversation"
-                className="shrink-0 rounded-lg p-1.5 text-neutral-400 opacity-0 transition hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 dark:hover:bg-red-950 dark:hover:text-red-400"
+                className="shrink-0 rounded-lg p-1.5 text-neutral-500 opacity-0 transition hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 dark:hover:bg-red-950 dark:hover:text-red-400"
               >
                 <TrashIcon />
               </button>
