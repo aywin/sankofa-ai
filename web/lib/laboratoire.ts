@@ -16,6 +16,17 @@ import type {
 // UN couple précis, avec en plus tout ce que chaque nœud du pipeline a
 // besoin d'afficher comme entrée/sortie réelle.
 
+// Version légère d'un couple, pour peupler les sélecteurs plante/
+// indication du canvas (nœuds 1 et 2) — dérivée de DiscoveryResult côté
+// pages, pas d'un fetch dédié.
+export interface CoupleLite {
+  claimId: string;
+  taxonSlug: string;
+  nomPrincipal: string;
+  indicationId: string;
+  indicationNom: string;
+}
+
 export interface LaboratoireData {
   claimId: string;
   taxon: {

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLaboratoireData } from "@/lib/laboratoire";
+import { getDiscoveryData } from "@/lib/decouverte";
 import { obtenirExecution } from "@/lib/laboratoireAnalyse";
 import { LaboratoireCanvas } from "@/components/laboratoire/LaboratoireCanvas";
 
@@ -16,8 +17,16 @@ export default async function LaboratoirePage({
   const { claimId } = await params;
   const { execution: executionId } = await searchParams;
 
-  const data = await getLaboratoireData(claimId);
+  const [data, { results }] = await Promise.all([getLaboratoireData(claimId), getDiscoveryData({})]);
   if (!data) notFound();
+
+  const couples = results.map((r) => ({
+    claimId: r.claimId,
+    taxonSlug: r.taxonSlug,
+    nomPrincipal: r.nomPrincipal,
+    indicationId: r.indicationId,
+    indicationNom: r.indicationNom,
+  }));
 
   let resultatInitial = null;
   if (executionId) {
@@ -32,7 +41,7 @@ export default async function LaboratoirePage({
   }
 
   return (
-    <div className="mx-auto max-w-[920px] px-4 py-8">
+    <div className="mx-auto max-w-[1100px] px-4 py-8">
       <Link
         href="/laboratoire"
         className="mb-4 inline-block text-sm text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
@@ -44,7 +53,7 @@ export default async function LaboratoirePage({
         {data.nomPrincipal} × {data.indication.nom}
       </h1>
 
-      <LaboratoireCanvas data={data} resultatInitial={resultatInitial} />
+      <LaboratoireCanvas initialData={data} couples={couples} resultatInitial={resultatInitial} />
     </div>
   );
 }
