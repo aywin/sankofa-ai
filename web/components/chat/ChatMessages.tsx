@@ -211,9 +211,9 @@ export function ChatMessages({
                 <button
                   type="button"
                   onClick={onContribute}
-                  className="mb-2 rounded-xl border border-dashed border-emerald-300 px-3 py-2 text-xs font-medium text-emerald-700 transition hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-950"
+                  className="mb-2 rounded-xl border border-emerald-200 bg-emerald-50/60 px-3 py-2 text-xs font-medium text-emerald-700 transition hover:bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-400 dark:hover:bg-emerald-950"
                 >
-                  ➕ Tu connais un remède pour ça ? Signale-le à Lafi
+                  ➕ Tu connais un remède pour ça ? Raconte-le à Lafi
                 </button>
               )}
 

@@ -45,11 +45,8 @@ function BentoTile({
       <p className="font-serif text-lg font-semibold text-neutral-900 dark:text-neutral-100">{title}</p>
       <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">{description}</p>
       <div className="mt-4 flex-1">{children}</div>
-      <Link
-        href={href}
-        className="mt-4 inline-block text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400"
-      >
-        {cta} →
+      <Link href={href} className="mt-4 inline-block text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400">
+        {cta}
       </Link>
     </div>
   );
@@ -62,22 +59,18 @@ export default async function LandingPage() {
     <div className="flex min-h-dvh flex-col">
       <SiteHeader />
 
-      {/* 1. Entrée directe — le moment "manifeste" : fond encre profond,
-          deux colonnes (texte + carte produit flottante), le graphe en
-          toile de fond. */}
+      {/* 1. Entrée directe — le moment "manifeste" : fond encre profond.
+          Le graphe est confiné à la colonne de droite (derrière la carte
+          produit) et n'a plus le droit de déborder sous le texte — un
+          chevauchement graphe/texte avait déjà cassé une version
+          précédente de ce hero. */}
       <section className="relative overflow-hidden bg-ink-950 px-4 pb-28 pt-16 sm:pb-40 sm:pt-24">
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-70 sm:justify-start sm:pl-0">
-          <div className="h-[420px] w-[420px] sm:h-[640px] sm:w-[640px]">
-            <KnowledgeGraph />
-          </div>
-        </div>
         <div className="relative mx-auto grid max-w-[1100px] items-center gap-12 sm:grid-cols-2">
           <div className="text-center sm:text-left">
             <h1 className="font-serif text-4xl font-semibold leading-tight text-sand-50 sm:text-5xl">
-              On documente le savoir des tradipraticiens. On le rend{" "}
-              <span className="text-laterite-400">accessible</span> à tous.
+              Rendre le savoir <span className="text-laterite-400">traditionnel</span> accessible à tous.
             </h1>
-            <p className="mx-auto mt-5 max-w-md text-base text-sand-50/80 sm:mx-0">
+            <p className="mx-auto mt-5 max-w-md text-base text-sand-50/70 sm:mx-0">
               Des soins simples et efficaces par les plantes, croisés avec la science — enfin réunis au même
               endroit, alors qu&apos;il fallait autrefois les chercher ville par ville, guérisseur par guérisseur.
             </p>
@@ -85,8 +78,13 @@ export default async function LandingPage() {
               <HeroSearch />
             </div>
           </div>
-          <div className="hidden justify-end sm:flex">
-            <HeroPreviewCard />
+          <div className="relative hidden justify-end sm:flex">
+            <div className="pointer-events-none absolute inset-0 -m-10 opacity-40">
+              <KnowledgeGraph />
+            </div>
+            <div className="relative">
+              <HeroPreviewCard />
+            </div>
           </div>
         </div>
       </section>
@@ -113,8 +111,8 @@ export default async function LandingPage() {
               Le laboratoire
             </p>
             <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
-              Chaque recommandation s&apos;ouvre : d&apos;où vient la donnée, comment elle est pondérée, ce qui
-              n&apos;est pas encore calculé.
+              Le raisonnement complet, nœud par nœud : d&apos;où vient la donnée, comment elle est pondérée, ce
+              qu&apos;en dit la science et la tradition — jamais fondu en un seul chiffre.
             </p>
             <div className="mt-5">
               <LaboratoryPreview />

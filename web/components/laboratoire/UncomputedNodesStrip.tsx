@@ -16,7 +16,7 @@ const NODES = [
 // pipeline s'arrête là par choix plutôt que par manque de données.
 export function UncomputedNodesStrip() {
   return (
-    <div className="rounded-2xl border border-dashed border-neutral-300 p-3 text-xs text-neutral-500 dark:border-neutral-700 dark:text-neutral-500">
+    <div className="rounded-2xl border border-neutral-200 bg-neutral-50/60 p-3 text-xs text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-500">
       <p className="mb-1.5 font-medium uppercase tracking-wide">Non calculés dans cette version</p>
       <div className="flex flex-wrap gap-1.5">
         {NODES.map((n) => (

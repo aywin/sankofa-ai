@@ -65,13 +65,13 @@ export function IndicationsList({ claims }: { claims: ClaimDetail[] }) {
               {claim.etudes.map((etude) => (
                 <li key={etude.id}>
                   {etude.url ? (
-                    <a href={etude.url} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
+                    <a href={etude.url} target="_blank" rel="noreferrer" className="italic underline-offset-2 hover:underline">
                       {etude.titre}
                     </a>
                   ) : (
-                    etude.titre
+                    <span className="italic">{etude.titre}</span>
                   )}{" "}
-                  — {ETUDE_TYPE_LABELS[etude.type] ?? etude.type}
+                  <span className="not-italic">(titre original)</span> — {ETUDE_TYPE_LABELS[etude.type] ?? etude.type}
                   {etude.annee ? ` (${etude.annee})` : ""}
                 </li>
               ))}

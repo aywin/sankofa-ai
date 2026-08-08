@@ -63,7 +63,7 @@ export async function HeroPreviewCard() {
           estPilote={row.est_pilote}
         />
       </div>
-      <p className="mt-3 text-xs font-medium text-emerald-700">Voir le raisonnement complet →</p>
+      <p className="mt-3 text-xs font-medium text-emerald-700">Voir le raisonnement complet</p>
     </Link>
   );
 }

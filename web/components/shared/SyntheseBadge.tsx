@@ -24,7 +24,14 @@ export function SyntheseBadge({
   estPilote: boolean;
 }) {
   const force = computeForceAttestation(stats, !!divergenceNote);
-  const rienDocumente = force === "non_renseignee" && qualitePreuve === null;
+  // Un usage documenté (le claim existe) n'est pas la même chose qu'une
+  // attestation de terrain vérifiée — mais cette nuance est une affaire
+  // d'équipe, pas d'utilisateur : personne n'a besoin de lire "Pas encore
+  // documenté" à côté d'une plante dont l'usage est déjà affiché sur la
+  // page. Sur le badge public, on montre un signal seulement quand il y
+  // en a un ; l'absence de collecte de terrain reste expliquée en détail
+  // dans le bloc attestation de la fiche, pas répétée sur chaque carte.
+  const afficherTradition = force !== "non_renseignee";
 
   return (
     <div className="flex flex-wrap items-center gap-1.5">
@@ -32,13 +39,11 @@ export function SyntheseBadge({
         <span className={`${PILL_CLASS} bg-red-600 text-white`}>Prudence — risque signalé</span>
       ) : force === "contredite" || divergenceNote ? (
         <span className={`${PILL_CLASS} bg-laterite-500 text-white`}>Avis partagés</span>
-      ) : rienDocumente ? (
-        <span className={`${PILL_CLASS} bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300`}>
-          Pas encore documenté
-        </span>
       ) : (
         <>
-          <span className={`${PILL_CLASS} bg-emerald-600 text-white`}>{forceLabelGrandPublic(force)}</span>
+          {afficherTradition && (
+            <span className={`${PILL_CLASS} bg-emerald-600 text-white`}>{forceLabelGrandPublic(force)}</span>
+          )}
           <span className={`${PILL_CLASS} bg-sky-600 text-white`}>{qualiteLabelGrandPublic(qualitePreuve)}</span>
         </>
       )}

@@ -12,8 +12,8 @@ export function WhatWeDontDoSection() {
   return (
     <ul className="mx-auto max-w-xl space-y-2.5">
       {POINTS.map((p) => (
-        <li key={p} className="flex gap-2 text-sm text-neutral-600 dark:text-neutral-300">
-          <span className="mt-0.5 shrink-0 text-red-500">✕</span>
+        <li key={p} className="flex gap-2.5 text-sm text-neutral-600 dark:text-neutral-300">
+          <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-neutral-400 dark:bg-neutral-600" />
           {p}
         </li>
       ))}

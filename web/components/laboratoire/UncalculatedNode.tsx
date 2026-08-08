@@ -3,7 +3,7 @@
 // veut pas montrer".
 export function UncalculatedNode({ numero, titre, raison }: { numero: string; titre: string; raison: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-neutral-300 p-4 dark:border-neutral-700">
+    <div className="rounded-2xl border border-neutral-200 bg-neutral-50/60 p-4 dark:border-neutral-800 dark:bg-neutral-900/30">
       <div className="flex items-center gap-2">
         <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-neutral-300 text-xs font-semibold text-neutral-500 dark:border-neutral-600 dark:text-neutral-500">
           {numero}
