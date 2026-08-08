@@ -60,30 +60,35 @@ export default async function LandingPage() {
       <SiteHeader />
 
       {/* 1. Entrée directe — le moment "manifeste" : fond encre profond.
-          Le graphe est confiné à la colonne de droite (derrière la carte
-          produit) et n'a plus le droit de déborder sous le texte — un
-          chevauchement graphe/texte avait déjà cassé une version
-          précédente de ce hero. */}
+          Le titre occupe toute la largeur du conteneur (pas la moitié
+          d'une grille) pour tenir sur une seule ligne en desktop. Le
+          graphe reste confiné à la colonne de droite, en dessous, et n'a
+          plus le droit de déborder sous le texte — un chevauchement
+          graphe/texte avait déjà cassé une version précédente de ce
+          hero. */}
       <section className="relative overflow-hidden bg-ink-950 px-4 pb-28 pt-16 sm:pb-40 sm:pt-24">
-        <div className="relative mx-auto grid max-w-[1100px] items-center gap-12 sm:grid-cols-2">
-          <div className="text-center sm:text-left">
-            <h1 className="font-serif text-4xl font-semibold leading-tight text-sand-50 sm:text-5xl">
-              Rendre le savoir <span className="text-laterite-400">traditionnel</span> accessible à tous.
-            </h1>
-            <p className="mx-auto mt-5 max-w-md text-base text-sand-50/70 sm:mx-0">
-              Des soins simples et efficaces par les plantes, croisés avec la science — enfin réunis au même
-              endroit, alors qu&apos;il fallait autrefois les chercher ville par ville, guérisseur par guérisseur.
-            </p>
-            <div className="mt-9">
-              <HeroSearch />
+        <div className="relative mx-auto max-w-[1100px]">
+          <h1 className="text-center font-serif text-3xl font-semibold leading-tight text-sand-50 sm:text-left sm:text-4xl lg:whitespace-nowrap">
+            Le savoir <span className="text-laterite-400">traditionnel</span>, accessible à tous.
+          </h1>
+
+          <div className="mt-10 grid items-center gap-12 sm:grid-cols-2">
+            <div className="text-center sm:text-left">
+              <p className="mx-auto max-w-md text-base text-sand-50/70 sm:mx-0">
+                Des soins simples et efficaces par les plantes, croisés avec la science — enfin réunis au même
+                endroit, alors qu&apos;il fallait autrefois les chercher ville par ville, guérisseur par guérisseur.
+              </p>
+              <div className="mt-9">
+                <HeroSearch />
+              </div>
             </div>
-          </div>
-          <div className="relative hidden min-h-[440px] items-center justify-end sm:flex">
-            <div className="pointer-events-none absolute inset-0 opacity-70">
-              <KnowledgeGraph />
-            </div>
-            <div className="relative z-10">
-              <HeroPreviewCard />
+            <div className="relative hidden min-h-[380px] items-center justify-end sm:flex">
+              <div className="pointer-events-none absolute inset-0 opacity-70">
+                <KnowledgeGraph />
+              </div>
+              <div className="relative z-10">
+                <HeroPreviewCard />
+              </div>
             </div>
           </div>
         </div>
