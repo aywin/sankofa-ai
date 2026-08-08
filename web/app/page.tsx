@@ -68,9 +68,9 @@ export default async function LandingPage() {
           le droit de déborder sous le texte — un chevauchement
           graphe/texte avait déjà cassé une version précédente de ce
           hero. */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-ink-900 via-ink-950 to-ink-900 px-4 pb-28 pt-16 sm:pb-40 sm:pt-24">
-        <div className="pointer-events-none absolute -left-40 -top-40 h-96 w-96 rounded-full bg-laterite-700/25 blur-[120px]" />
-        <div className="pointer-events-none absolute -bottom-40 -right-20 h-96 w-96 rounded-full bg-emerald-700/20 blur-[120px]" />
+      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-950 via-ink-950 to-laterite-950 px-4 pb-28 pt-16 sm:pb-40 sm:pt-24">
+        <div className="pointer-events-none absolute -left-32 -top-32 h-[30rem] w-[30rem] rounded-full bg-laterite-600/45 blur-[110px]" />
+        <div className="pointer-events-none absolute -bottom-40 -right-20 h-[30rem] w-[30rem] rounded-full bg-emerald-500/35 blur-[110px]" />
         <div className="relative mx-auto max-w-[1100px]">
           <h1 className="text-center font-serif text-3xl font-semibold leading-tight text-sand-50 sm:text-left sm:text-4xl lg:whitespace-nowrap">
             Le savoir <span className="text-laterite-400">traditionnel</span>, accessible à tous.
