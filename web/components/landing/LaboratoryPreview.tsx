@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { supabaseServer } from "@/lib/supabase";
 
 // "Un exemple préchargé qui s'exécute, pour donner envie de cliquer"
@@ -50,6 +51,19 @@ export async function LaboratoryPreview() {
       >
         Lancer cette simulation
       </Link>
+
+      {/* Illustration éditoriale — comble le vide sous le CTA dans la
+          tuile bento. next/image sert une version redimensionnée/
+          compressée plutôt que le PNG source (2 Mo) tel quel. */}
+      <div className="relative mt-5 aspect-[4/3] w-full overflow-hidden rounded-xl bg-emerald-100/60 dark:bg-emerald-900/30">
+        <Image
+          src="/images/laboratoire/pipeline.png"
+          alt=""
+          fill
+          sizes="(min-width: 640px) 500px, 100vw"
+          className="object-cover"
+        />
+      </div>
     </div>
   );
 }
