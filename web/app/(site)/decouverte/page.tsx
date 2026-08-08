@@ -27,10 +27,14 @@ export default async function DecouvertePage({
         <LeafIcon className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
         Découverte
       </h1>
-      <p className="mb-6 text-sm text-neutral-500 dark:text-neutral-400">
+      <p className="mb-3 text-sm text-neutral-500 dark:text-neutral-400">
         {results.length} usage{results.length > 1 ? "s" : ""} traditionnel{results.length > 1 ? "s" : ""}
         {results.length !== totalCount ? ` sur ${totalCount} au total` : ""} — classés du niveau de preuve le
         plus solide au moins solide.
+      </p>
+      <p className="mb-6 rounded-xl bg-neutral-100 px-3 py-2 text-xs text-neutral-600 dark:bg-neutral-900 dark:text-neutral-300">
+        La collecte de terrain auprès des tradipraticiens est en cours — une partie des sources affichées ici sont
+        encore illustratives, clairement indiquées comme telles sur chaque carte.
       </p>
 
       <div className="mb-6">

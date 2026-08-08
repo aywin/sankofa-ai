@@ -8,6 +8,7 @@ import type {
   Compose,
   Cible,
   AttestationStats,
+  SourceSavoir,
 } from "./types";
 
 // Données d'un claim pour le laboratoire de simulation (§5 du brief) —
@@ -47,7 +48,9 @@ export interface LaboratoireData {
     region: string | null;
     langue: string | null;
     niveauDivulgation: NiveauDivulgation;
+    compteDansLesScores: boolean;
     contributeur: { nomAffichage: string | null; preferenceAttribution: PreferenceAttribution } | null;
+    sourceSavoir: SourceSavoir | null;
   }[];
   stats: AttestationStats;
   composes: Array<Compose & { cibles: Cible[] }>;
@@ -86,7 +89,9 @@ interface RawRow {
         langue: string | null;
         niveau_divulgation: NiveauDivulgation;
         lignee_id: string;
+        compte_dans_les_scores: boolean;
         contributeur: { nom_affichage: string | null; preference_attribution: PreferenceAttribution } | null;
+        source_savoir: SourceSavoir | null;
       }[]
     | null;
 }
@@ -102,7 +107,7 @@ export async function getLaboratoireData(claimId: string): Promise<LaboratoireDa
        partie(nom),
        preparation(mode, solvant, duree, temperature, description_libre, precautions_specifiques),
        etudes:etude(id, claim_id, doi, titre, type, annee, resume, url),
-       attestations:attestation(id, region, langue, niveau_divulgation, lignee_id, contributeur(nom_affichage, preference_attribution))`
+       attestations:attestation(id, region, langue, niveau_divulgation, lignee_id, compte_dans_les_scores, contributeur(nom_affichage, preference_attribution), source_savoir(*))`
     )
     .eq("id", claimId)
     .maybeSingle<RawRow>();
@@ -119,10 +124,11 @@ export async function getLaboratoireData(claimId: string): Promise<LaboratoireDa
   if (composesError) throw new Error(composesError.message);
 
   const attestations = data.attestations ?? [];
+  const comptees = attestations.filter((a) => a.compte_dans_les_scores);
   const principal = data.taxon.noms_vernaculaires.find((n) => n.est_principal);
-  const lignees = new Set(attestations.map((a) => a.lignee_id));
-  const regions = new Set(attestations.map((a) => a.region).filter((r): r is string => !!r));
-  const langues = new Set(attestations.map((a) => a.langue).filter((l): l is string => !!l));
+  const lignees = new Set(comptees.map((a) => a.lignee_id));
+  const regions = new Set(comptees.map((a) => a.region).filter((r): r is string => !!r));
+  const langues = new Set(comptees.map((a) => a.langue).filter((l): l is string => !!l));
 
   return {
     claimId: data.id,
@@ -156,12 +162,14 @@ export async function getLaboratoireData(claimId: string): Promise<LaboratoireDa
       region: a.region,
       langue: a.langue,
       niveauDivulgation: a.niveau_divulgation,
+      compteDansLesScores: a.compte_dans_les_scores,
       contributeur: a.contributeur
         ? { nomAffichage: a.contributeur.nom_affichage, preferenceAttribution: a.contributeur.preference_attribution }
         : null,
+      sourceSavoir: a.source_savoir,
     })),
     stats: {
-      attestations_count: attestations.length,
+      attestations_count: comptees.length,
       lignees_distinctes: lignees.size,
       regions_distinctes: regions.size,
       langues_distinctes: langues.size,

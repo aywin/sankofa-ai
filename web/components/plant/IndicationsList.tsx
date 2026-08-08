@@ -53,11 +53,11 @@ export function IndicationsList({ claims }: { claims: ClaimDetail[] }) {
           </div>
 
           <div className="mt-3">
-            <PreparationCard partie={claim.partie} preparation={claim.preparation} />
+            <AttestationSection stats={claim.stats} attestations={claim.attestations} estPilote={claim.est_pilote} />
           </div>
 
           <div className="mt-3">
-            <AttestationSection stats={claim.stats} attestations={claim.attestations} estPilote={claim.est_pilote} />
+            <PreparationCard partie={claim.partie} preparation={claim.preparation} />
           </div>
 
           {claim.etudes.length > 0 && (

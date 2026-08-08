@@ -11,6 +11,7 @@ import type {
   Compose,
   Cible,
   AttestationStats,
+  SourceSavoir,
 } from "./types";
 
 // Requêtes centralisées sur le modèle claim/attestation, réutilisées par
@@ -66,12 +67,17 @@ export interface ClaimDetail {
     precautions_specifiques: string | null;
   };
   etudes: Etude[];
+  // Toutes les attestations sont retournées pour l'affichage (une source
+  // illustrative reste montrée, avec sa notice) — seules celles où
+  // compte_dans_les_scores=true entrent dans `stats` ci-dessous.
   attestations: Array<{
     id: string;
     region: string | null;
     langue: string | null;
     niveau_divulgation: NiveauDivulgation;
+    compte_dans_les_scores: boolean;
     contributeur: { nom_affichage: string | null; preference_attribution: PreferenceAttribution } | null;
+    source_savoir: SourceSavoir | null;
   }>;
   stats: AttestationStats;
 }
@@ -82,7 +88,9 @@ interface RawAttestation {
   langue: string | null;
   niveau_divulgation: NiveauDivulgation;
   lignee_id: string;
+  compte_dans_les_scores: boolean;
   contributeur: { nom_affichage: string | null; preference_attribution: PreferenceAttribution } | null;
+  source_savoir: SourceSavoir | null;
 }
 
 interface RawClaimRow {
@@ -111,7 +119,7 @@ export async function getClaimsForTaxon(taxonId: string): Promise<ClaimDetail[]>
        partie(id, nom),
        preparation(id, mode, solvant, duree, temperature, description_libre, precautions_specifiques),
        etudes:etude(id, claim_id, doi, titre, type, annee, resume, url),
-       attestations:attestation(id, region, langue, niveau_divulgation, lignee_id, contributeur(nom_affichage, preference_attribution))`
+       attestations:attestation(id, region, langue, niveau_divulgation, lignee_id, compte_dans_les_scores, contributeur(nom_affichage, preference_attribution), source_savoir(*))`
     )
     .eq("taxon_id", taxonId)
     .returns<RawClaimRow[]>();
@@ -120,9 +128,14 @@ export async function getClaimsForTaxon(taxonId: string): Promise<ClaimDetail[]>
 
   return (data ?? []).map((row) => {
     const attestations = row.attestations ?? [];
-    const lignees = new Set(attestations.map((a) => a.lignee_id));
-    const regions = new Set(attestations.map((a) => a.region).filter((r): r is string => !!r));
-    const langues = new Set(attestations.map((a) => a.langue).filter((l): l is string => !!l));
+    // Le calcul d'indépendance n'a de sens que sur des sources réelles —
+    // une source illustrative ne doit jamais faire bouger un score
+    // (lafi-best.md P1). La colonne compte_dans_les_scores est verrouillée
+    // par trigger côté base, on ne fait que la lire ici.
+    const comptees = attestations.filter((a) => a.compte_dans_les_scores);
+    const lignees = new Set(comptees.map((a) => a.lignee_id));
+    const regions = new Set(comptees.map((a) => a.region).filter((r): r is string => !!r));
+    const langues = new Set(comptees.map((a) => a.langue).filter((l): l is string => !!l));
 
     return {
       id: row.id,
@@ -139,10 +152,12 @@ export async function getClaimsForTaxon(taxonId: string): Promise<ClaimDetail[]>
         region: a.region,
         langue: a.langue,
         niveau_divulgation: a.niveau_divulgation,
+        compte_dans_les_scores: a.compte_dans_les_scores,
         contributeur: a.contributeur,
+        source_savoir: a.source_savoir,
       })),
       stats: {
-        attestations_count: attestations.length,
+        attestations_count: comptees.length,
         lignees_distinctes: lignees.size,
         regions_distinctes: regions.size,
         langues_distinctes: langues.size,

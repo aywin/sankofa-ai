@@ -108,6 +108,25 @@ export interface Contributeur {
   preference_attribution: PreferenceAttribution;
 }
 
+export type TypeSourceSavoir = "structure" | "personne" | "publication";
+export type StatutVerite = "reel_verifie" | "illustratif";
+
+// Attribution humaine d'une attestation (v7, voir lafi-best.md P1) —
+// distinction stricte réel/illustratif portée en base, avec des
+// contraintes qui empêchent une source illustrative de compter dans un
+// score ou d'usurper une identité réelle (voir schema_v7.sql).
+export interface SourceSavoir {
+  id: string;
+  type: TypeSourceSavoir;
+  nom_affichage: string;
+  role: string | null;
+  localisation: string | null;
+  statut_verite: StatutVerite;
+  reference_url: string | null;
+  photo_url: string | null;
+  notice: string | null;
+}
+
 export interface Attestation {
   id: string;
   claim_id: string;
@@ -117,6 +136,10 @@ export interface Attestation {
   langue: string | null;
   niveau_divulgation: NiveauDivulgation;
   consentement: boolean;
+  source_savoir_id: string | null;
+  // Gate de comptage verrouillée par trigger côté base — jamais mise à
+  // jour depuis l'application, seulement lue.
+  compte_dans_les_scores: boolean;
 }
 
 export interface Compose {

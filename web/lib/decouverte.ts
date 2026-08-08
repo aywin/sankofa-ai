@@ -1,5 +1,5 @@
 import { supabaseServer } from "./supabase";
-import type { GradeTier } from "./types";
+import type { GradeTier, SourceSavoir } from "./types";
 
 // Page découverte (§3 du brief) : grille filtrable, tri par défaut =
 // niveau de preuve, jamais popularité. ~24 claims aujourd'hui — pas
@@ -24,6 +24,8 @@ export interface DiscoveryResult {
   attestationsCount: number;
   lignéesDistinctes: number;
   regions: string[];
+  photoUrl: string | null;
+  attribution: SourceSavoir | null;
 }
 
 interface RawRow {
@@ -36,10 +38,16 @@ interface RawRow {
     nom_scientifique: string;
     famille: string | null;
     noms_vernaculaires: { libelle: string; langue: string; est_principal: boolean }[];
+    media: { url: string }[];
   };
   indication: { id: string; nom: string };
   partie: { nom: string };
-  attestations: { region: string | null; lignee_id: string }[];
+  attestations: {
+    region: string | null;
+    lignee_id: string;
+    compte_dans_les_scores: boolean;
+    source_savoir: SourceSavoir | null;
+  }[];
 }
 
 async function fetchAllClaims(): Promise<DiscoveryResult[]> {
@@ -47,10 +55,10 @@ async function fetchAllClaims(): Promise<DiscoveryResult[]> {
     .from("claim")
     .select(
       `id, qualite_preuve_scientifique, contre_indication_forte, est_pilote,
-       taxon(slug, nom_scientifique, famille, noms_vernaculaires:nom_vernaculaire(libelle, langue, est_principal)),
+       taxon(slug, nom_scientifique, famille, noms_vernaculaires:nom_vernaculaire(libelle, langue, est_principal), media:taxon_media(url)),
        indication(id, nom),
        partie(nom),
-       attestations:attestation(region, lignee_id)`
+       attestations:attestation(region, lignee_id, compte_dans_les_scores, source_savoir(*))`
     )
     .returns<RawRow[]>();
 
@@ -58,8 +66,12 @@ async function fetchAllClaims(): Promise<DiscoveryResult[]> {
 
   return (data ?? []).map((row) => {
     const principal = row.taxon.noms_vernaculaires.find((n) => n.est_principal);
-    const regions = [...new Set(row.attestations.map((a) => a.region).filter((r): r is string => !!r))];
-    const lignees = new Set(row.attestations.map((a) => a.lignee_id));
+    const comptees = row.attestations.filter((a) => a.compte_dans_les_scores);
+    const regions = [...new Set(comptees.map((a) => a.region).filter((r): r is string => !!r))];
+    const lignees = new Set(comptees.map((a) => a.lignee_id));
+    // Attribution discrète (P5) : une seule source représentative par
+    // carte, même si elle est illustrative — SourceCard porte sa notice.
+    const attribution = row.attestations.find((a) => a.source_savoir)?.source_savoir ?? null;
 
     return {
       claimId: row.id,
@@ -74,9 +86,11 @@ async function fetchAllClaims(): Promise<DiscoveryResult[]> {
       qualitePreuveScientifique: row.qualite_preuve_scientifique,
       contreIndicationForte: row.contre_indication_forte,
       estPilote: row.est_pilote,
-      attestationsCount: row.attestations.length,
+      attestationsCount: comptees.length,
       lignéesDistinctes: lignees.size,
       regions,
+      photoUrl: row.taxon.media[0]?.url ?? null,
+      attribution,
     };
   });
 }

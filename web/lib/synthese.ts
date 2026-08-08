@@ -47,6 +47,40 @@ export const STATUT_LABELS: Record<StatutSynthese, string> = {
   contre_indique: "Contre-indiqué",
 };
 
+// Vocabulaire grand public (lafi-best.md P2) — remplace le badge fusionné
+// à 6 valeurs sur les écrans publics (Découverte, fiche, cartes du chat).
+// Les deux axes restent affichés SÉPARÉMENT, jamais refusionnés en un
+// mot : "Plausible" ne dit rien à quelqu'un sans le contexte GRADE, et
+// un badge que toutes les cartes portent n'informe personne.
+//
+// Point de vigilance qui a déjà produit une erreur une fois (corrigée) :
+// ne jamais laisser le langage simplifié grossir l'affirmation. GRADE
+// "modérée" veut dire confiance modérée dans l'estimation de l'effet,
+// PAS confirmation — donc "Étudié, résultats encourageants", jamais
+// "Confirmé par la science". C'est la seule règle de ce fichier qui
+// touche à la sécurité de l'utilisateur plutôt qu'à la clarté.
+export function forceLabelGrandPublic(force: ForceAttestation): string {
+  switch (force) {
+    case "multi_traditions":
+      return "Très utilisé";
+    case "convergente":
+      return "Utilisé dans plusieurs régions";
+    case "tradition_unique":
+      return "Usage local";
+    case "contredite":
+      return "Avis partagés";
+    case "non_renseignee":
+      return "Pas encore documenté";
+  }
+}
+
+export function qualiteLabelGrandPublic(qualite: GradeTier | null): string {
+  if (qualite === null) return "Pas encore étudié";
+  if (qualite === "elevee") return "Bien étudié";
+  if (qualite === "moderee") return "Étudié, résultats encourageants";
+  return "Peu d'études";
+}
+
 // Styles partagés entre SyntheseBadge (fiche, cartes) et OutputPanel
 // (laboratoire) — une seule source de vérité pour l'identité visuelle
 // d'un statut.
