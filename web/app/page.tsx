@@ -78,11 +78,11 @@ export default async function LandingPage() {
               <HeroSearch />
             </div>
           </div>
-          <div className="relative hidden justify-end sm:flex">
-            <div className="pointer-events-none absolute inset-0 -m-10 opacity-40">
+          <div className="relative hidden min-h-[440px] items-center justify-end sm:flex">
+            <div className="pointer-events-none absolute inset-0 opacity-70">
               <KnowledgeGraph />
             </div>
-            <div className="relative">
+            <div className="relative z-10">
               <HeroPreviewCard />
             </div>
           </div>
