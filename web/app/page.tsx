@@ -59,14 +59,18 @@ export default async function LandingPage() {
     <div className="flex min-h-dvh flex-col">
       <SiteHeader />
 
-      {/* 1. Entrée directe — le moment "manifeste" : fond encre profond.
-          Le titre occupe toute la largeur du conteneur (pas la moitié
-          d'une grille) pour tenir sur une seule ligne en desktop. Le
-          graphe reste confiné à la colonne de droite, en dessous, et n'a
-          plus le droit de déborder sous le texte — un chevauchement
+      {/* 1. Entrée directe — le moment "manifeste" : fond sombre, mais un
+          dégradé chaud + deux halos de couleur plutôt qu'un noir plat
+          (retour utilisateur : "on peut éviter le tout noir"). Le titre
+          occupe toute la largeur du conteneur (pas la moitié d'une
+          grille) pour tenir sur une seule ligne en desktop. Le graphe
+          reste confiné à la colonne de droite, en dessous, et n'a plus
+          le droit de déborder sous le texte — un chevauchement
           graphe/texte avait déjà cassé une version précédente de ce
           hero. */}
-      <section className="relative overflow-hidden bg-ink-950 px-4 pb-28 pt-16 sm:pb-40 sm:pt-24">
+      <section className="relative overflow-hidden bg-gradient-to-br from-ink-900 via-ink-950 to-ink-900 px-4 pb-28 pt-16 sm:pb-40 sm:pt-24">
+        <div className="pointer-events-none absolute -left-40 -top-40 h-96 w-96 rounded-full bg-laterite-700/25 blur-[120px]" />
+        <div className="pointer-events-none absolute -bottom-40 -right-20 h-96 w-96 rounded-full bg-emerald-700/20 blur-[120px]" />
         <div className="relative mx-auto max-w-[1100px]">
           <h1 className="text-center font-serif text-3xl font-semibold leading-tight text-sand-50 sm:text-left sm:text-4xl lg:whitespace-nowrap">
             Le savoir <span className="text-laterite-400">traditionnel</span>, accessible à tous.

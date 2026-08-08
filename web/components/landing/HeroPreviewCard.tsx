@@ -39,7 +39,7 @@ export async function HeroPreviewCard() {
   return (
     <Link
       href={`/laboratoire/${row.id}`}
-      className="block w-full max-w-[300px] rounded-2xl border border-neutral-200 bg-white p-4 shadow-2xl shadow-black/30 transition hover:-translate-y-0.5 sm:rotate-2 sm:hover:rotate-0"
+      className="block w-full max-w-[300px] rounded-2xl border border-neutral-100 bg-sand-50 p-4 shadow-2xl shadow-black/30 transition hover:-translate-y-0.5 sm:rotate-2 sm:hover:rotate-0"
     >
       <div className="flex items-center gap-1.5 text-emerald-700">
         <LeafIcon className="h-4 w-4 shrink-0" />
