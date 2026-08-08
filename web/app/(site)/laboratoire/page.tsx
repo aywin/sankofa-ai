@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDiscoveryData } from "@/lib/decouverte";
 import { getLaboratoireData } from "@/lib/laboratoire";
@@ -44,6 +45,11 @@ export default async function LaboratoireIndexPage() {
       </p>
 
       <LaboratoireCanvas initialData={data} couples={couples} />
+
+      <p className="mt-8 border-t border-neutral-200/70 pt-4 text-xs text-neutral-500 dark:border-neutral-800/70 dark:text-neutral-400">
+        Autre chose : <Link href="/synergies" className="text-violet-700 hover:underline dark:text-violet-400">explorer des synergies entre deux plantes</Link>{" "}
+        (espace expérimental, distinct de ce qui est documenté ici).
+      </p>
     </div>
   );
 }

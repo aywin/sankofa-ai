@@ -148,7 +148,16 @@ export interface Compose {
   nom: string;
   concentration: string | null;
   methode_identification: string | null;
+  // Base/méthode ayant établi le lien plante→composé (ex. "CMAUP") —
+  // jamais un usage attesté en soi.
+  source_base: string | null;
+  // Provenance géographique de l'échantillon analysé, quand connue : un
+  // composé documenté ailleurs n'est pas une affirmation sur le même
+  // taxon récolté au Burkina Faso (chimiotype variable).
+  localisation_collecte: string | null;
 }
+
+export type NiveauPreuveCible = "activite_mesuree" | "predite_similarite";
 
 export interface Cible {
   id: string;
@@ -156,6 +165,14 @@ export interface Cible {
   proteine: string;
   affinite: string | null;
   source: string | null;
+  // Voie biologique KEGG associée, quand connue — support pour un futur
+  // calcul de recouvrement de voie plutôt que de cible exacte.
+  voie_kegg: string | null;
+  // "activite_mesuree" : IC50/Ki/EC50 mesuré avec référence.
+  // "predite_similarite" : cible prédite par analogie structurale,
+  // jamais mesurée pour ce composé précis — à ne jamais confondre avec
+  // une donnée mesurée dans l'affichage.
+  niveau_preuve: NiveauPreuveCible;
 }
 
 export interface Etude {
