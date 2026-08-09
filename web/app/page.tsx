@@ -72,8 +72,8 @@ export default async function LandingPage() {
         <div className="pointer-events-none absolute -left-32 -top-32 h-[30rem] w-[30rem] rounded-full bg-laterite-600/45 blur-[110px]" />
         <div className="pointer-events-none absolute -bottom-40 -right-20 h-[30rem] w-[30rem] rounded-full bg-emerald-500/35 blur-[110px]" />
         <div className="relative mx-auto max-w-[1100px]">
-          <h1 className="text-center font-serif text-3xl font-semibold leading-tight text-sand-50 sm:text-left sm:text-4xl lg:whitespace-nowrap">
-            Le savoir <span className="text-laterite-400">traditionnel</span>, accessible à tous.
+          <h1 className="text-center font-serif text-3xl font-semibold leading-tight text-sand-50 sm:text-left sm:text-4xl lg:whitespace-nowrap lg:text-[2rem]">
+            Rendre le savoir <span className="text-laterite-400">traditionnel</span> accessible à tous.
           </h1>
 
           <div className="mt-10 grid items-center gap-12 sm:grid-cols-2">
