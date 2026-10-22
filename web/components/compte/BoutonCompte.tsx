@@ -31,7 +31,11 @@ export function BoutonCompte() {
 
   return (
     <>
-      <button type="button" onClick={() => setOuvert(true)} className="hover:text-emerald-700 dark:hover:text-emerald-400">
+      <button
+        type="button"
+        onClick={() => setOuvert(true)}
+        className="rounded-lg px-1 outline-none hover:text-emerald-700 focus-visible:ring-2 focus-visible:ring-emerald-500 dark:hover:text-emerald-400"
+      >
         Se connecter
       </button>
       {ouvert && (

@@ -1,5 +1,6 @@
 "use client";
 
+import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import {
@@ -113,7 +114,10 @@ export function AuthModal({
     verifier: "Vérifie ta boîte mail",
   };
 
-  return (
+  // Portail vers <body> : ouverte depuis l'en-tête (backdrop-blur), une
+  // fenêtre "fixed" serait positionnée par rapport à l'en-tête, pas à
+  // l'écran — elle s'affichait coupée en haut de page.
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-label={titres[mode]}>
       <button type="button" aria-label="Fermer" onClick={onClose} className="absolute inset-0 bg-black/40" />
       <div className="relative max-h-[94dvh] w-full overflow-y-auto rounded-t-3xl bg-sand-50 p-5 shadow-xl sm:max-w-md sm:rounded-3xl dark:bg-sand-950">
@@ -228,6 +232,7 @@ export function AuthModal({
           </p>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
