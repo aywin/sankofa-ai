@@ -21,7 +21,13 @@ export function useAuth() {
 
     const { data: subscription } = supabaseBrowser.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
-      if (event === "PASSWORD_RECOVERY") setRecuperation(true);
+      if (event === "PASSWORD_RECOVERY") {
+        setRecuperation(true);
+        // Si l'URL de redirection n'est pas autorisée dans Supabase, le lien
+        // "mot de passe oublié" retombe sur l'URL du site (l'accueil) : on
+        // renvoie vers la page qui permet de choisir le nouveau mot de passe.
+        if (window.location.pathname !== "/moi/mot-de-passe") window.location.assign("/moi/mot-de-passe");
+      }
     });
 
     return () => subscription.subscription.unsubscribe();
