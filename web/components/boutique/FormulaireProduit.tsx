@@ -11,6 +11,9 @@ export interface ProduitGere {
   nom: string;
   description: string | null;
   prix: number;
+  prix_reduit: number | null;
+  ville: string | null;
+  plante_origine_libre: string | null;
   stock: number | null;
   image_url: string | null;
   statut: "publie" | "masque" | "retire";
@@ -27,12 +30,14 @@ const IMAGE_MAX_OCTETS = 3 * 1024 * 1024;
 
 export function FormulaireProduit({
   boutiqueId,
+  villeBoutique,
   userId,
   produit,
   onFermer,
   onEnregistre,
 }: {
   boutiqueId: string;
+  villeBoutique: string | null;
   userId: string;
   produit: ProduitGere | null;
   onFermer: () => void;
@@ -40,6 +45,9 @@ export function FormulaireProduit({
 }) {
   const [nom, setNom] = useState(produit?.nom ?? "");
   const [prix, setPrix] = useState(produit ? String(produit.prix) : "");
+  const [prixReduit, setPrixReduit] = useState(produit?.prix_reduit != null ? String(produit.prix_reduit) : "");
+  const [ville, setVille] = useState(produit ? (produit.ville ?? "") : (villeBoutique ?? ""));
+  const [planteLibre, setPlanteLibre] = useState(produit?.plante_origine_libre ?? "");
   const [description, setDescription] = useState(produit?.description ?? "");
   const [suivreStock, setSuivreStock] = useState(produit ? produit.stock !== null : false);
   const [stock, setStock] = useState(produit?.stock != null ? String(produit.stock) : "");
@@ -94,6 +102,9 @@ export function FormulaireProduit({
         nom: nom.trim(),
         description: description.trim() || null,
         prix: Number(prix),
+        prix_reduit: prixReduit ? Number(prixReduit) : null,
+        ville: ville.trim() || null,
+        plante_origine_libre: planteLibre.trim() || null,
         stock: suivreStock ? Number(stock || 0) : null,
         image_url: url,
       };
@@ -142,9 +153,31 @@ export function FormulaireProduit({
             className={CHAMP}
           />
           <span className="mt-1 block text-xs text-neutral-500">
-            L&apos;acheteur paie ce prix. Les frais du paiement mobile sont déduits de ce que tu reçois.
+            Les frais du paiement mobile sont déduits de ce que tu reçois.
           </span>
         </label>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="block text-sm">
+            <span className="mb-1 block font-medium">Prix réduit (facultatif)</span>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={100}
+              max={prix ? Number(prix) - 1 : undefined}
+              step={1}
+              value={prixReduit}
+              onChange={(e) => setPrixReduit(e.target.value)}
+              className={CHAMP}
+              placeholder="Ex. promotion"
+            />
+            <span className="mt-1 block text-xs text-neutral-500">Affiché à la place du prix, qui apparaît barré.</span>
+          </label>
+          <label className="block text-sm">
+            <span className="mb-1 block font-medium">Ville</span>
+            <input maxLength={80} value={ville} onChange={(e) => setVille(e.target.value)} className={CHAMP} placeholder="Où le produit est disponible" />
+          </label>
+        </div>
 
         <label className="block text-sm">
           <span className="mb-1 block font-medium">Description</span>
@@ -216,7 +249,7 @@ export function FormulaireProduit({
         </div>
 
         <div className="text-sm">
-          <span className="mb-1 block font-medium">Plantes utilisées (facultatif)</span>
+          <span className="mb-1 block font-medium">Plante d&apos;origine</span>
           <div className="mb-2 flex flex-wrap gap-1.5">
             {taxonIds.map((id) => (
               <button
@@ -250,8 +283,16 @@ export function FormulaireProduit({
             </ul>
           )}
           <span className="mt-1 block text-xs text-neutral-500">
-            Relie le produit aux fiches Lafi : l&apos;acheteur y trouve ce qui est documenté sur chaque plante.
+            Choisie dans les fiches Lafi, l&apos;acheteur y trouve ce qui est documenté sur la plante.
           </span>
+          <input
+            maxLength={120}
+            value={planteLibre}
+            onChange={(e) => setPlanteLibre(e.target.value)}
+            className={`${CHAMP} mt-2`}
+            placeholder="Pas dans la liste ? Écris le nom local de la plante"
+            aria-label="Plante d'origine, nom libre"
+          />
         </div>
 
         {erreur && <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">{erreur}</p>}
@@ -272,6 +313,7 @@ export function FormulaireProduit({
 export function messageBase(message: string | undefined): string {
   if (!message) return "Enregistrement impossible.";
   if (message.includes("sans_allegation")) return "Le texte contient une promesse de guérison ou une allégation interdite.";
+  if (message.includes("prix_reduit")) return "Le prix réduit doit être inférieur au prix.";
   if (message.includes("prix")) return "Prix invalide : entre 100 et 5 000 000 FCFA, sans centimes.";
   if (message.includes("boutique_slug_key")) return "Cette adresse de boutique est déjà prise : choisis-en une autre.";
   if (message.includes("telephone")) return "Numéro de téléphone invalide.";

@@ -10,7 +10,11 @@ export interface ProduitPublic {
   id: string;
   nom: string;
   description: string | null;
+  // Prix payé (réduit s'il y a une réduction) ; prixInitial = prix barré.
   prix: number;
+  prixInitial: number | null;
+  ville: string | null;
+  planteOrigine: string | null;
   stock: number | null;
   image_url: string | null;
   plantes: { slug: string; nom_scientifique: string }[];
@@ -38,7 +42,9 @@ export async function getBoutiquePublique(slug: string): Promise<BoutiquePubliqu
 
   const { data: produits, error: errProduits } = await supabaseServer
     .from("produit")
-    .select("id, nom, description, prix, stock, image_url, produit_taxon(taxon(slug, nom_scientifique))")
+    .select(
+      "id, nom, description, prix, prix_reduit, ville, plante_origine_libre, stock, image_url, produit_taxon(taxon(slug, nom_scientifique))"
+    )
     .eq("boutique_id", boutique.id)
     .eq("statut", "publie")
     .order("created_at", { ascending: false });
@@ -49,6 +55,9 @@ export async function getBoutiquePublique(slug: string): Promise<BoutiquePubliqu
     nom: string;
     description: string | null;
     prix: number | string;
+    prix_reduit: number | string | null;
+    ville: string | null;
+    plante_origine_libre: string | null;
     stock: number | null;
     image_url: string | null;
     produit_taxon: { taxon: { slug: string; nom_scientifique: string } | null }[];
@@ -60,12 +69,54 @@ export async function getBoutiquePublique(slug: string): Promise<BoutiquePubliqu
       id: p.id,
       nom: p.nom,
       description: p.description,
-      prix: Number(p.prix),
+      prix: Number(p.prix_reduit ?? p.prix),
+      prixInitial: p.prix_reduit !== null ? Number(p.prix) : null,
+      ville: p.ville ?? boutique.ville,
+      planteOrigine: p.plante_origine_libre,
       stock: p.stock,
       image_url: p.image_url,
       plantes: p.produit_taxon.flatMap((pt) => (pt.taxon ? [pt.taxon] : [])),
     })),
   };
+}
+
+// Vitrine générale : derniers produits en ligne, toutes boutiques actives
+// confondues. Affichée dans l'espace d'un vendeur qui n'a pas encore de
+// boutique, pour qu'il voie ce qui se vend déjà sur Lafi.
+export interface ProduitDisponible {
+  id: string;
+  nom: string;
+  prix: number;
+  prixInitial: number | null;
+  image_url: string | null;
+  boutique: { nom: string; slug: string; ville: string | null };
+}
+
+export async function getProduitsDisponibles(limite = 12): Promise<ProduitDisponible[]> {
+  const { data, error } = await supabaseServer
+    .from("produit")
+    .select("id, nom, prix, prix_reduit, image_url, boutique!inner(nom, slug, ville, statut)")
+    .eq("statut", "publie")
+    .eq("boutique.statut", "active")
+    .order("created_at", { ascending: false })
+    .limit(limite);
+  if (error) throw new Error(error.message);
+  type Ligne = {
+    id: string;
+    nom: string;
+    prix: number | string;
+    prix_reduit: number | string | null;
+    image_url: string | null;
+    boutique: { nom: string; slug: string; ville: string | null };
+  };
+  return ((data ?? []) as unknown as Ligne[]).map((p) => ({
+    id: p.id,
+    nom: p.nom,
+    prix: Number(p.prix_reduit ?? p.prix),
+    prixInitial: p.prix_reduit !== null ? Number(p.prix) : null,
+    image_url: p.image_url,
+    boutique: { nom: p.boutique.nom, slug: p.boutique.slug, ville: p.boutique.ville },
+  }));
 }
 
 // ---------- Commandes ----------
@@ -105,7 +156,7 @@ export async function creerCommande(entree: NouvelleCommande, origine: string): 
   const ids = [...new Set(entree.lignes.map((l) => l.produitId))];
   const { data: produits } = await supabaseServer
     .from("produit")
-    .select("id, nom, prix, stock")
+    .select("id, nom, prix, prix_reduit, stock")
     .eq("boutique_id", boutique.id)
     .eq("statut", "publie")
     .in("id", ids);
@@ -121,7 +172,7 @@ export async function creerCommande(entree: NouvelleCommande, origine: string): 
           : `Il ne reste que ${produit.stock} « ${produit.nom} ».`
       );
     }
-    return { produit_id: produit.id, nom_produit: produit.nom, prix_unitaire: Number(produit.prix), quantite: l.quantite };
+    return { produit_id: produit.id, nom_produit: produit.nom, prix_unitaire: Number(produit.prix_reduit ?? produit.prix), quantite: l.quantite };
   });
   const total = lignes.reduce((somme, l) => somme + l.prix_unitaire * l.quantite, 0);
 

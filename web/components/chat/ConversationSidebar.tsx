@@ -199,9 +199,18 @@ export function ConversationSidebar({
         <div className="mt-2 shrink-0 border-t border-neutral-200 pt-2 dark:border-neutral-800">
           {userEmail ? (
             <div className="flex items-center justify-between gap-2 px-1">
-              <span className="truncate text-xs text-neutral-500 dark:text-neutral-400">
-                {userEmail}
-              </span>
+              <Link
+                href="/moi"
+                className="flex min-w-0 items-center gap-2 rounded-xl py-1 pr-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-900"
+              >
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-xs font-semibold uppercase text-white" aria-hidden>
+                  {userEmail[0]}
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-xs font-medium">Mon compte</span>
+                  <span className="block truncate text-[11px] text-neutral-500 dark:text-neutral-400">{userEmail}</span>
+                </span>
+              </Link>
               <button
                 type="button"
                 onClick={onSignOut}

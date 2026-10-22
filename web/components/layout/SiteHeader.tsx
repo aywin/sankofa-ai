@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LafiMark } from "@/components/chat/icons";
+import { BoutonCompte } from "@/components/compte/BoutonCompte";
 
 // Navigation persistante partagée par toutes les pages hors chat (qui a
 // sa propre coquille avec sidebar) — corrige l'absence de navigation
@@ -16,7 +17,7 @@ export function SiteHeader() {
           <LafiMark className="h-5 w-5" />
           Lafi
         </Link>
-        <nav className="flex items-center gap-5 text-sm font-medium text-neutral-600 dark:text-neutral-300">
+        <nav className="flex items-center gap-4 text-sm sm:gap-5 font-medium text-neutral-600 dark:text-neutral-300">
           <Link href="/decouverte" className="hover:text-emerald-700 dark:hover:text-emerald-400">
             Découverte
           </Link>
@@ -29,6 +30,7 @@ export function SiteHeader() {
           >
             Parler à Lafi
           </Link>
+          <BoutonCompte />
         </nav>
       </div>
     </header>

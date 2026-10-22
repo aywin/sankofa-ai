@@ -39,7 +39,22 @@ function CarteProduit({
       )}
       <div className="flex flex-1 flex-col p-4">
         <h3 className="font-semibold text-neutral-900 dark:text-neutral-100">{produit.nom}</h3>
-        <p className="mt-0.5 text-lg font-semibold text-emerald-700 dark:text-emerald-400">{formatFcfa(produit.prix)}</p>
+        <p className="mt-0.5 flex flex-wrap items-baseline gap-2">
+          <span className="text-lg font-semibold text-emerald-700 dark:text-emerald-400">{formatFcfa(produit.prix)}</span>
+          {produit.prixInitial && (
+            <>
+              <span className="text-sm text-neutral-400 line-through">{formatFcfa(produit.prixInitial)}</span>
+              <span className="rounded-full bg-laterite-100 px-2 py-0.5 text-xs font-semibold text-laterite-800 dark:bg-laterite-950 dark:text-laterite-200">
+                −{Math.round((1 - produit.prix / produit.prixInitial) * 100)} %
+              </span>
+            </>
+          )}
+        </p>
+        {(produit.ville || produit.planteOrigine) && (
+          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+            {[produit.ville, produit.planteOrigine && `Plante : ${produit.planteOrigine}`].filter(Boolean).join(" · ")}
+          </p>
+        )}
         {produit.description && (
           <p className="mt-2 whitespace-pre-line text-sm text-neutral-600 dark:text-neutral-300">{produit.description}</p>
         )}

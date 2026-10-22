@@ -8,7 +8,7 @@ import { DisclaimerBanner } from "@/components/chat/DisclaimerBanner";
 import { ChatMessages } from "@/components/chat/ChatMessages";
 import { ChatInput, type ChatInputHandle } from "@/components/chat/ChatInput";
 import { ConversationSidebar } from "@/components/chat/ConversationSidebar";
-import { AuthModal } from "@/components/chat/AuthModal";
+import { AuthModal } from "@/components/compte/AuthModal";
 import { ContributeModal } from "@/components/chat/ContributeModal";
 import { LafiMark, PanelIcon } from "@/components/chat/icons";
 import { useAuth } from "@/lib/useAuth";
@@ -124,7 +124,7 @@ function ChatSession({
 }
 
 export default function ChatPage() {
-  const { user, signIn, signUp, signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
   // Valeurs neutres au rendu serveur ET au premier rendu client (évite un
   // mismatch d'hydratation) ; l'effet ci-dessous restaure le vrai état
@@ -288,7 +288,12 @@ export default function ChatPage() {
       </div>
 
       {authModalOpen && (
-        <AuthModal onClose={() => setAuthModalOpen(false)} onSignIn={signIn} onSignUp={signUp} />
+        <AuthModal
+          onClose={() => setAuthModalOpen(false)}
+          onConnecte={(tradipraticien) => {
+            if (tradipraticien) window.location.href = "/moi/boutique";
+          }}
+        />
       )}
       {contributeModalOpen && (
         <ContributeModal onClose={() => setContributeModalOpen(false)} />

@@ -4,12 +4,13 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import type { User } from "@supabase/supabase-js";
-import { useAuth } from "@/lib/useAuth";
+import { useRouter } from "next/navigation";
+import { useEspace } from "@/components/compte/Espace";
 import { supabaseBrowser } from "@/lib/supabase-browser";
 import { slugify } from "@/lib/slug";
 import { allegationsTrouvees } from "@/lib/allegations";
 import { formatDate, formatFcfa } from "@/lib/format";
-import { AuthModal } from "@/components/chat/AuthModal";
+import { ProduitsDisponibles } from "./ProduitsDisponibles";
 import { CHAMP } from "./Dialogue";
 import { FormulaireProduit, messageBase, type ProduitGere } from "./FormulaireProduit";
 
@@ -28,49 +29,104 @@ interface Boutique {
 
 type Onglet = "produits" | "commandes" | "reglages";
 
+// Onglet "Ma boutique" de l'espace (/moi/boutique). Trois états :
+// pas encore tradipraticien -> activer le statut ; tradipraticien sans
+// boutique -> état vide + création ; boutique -> gestion. Dans les deux
+// premiers cas, on montre ce qui se vend déjà sur Lafi.
 export function GestionBoutique() {
-  const { user, loading, signIn, signUp } = useAuth();
-  const [authOuverte, setAuthOuverte] = useState(false);
+  const { user, compte, recharger } = useEspace();
+  const router = useRouter();
   const [boutique, setBoutique] = useState<Boutique | null | undefined>(undefined);
+  const [creation, setCreation] = useState(false);
+  const [occupe, setOccupe] = useState(false);
+  const [erreur, setErreur] = useState<string | null>(null);
 
-  const charger = useCallback(async (u: User) => {
-    const { data } = await supabaseBrowser.from("boutique").select("*").eq("proprietaire_id", u.id).maybeSingle();
+  const charger = useCallback(async () => {
+    const { data } = await supabaseBrowser.from("boutique").select("*").eq("proprietaire_id", user.id).maybeSingle();
     setBoutique((data as Boutique | null) ?? null);
-  }, []);
+  }, [user.id]);
 
   useEffect(() => {
     // Chargement asynchrone : setState n'a lieu qu'après la réponse réseau.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (user) charger(user);
-  }, [user, charger]);
+    charger();
+  }, [charger]);
 
-  if (loading || (user && boutique === undefined)) {
-    return <p className="py-16 text-center text-sm text-neutral-500">Chargement…</p>;
-  }
+  const activerStatut = async () => {
+    setOccupe(true);
+    setErreur(null);
+    const { error } = await supabaseBrowser.from("profil_role").insert({ profil_id: user.id, role: "tradipraticien", statut: "declare" });
+    setOccupe(false);
+    // 23505 : déjà actif.
+    if (error && error.code !== "23505") {
+      setErreur(error.message);
+      return;
+    }
+    await recharger();
+    setCreation(true);
+    router.refresh();
+  };
 
-  if (!user) {
+  if (boutique === undefined) return <p className="py-10 text-center text-sm text-neutral-500">Chargement…</p>;
+  if (boutique) return <TableauBoutique user={user} boutique={boutique} onBoutiqueChange={charger} />;
+  if (creation) {
     return (
-      <div className="mx-auto max-w-md rounded-3xl border border-neutral-200/70 bg-white p-6 text-center dark:border-neutral-800/70 dark:bg-neutral-900/60">
-        <h1 className="font-serif text-2xl font-semibold">Ta boutique sur Lafi</h1>
-        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
-          Tu es tradipraticien ? Mets tes préparations en vente, partage le lien de ta boutique, et reçois les paiements
-          par mobile money.
-        </p>
-        <button type="button" onClick={() => setAuthOuverte(true)} className="mt-5 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700">
-          Se connecter ou créer un compte
-        </button>
-        {authOuverte && <AuthModal onClose={() => setAuthOuverte(false)} onSignIn={signIn} onSignUp={signUp} />}
-      </div>
+      <FormulaireBoutique
+        user={user}
+        boutique={null}
+        onEnregistre={charger}
+        onAnnuler={() => setCreation(false)}
+      />
     );
   }
 
-  if (!boutique) return <FormulaireBoutique user={user} boutique={null} onEnregistre={() => charger(user)} />;
-  return <TableauBoutique user={user} boutique={boutique} onBoutiqueChange={() => charger(user)} />;
+  return (
+    <div className="space-y-8">
+      <div className="rounded-3xl border border-dashed border-neutral-300 px-6 py-10 text-center dark:border-neutral-700">
+        <p className="text-3xl" aria-hidden>
+          🫙
+        </p>
+        {compte.tradipraticien ? (
+          <>
+            <h2 className="mt-2 text-lg font-semibold">Tu n&apos;as pas encore de boutique</h2>
+            <p className="mx-auto mt-1 max-w-md text-sm text-neutral-600 dark:text-neutral-300">
+              Crée-la en une minute, ajoute tes produits, puis partage son lien : tes clients paient par mobile money.
+            </p>
+            <button type="button" onClick={() => setCreation(true)} className="mt-5 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700">
+              Créer ma boutique
+            </button>
+          </>
+        ) : (
+          <>
+            <h2 className="mt-2 text-lg font-semibold">Vendre tes préparations sur Lafi</h2>
+            <p className="mx-auto mt-1 max-w-md text-sm text-neutral-600 dark:text-neutral-300">
+              Tu es tradipraticien ? Active ton statut pour ouvrir ta boutique et vendre tes préparations.
+            </p>
+            <button type="button" disabled={occupe} onClick={activerStatut} className="mt-5 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50">
+              Activer le statut tradipraticien
+            </button>
+          </>
+        )}
+        {erreur && <p className="mt-3 text-sm text-red-700 dark:text-red-300">{erreur}</p>}
+      </div>
+      <ProduitsDisponibles />
+    </div>
+  );
 }
 
 // ---------- Création et réglages ----------
 
-function FormulaireBoutique({ user, boutique, onEnregistre }: { user: User; boutique: Boutique | null; onEnregistre: () => void }) {
+function FormulaireBoutique({
+  user,
+  boutique,
+  onEnregistre,
+  onAnnuler,
+}: {
+  user: User;
+  boutique: Boutique | null;
+  onEnregistre: () => void;
+  onAnnuler?: () => void;
+}) {
   const [nom, setNom] = useState(boutique?.nom ?? "");
   const [slug, setSlug] = useState(boutique?.slug ?? "");
   const [slugTouche, setSlugTouche] = useState(!!boutique);
@@ -137,7 +193,7 @@ function FormulaireBoutique({ user, boutique, onEnregistre }: { user: User; bout
     >
       {!boutique && (
         <div>
-          <h1 className="font-serif text-2xl font-semibold">Ouvrir ta boutique</h1>
+          <h2 className="font-serif text-2xl font-semibold">Créer ta boutique</h2>
           <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
             Tu pourras ajouter tes produits juste après. Tout reste modifiable.
           </p>
@@ -231,8 +287,13 @@ function FormulaireBoutique({ user, boutique, onEnregistre }: { user: User; bout
       {enregistre && boutique && <p className="text-sm text-emerald-700 dark:text-emerald-400">Modifications enregistrées.</p>}
 
       <button type="submit" disabled={envoi || allegations.length > 0} className="w-full rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60">
-        {envoi ? "Enregistrement…" : boutique ? "Enregistrer" : "Ouvrir ma boutique"}
+        {envoi ? "Enregistrement…" : boutique ? "Enregistrer" : "Créer ma boutique"}
       </button>
+      {onAnnuler && (
+        <button type="button" onClick={onAnnuler} className="w-full text-sm text-neutral-500 hover:underline">
+          Annuler
+        </button>
+      )}
     </form>
   );
 }
@@ -290,12 +351,7 @@ function TableauBoutique({ user, boutique, onBoutiqueChange }: { user: User; bou
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <p className="text-xs font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">Ma boutique</p>
-          <h1 className="font-serif text-2xl font-semibold">{boutique.nom}</h1>
-        </div>
-      </div>
+      <h2 className="font-serif text-xl font-semibold">{boutique.nom}</h2>
 
       {boutique.statut === "suspendue" && (
         <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-950 dark:text-red-200" role="alert">
@@ -356,7 +412,9 @@ function OngletProduits({ user, boutique }: { user: User; boutique: Boutique }) 
   const charger = useCallback(async () => {
     const { data, error } = await supabaseBrowser
       .from("produit")
-      .select("id, nom, description, prix, stock, image_url, statut, retire_motif, produit_taxon(taxon_id)")
+      .select(
+        "id, nom, description, prix, prix_reduit, ville, plante_origine_libre, stock, image_url, statut, retire_motif, produit_taxon(taxon_id)"
+      )
       .eq("boutique_id", boutique.id)
       .order("created_at", { ascending: false });
     if (error) {
@@ -367,6 +425,7 @@ function OngletProduits({ user, boutique }: { user: User; boutique: Boutique }) 
       (data ?? []).map((p) => ({
         ...p,
         prix: Number(p.prix),
+        prix_reduit: p.prix_reduit === null ? null : Number(p.prix_reduit),
         taxonIds: (p.produit_taxon as { taxon_id: string }[]).map((t) => t.taxon_id),
       })) as ProduitGere[]
     );
@@ -425,7 +484,14 @@ function OngletProduits({ user, boutique }: { user: User; boutique: Boutique }) 
                 <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${STATUTS_PRODUIT[p.statut].classe}`}>{STATUTS_PRODUIT[p.statut].libelle}</span>
               </div>
               <p className="text-sm text-neutral-600 dark:text-neutral-300">
-                {formatFcfa(p.prix)}
+                {p.prix_reduit !== null ? (
+                  <>
+                    {formatFcfa(p.prix_reduit)} <span className="text-neutral-400 line-through">{formatFcfa(p.prix)}</span>
+                  </>
+                ) : (
+                  formatFcfa(p.prix)
+                )}
+                {p.ville && ` · ${p.ville}`}
                 {p.stock !== null && ` · ${p.stock === 0 ? "épuisé" : `${p.stock} en stock`}`}
               </p>
               {p.statut === "retire" && p.retire_motif && <p className="mt-1 text-xs text-red-700 dark:text-red-300">Motif : {p.retire_motif}</p>}
@@ -450,6 +516,7 @@ function OngletProduits({ user, boutique }: { user: User; boutique: Boutique }) 
       {edition && (
         <FormulaireProduit
           boutiqueId={boutique.id}
+          villeBoutique={boutique.ville}
           userId={user.id}
           produit={edition === "nouveau" ? null : edition}
           onFermer={() => setEdition(null)}

@@ -126,7 +126,15 @@ create table if not exists produit (
   -- Franc CFA : pas de centimes. numeric (jamais de flottant), envoyé à
   -- SasPay en chaîne "2500.00".
   prix numeric(12, 2) not null check (prix >= 100 and prix <= 5000000 and prix = round(prix)),
+  -- Réduction : prix réduit affiché à la place du prix (barré). NULL = pas
+  -- de réduction. C'est ce prix-là qui est encaissé.
+  prix_reduit numeric(12, 2) check (prix_reduit is null or (prix_reduit >= 100 and prix_reduit < prix and prix_reduit = round(prix_reduit))),
   devise text not null default 'XOF' check (devise = 'XOF'),
+  -- Où le produit est disponible (par défaut la ville de la boutique).
+  ville text check (ville is null or length(ville) <= 80),
+  -- Plante d'origine quand elle n'est pas dans les fiches Lafi (sinon :
+  -- produit_taxon, qui relie aux fiches).
+  plante_origine_libre text check (plante_origine_libre is null or length(plante_origine_libre) <= 120),
   -- NULL = stock non suivi.
   stock integer check (stock is null or stock >= 0),
   image_url text,
