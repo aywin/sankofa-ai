@@ -130,6 +130,13 @@ export function ConversationSidebar({
             <PlusIcon />
             Contribuer
           </button>
+          <Link
+            href="/moi/boutique"
+            className="flex items-center gap-2 rounded-xl px-2 py-2 text-sm text-neutral-600 transition hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-900"
+          >
+            <span aria-hidden>🛍️</span>
+            Ma boutique
+          </Link>
         </div>
 
         {favorites.length > 0 && (

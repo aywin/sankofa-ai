@@ -37,6 +37,11 @@ export function SiteFooter() {
                 Parler à Lafi
               </Link>
             </li>
+            <li>
+              <Link href="/moi/boutique" className="hover:text-sand-50">
+                Vendre mes préparations
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -58,8 +63,9 @@ export function SiteFooter() {
       </div>
 
       <div className="mx-auto mt-10 max-w-[1100px] border-t border-sand-50/10 pt-6 text-xs text-sand-50/50">
-        Lafi — information documentaire, pas un avis médical. Aucun élément de langage marchand : pas d&apos;achat,
-        pas de promotion.
+        Lafi — information documentaire, pas un avis médical. Les fiches et le chat ne vendent rien et ne
+        recommandent aucun vendeur ; les boutiques sont tenues par les tradipraticiens eux-mêmes, sous leur
+        responsabilité.
       </div>
     </footer>
   );
