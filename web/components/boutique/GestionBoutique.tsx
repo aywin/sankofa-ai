@@ -208,13 +208,14 @@ function FormulaireBoutique({
       <label className="block text-sm">
         <span className="mb-1 block font-medium">Adresse de ta boutique</span>
         <div className="flex items-center gap-1">
-          <span className="shrink-0 text-neutral-500">lafi…/b/</span>
+          <span className="shrink-0 text-neutral-500">{window.location.host}/b/</span>
           <input
             required
             pattern="[a-z0-9]+(-[a-z0-9]+)*"
             minLength={3}
             maxLength={40}
             value={slugFinal}
+            placeholder="plantes-de-tenkodogo"
             onChange={(e) => {
               setSlugTouche(true);
               setSlug(slugify(e.target.value));
@@ -222,6 +223,10 @@ function FormulaireBoutique({
             className={CHAMP}
           />
         </div>
+        <span className="mt-1 block text-xs text-neutral-500">
+          C&apos;est le lien que tu partageras à tes clients. Il se remplit tout seul avec le nom de ta boutique ; tu
+          peux le changer. Exemple : <span className="font-mono">plantes-de-tenkodogo</span> (minuscules, chiffres et tirets).
+        </span>
         {boutique && slugFinal !== boutique.slug && (
           <span className="mt-1 block text-xs text-laterite-700 dark:text-laterite-300">
             Attention : les liens déjà partagés avec l&apos;ancienne adresse ne marcheront plus.
