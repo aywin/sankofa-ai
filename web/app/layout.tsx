@@ -21,7 +21,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Lafi",
-  description: "Se soigner naturellement et efficacement.",
+  description: "Comprendre les usages des plantes médicinales, leurs preuves et leurs précautions.",
 };
 
 export default function RootLayout({

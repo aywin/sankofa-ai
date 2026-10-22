@@ -4,6 +4,8 @@ import ReactMarkdown from "react-markdown";
 import type { UIMessage } from "ai";
 import { PlantCard } from "./PlantCard";
 import { LafiMark, LeafIcon } from "./icons";
+import { TriageBlock } from "./TriageBlock";
+import type { TriageResultat } from "@/lib/triage";
 import type { MatchClaimResult, Taxon } from "@/lib/types";
 
 const EXEMPLES = [
@@ -70,18 +72,23 @@ function hasEmptySearch(parts: ToolPart[]): boolean {
   });
 }
 
-function collectPlantResults(parts: ToolPart[]): MatchClaimResult[] {
+// Les usages arrivent de deux façons : la recherche faite par le serveur
+// avant la génération (part "data-usages") et les relances par l'outil.
+function collectPlantResults(parts: UIMessage["parts"]): MatchClaimResult[] {
   const seen = new Set<string>();
   const results: MatchClaimResult[] = [];
 
-  for (const part of parts) {
-    if (part.type === "tool-rechercher_par_symptome" && part.state === "output-available") {
-      const output = part.output as { resultats?: MatchClaimResult[] } | undefined;
-      for (const r of output?.resultats ?? []) {
-        if (!seen.has(r.claim_id)) {
-          seen.add(r.claim_id);
-          results.push(r);
-        }
+  for (const part of parts as unknown as (ToolPart & { data?: unknown })[]) {
+    let resultats: MatchClaimResult[] = [];
+    if (part.type === "data-usages") {
+      resultats = (part.data as { resultats?: MatchClaimResult[] } | undefined)?.resultats ?? [];
+    } else if (part.type === "tool-rechercher_par_symptome" && part.state === "output-available") {
+      resultats = (part.output as { resultats?: MatchClaimResult[] } | undefined)?.resultats ?? [];
+    }
+    for (const r of resultats) {
+      if (!seen.has(r.claim_id)) {
+        seen.add(r.claim_id);
+        results.push(r);
       }
     }
   }
@@ -134,7 +141,7 @@ export function ChatMessages({
             Décris un symptôme, une maladie — ou envoie une photo.
           </p>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-500">
-            Se soigner naturellement et efficacement.
+            Comprendre les usages des plantes, leurs preuves et leurs précautions.
           </p>
         </div>
         <div className="flex flex-wrap justify-center gap-2">
@@ -164,7 +171,10 @@ export function ChatMessages({
           (p): p is Extract<typeof p, { type: "file" }> =>
             p.type === "file" && !!p.mediaType?.startsWith("image/")
         );
-        const plantResults = isUser ? [] : collectPlantResults(toolParts);
+        const plantResults = isUser ? [] : collectPlantResults(message.parts);
+        const triage = isUser
+          ? null
+          : ((message.parts.find((p) => p.type === "data-triage") as { data?: TriageResultat } | undefined)?.data ?? null);
         const showContributeCta = !isUser && status === "ready" && hasEmptySearch(toolParts);
 
         return (
@@ -192,6 +202,8 @@ export function ChatMessages({
                   ))}
                 </div>
               )}
+
+              {triage && <TriageBlock triage={triage} />}
 
               {!isUser && <ToolSteps parts={toolParts} />}
 

@@ -84,7 +84,6 @@ export const ChatInput = forwardRef<
     recognitionRef.current = recognition;
     // Capacité détectable seulement côté client : démarrer à false évite le
     // mismatch d'hydratation, ce setState post-montage active le micro ensuite.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSpeechSupported(true);
   }, []);
 

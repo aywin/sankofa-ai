@@ -79,7 +79,7 @@ export default async function LandingPage() {
           <div className="mt-10 grid items-center gap-12 sm:grid-cols-2">
             <div className="text-center sm:text-left">
               <p className="mx-auto max-w-md text-base text-sand-50/70 sm:mx-0">
-                Des soins simples et efficaces par les plantes, croisés avec la science — enfin réunis au même
+                Les usages des plantes recueillis auprès des tradipraticiens, croisés avec la science — réunis au même
                 endroit, alors qu&apos;il fallait autrefois les chercher ville par ville, guérisseur par guérisseur.
               </p>
               <div className="mt-9">

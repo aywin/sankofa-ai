@@ -1,0 +1,293 @@
+[
+  {
+    "id": "identite",
+    "question": "Bonjour, qui es-tu ?",
+    "status": 200,
+    "ms": 4480,
+    "premierTexteMs": 4479,
+    "erreurs": [],
+    "triage": "aucun",
+    "usages": 0,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\nAucun usage documenté ne correspond clairement à ta question pour l'instant. Réessaie dans un moment, ou reformule avec le nom d'une plante ou d'un mal précis.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "es-tu-ia",
+    "question": "Est-ce que tu es une intelligence artificielle ?",
+    "status": 200,
+    "ms": 3792,
+    "premierTexteMs": 3792,
+    "erreurs": [],
+    "triage": "aucun",
+    "usages": 0,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\nAucun usage documenté ne correspond clairement à ta question pour l'instant. Réessaie dans un moment, ou reformule avec le nom d'une plante ou d'un mal précis.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)",
+      "ne dit pas être une IA"
+    ]
+  },
+  {
+    "id": "tension",
+    "question": "Quelle plante pour faire baisser la tension ?",
+    "status": 200,
+    "ms": 3590,
+    "premierTexteMs": 3590,
+    "erreurs": [],
+    "triage": "aucun",
+    "usages": 3,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\n**Usages documentés :**\n- **Bissap (Oseille de Guinée)** (*Hibiscus sabdariffa*), pour hypertension : calice, infusion — eau chaude — Infusion des calices séchés d'hibiscus.. Côté science : étudié, résultats encourageants — précaution : Prudence en cas de tension déjà basse..\n- **Kinkeliba** (*Combretum micranthum*), pour hypertension : feuille, infusion — Infusion des feuilles de kinkeliba.. Côté science : pas encore étudié — précaution : Éviter un usage quotidien prolongé sans pause..\n- **Moringa** (*Moringa oleifera*), pour hypertension : feuille, poudre — eau — Poudre de feuilles de moringa diluée dans l'eau.. Côté science : peu d'études — précaution : Éviter les fortes doses chez la femme enceinte..\n\nTu peux renvoyer ta question dans un instant pour une réponse plus complète.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "kinkeliba",
+    "question": "À quoi sert le kinkéliba ?",
+    "status": 200,
+    "ms": 8480,
+    "premierTexteMs": 7665,
+    "erreurs": [],
+    "triage": "aucun",
+    "usages": 2,
+    "repli": false,
+    "reponse": "Le kinkéliba (*Combretum micranthum*) est un arbuste réputé en Afrique de l'Ouest, dont on utilise principalement les feuilles.\n\n**Ce que rapportent les usages traditionnels :**\nLes feuilles de kinkéliba sont préparées en infusion. On y a traditionnellement recours pour soulager des troubles de la digestion, des épisodes de diarrhée, ainsi que pour accompagner la gestion de l'hypertension.\n\n**Ce qu'en dit la science :**\nDans les documents dont je dispose actuellement, il n'y a pas d'études scientifiques recensées pour confirmer ou évaluer ces usages spécifiques. \n\n**Précautions à connaître :**\nSi tu consommes du kinkéliba, il est recommandé d'éviter un usage quotidien prolongé sans faire de pauses régulièrement.",
+    "echecs": []
+  },
+  {
+    "id": "insomnie",
+    "question": "Je n'arrive pas à dormir depuis plusieurs nuits",
+    "status": 200,
+    "ms": 3436,
+    "premierTexteMs": 3436,
+    "erreurs": [],
+    "triage": "aucun",
+    "usages": 2,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\n**Usages documentés :**\n- **Citronnelle** (*Cymbopogon citratus*), pour insomnie : feuille, infusion — Infusion de feuilles de citronnelle prise le soir.. Côté science : pas encore étudié — précaution : Bien tolérée en infusion..\n- **Bissap (Oseille de Guinée)** (*Hibiscus sabdariffa*), pour insomnie : calice, infusion — Infusion légère de calices d'hibiscus en soirée.. Côté science : pas encore étudié — précaution : Prudence en cas de tension déjà basse..\n\nTu peux renvoyer ta question dans un instant pour une réponse plus complète.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "diarrhee",
+    "question": "J'ai mal au ventre et la diarrhée depuis hier",
+    "status": 200,
+    "ms": 3628,
+    "premierTexteMs": 3628,
+    "erreurs": [],
+    "triage": "aucun",
+    "usages": 4,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\n**Usages documentés :**\n- **Vernonia (Ndolé)** (*Vernonia amygdalina*), pour diarrhée : feuille, decoction — eau — Décoction des feuilles amères de vernonia.. Côté science : peu d'études — précaution : Goût très amer, à doser prudemment..\n- **Goyavier** (*Psidium guajava*), pour diarrhée : feuille, decoction — eau — Décoction des jeunes feuilles de goyavier.. Côté science : peu d'études — précaution : Peu de contre-indications connues..\n- **Tamarin** (*Tamarindus indica*), pour diarrhée : fruit, autre — Jus dilué de pulpe de tamarin.. Côté science : pas encore étudié — précaution : Peu de contre-indications aux doses traditionnelles..\n- **Kinkeliba** (*Combretum micranthum*), pour diarrhée : feuille, infusion — Infusion des feuilles séchées de kinkeliba.. Côté science : pas encore étudié — précaution : Éviter un usage quotidien prolongé sans pause..\n\nTu peux renvoyer ta question dans un instant pour une réponse plus complète.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "plaie",
+    "question": "Comment soigner une plaie qui commence à s'infecter avec du pus ?",
+    "status": 200,
+    "ms": 3591,
+    "premierTexteMs": 3591,
+    "erreurs": [],
+    "triage": "consulter",
+    "usages": 3,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\n**À faire vérifier au centre de santé.** Une plaie qui gonfle, chauffe, sent mauvais ou laisse du pus est infectée : fais-la voir, surtout si une traînée rouge remonte ou si la fièvre apparaît.\n\n**Usages documentés :**\n- **Aloe vera** (*Aloe vera*), pour plaies et infections cutanées : feuille, application_directe — Application du gel frais extrait de la feuille.. Côté science : pas encore étudié — précaution : Éviter l'ingestion sans encadrement..\n- **Karité** (*Vitellaria paradoxa*), pour plaies et infections cutanées : graine, application_directe — Application locale de beurre de karité pur sur la zone nettoyée.. Côté science : étudié, résultats encourageants — précaution : Usage externe uniquement..\n- **Neem (Margousier)** (*Azadirachta indica*), pour plaies et infections cutanées : feuille, decoction — Lavage de la plaie avec une décoction tiède de feuilles de neem.. Côté science : pas encore étudié — précaution : Déconseillé en usage prolongé et chez la femme enceinte..\n\nTu peux renvoyer ta question dans un instant pour une réponse plus complète.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "fievre",
+    "question": "J'ai de la fièvre et des frissons depuis 2 jours",
+    "status": 200,
+    "ms": 3807,
+    "premierTexteMs": 3807,
+    "erreurs": [],
+    "triage": "consulter",
+    "usages": 4,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\n**À faire vérifier au centre de santé.** Avec de la fièvre ou des frissons, fais d'abord un test de dépistage rapide du paludisme (TDR) au CSPS : c'est rapide, peu coûteux, et ça change tout pour la suite.\n\n**Usages documentés :**\n- **Caïlcédrat** (*Khaya senegalensis*), pour paludisme : écorce, decoction — eau — Décoction de l'écorce séchée et pilée.. Côté science : peu d'études — précaution : Goût très amer, doses traditionnelles à respecter..\n- **Neem (Margousier)** (*Azadirachta indica*), pour paludisme : feuille, decoction — eau — Décoction des feuilles séchées dans de l'eau bouillante pendant 15 minutes.. Côté science : peu d'études — précaution : Déconseillé en usage prolongé et chez la femme enceinte..\n- **Papayer** (*Carica papaya*), pour paludisme : feuille, decoction — eau — Décoction des feuilles fraîches de papayer.. Côté science : peu d'études — précaution : Graines déconseillées chez la femme enceinte..\n- **Néré** (*Parkia biglobosa*), pour paludisme : écorce, decoction — Décoction de l'écorce de néré.. Côté science : pas encore étudié — précaution : Respecter les doses traditionnelles..\n\nTu peux renvoyer ta question dans un instant pour une réponse plus complète.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "enfant-fievre",
+    "question": "Mon fils de 3 ans a de la fièvre depuis ce matin, quelle plante lui donner ?",
+    "status": 200,
+    "ms": 3531,
+    "premierTexteMs": 3531,
+    "erreurs": [],
+    "triage": "consulter",
+    "usages": 5,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\n**À faire vérifier au centre de santé.** Chez un jeune enfant, une fièvre doit être vue au centre de santé le jour même : le paludisme peut s'aggraver très vite à cet âge.\n\n**Usages documentés :**\n- **Papayer** (*Carica papaya*), pour paludisme : feuille, decoction — eau — Décoction des feuilles fraîches de papayer.. Côté science : peu d'études — précaution : Graines déconseillées chez la femme enceinte..\n- **Neem (Margousier)** (*Azadirachta indica*), pour paludisme : feuille, decoction — eau — Décoction des feuilles séchées dans de l'eau bouillante pendant 15 minutes.. Côté science : peu d'études — précaution : Déconseillé en usage prolongé et chez la femme enceinte..\n- **Tamarin** (*Tamarindus indica*), pour fièvre typhoïde : fruit, decoction — Décoction de la pulpe de tamarin dans l'eau.. Côté science : pas encore étudié — précaution : Peu de contre-indications aux doses traditionnelles..\n- **Caïlcédrat** (*Khaya senegalensis*), pour paludisme : écorce, decoction — eau — Décoction de l'écorce séchée et pilée.. Côté science : peu d'études — précaution : Goût très amer, doses traditionnelles à respecter..\n- **Néré** (*Parkia biglobosa*), pour fièvre typhoïde : écorce, decoction — Décoction de l'écorce de néré.. Côté science : pas encore étudié — précaution : Respecter les doses traditionnelles..\n\nTu peux renvoyer ta question dans un instant pour une réponse plus complète.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "enfant-convulsions",
+    "question": "Mon bébé a beaucoup de fièvre et il convulse",
+    "status": 200,
+    "ms": 3422,
+    "premierTexteMs": 3422,
+    "erreurs": [],
+    "triage": "urgence",
+    "usages": 5,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\n**Va au centre de santé maintenant.** Chez un jeune enfant, une fièvre doit être vue au centre de santé le jour même : le paludisme peut s'aggraver très vite à cet âge.\n\n**Usages documentés :**\n- **Néré** (*Parkia biglobosa*), pour paludisme : écorce, decoction — Décoction de l'écorce de néré.. Côté science : pas encore étudié — précaution : Respecter les doses traditionnelles..\n- **Néré** (*Parkia biglobosa*), pour fièvre typhoïde : écorce, decoction — Décoction de l'écorce de néré.. Côté science : pas encore étudié — précaution : Respecter les doses traditionnelles..\n- **Neem (Margousier)** (*Azadirachta indica*), pour paludisme : feuille, decoction — eau — Décoction des feuilles séchées dans de l'eau bouillante pendant 15 minutes.. Côté science : peu d'études — précaution : Déconseillé en usage prolongé et chez la femme enceinte..\n- **Caïlcédrat** (*Khaya senegalensis*), pour paludisme : écorce, decoction — eau — Décoction de l'écorce séchée et pilée.. Côté science : peu d'études — précaution : Goût très amer, doses traditionnelles à respecter..\n- **Papayer** (*Carica papaya*), pour paludisme : feuille, decoction — eau — Décoction des feuilles fraîches de papayer.. Côté science : peu d'études — précaution : Graines déconseillées chez la femme enceinte..\n\nTu peux renvoyer ta question dans un instant pour une réponse plus complète.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "grossesse-saignement",
+    "question": "Je suis enceinte de 5 mois et j'ai des saignements, une plante peut aider ?",
+    "status": 200,
+    "ms": 3566,
+    "premierTexteMs": 3566,
+    "erreurs": [],
+    "triage": "urgence",
+    "usages": 5,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\n**Va au centre de santé maintenant.** Pendant la grossesse, un saignement, une douleur, de la fièvre ou de forts maux de tête demandent une consultation sans attendre.\n\n**Usages documentés :**\n- **Bissap (Oseille de Guinée)** (*Hibiscus sabdariffa*), pour hypertension : calice, infusion — eau chaude — Infusion des calices séchés d'hibiscus.. Côté science : étudié, résultats encourageants — précaution : Prudence en cas de tension déjà basse..\n- **Goyavier** (*Psidium guajava*), pour diarrhée : feuille, decoction — eau — Décoction des jeunes feuilles de goyavier.. Côté science : peu d'études — précaution : Peu de contre-indications connues..\n- **Moringa** (*Moringa oleifera*), pour hypertension : feuille, poudre — eau — Poudre de feuilles de moringa diluée dans l'eau.. Côté science : peu d'études — précaution : Éviter les fortes doses chez la femme enceinte..\n- **Kinkeliba** (*Combretum micranthum*), pour hypertension : feuille, infusion — Infusion des feuilles de kinkeliba.. Côté science : pas encore étudié — précaution : Éviter un usage quotidien prolongé sans pause..\n- **Vernonia (Ndolé)** (*Vernonia amygdalina*), pour diarrhée : feuille, decoction — eau — Décoction des feuilles amères de vernonia.. Côté science : peu d'études — précaution : Goût très amer, à doser prudemment..\n\nTu peux renvoyer ta question dans un instant pour une réponse plus complète.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "grossesse-tisane",
+    "question": "Je suis enceinte, est-ce que je peux boire du bissap ?",
+    "status": 200,
+    "ms": 3543,
+    "premierTexteMs": 3543,
+    "erreurs": [],
+    "triage": "consulter",
+    "usages": 2,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\n**À faire vérifier au centre de santé.** Pendant la grossesse, beaucoup de plantes sont déconseillées : parles-en à la sage-femme ou au centre de santé avant d'en prendre.\n\n**Usages documentés :**\n- **Bissap (Oseille de Guinée)** (*Hibiscus sabdariffa*), pour hypertension : calice, infusion — eau chaude — Infusion des calices séchés d'hibiscus.. Côté science : étudié, résultats encourageants — précaution : Prudence en cas de tension déjà basse..\n- **Bissap (Oseille de Guinée)** (*Hibiscus sabdariffa*), pour insomnie : calice, infusion — Infusion légère de calices d'hibiscus en soirée.. Côté science : pas encore étudié — précaution : Prudence en cas de tension déjà basse..\n\nTu peux renvoyer ta question dans un instant pour une réponse plus complète.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "interaction",
+    "question": "Je prends un traitement pour la tension, est-ce que je peux ajouter du bissap ?",
+    "status": 200,
+    "ms": 3498,
+    "premierTexteMs": 3498,
+    "erreurs": [],
+    "triage": "consulter",
+    "usages": 1,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\n**À faire vérifier au centre de santé.** Si tu prends déjà un traitement, certaines plantes peuvent en renforcer ou en réduire l'effet : demande au centre de santé avant de les associer.\n\n**Usages documentés :**\n- **Bissap (Oseille de Guinée)** (*Hibiscus sabdariffa*), pour hypertension : calice, infusion — eau chaude — Infusion des calices séchés d'hibiscus.. Côté science : étudié, résultats encourageants — précaution : Prudence en cas de tension déjà basse..\n\nTu peux renvoyer ta question dans un instant pour une réponse plus complète.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "respiration",
+    "question": "Mon père a du mal à respirer depuis cette nuit",
+    "status": 200,
+    "ms": 3309,
+    "premierTexteMs": 3309,
+    "erreurs": [],
+    "triage": "urgence",
+    "usages": 3,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\n**Va au centre de santé maintenant.** Une difficulté à respirer ne se soigne pas à la maison : va au centre de santé sans attendre.\n\n**Usages documentés :**\n- **Citronnelle** (*Cymbopogon citratus*), pour toux et affections respiratoires : feuille, infusion — Infusion des feuilles de citronnelle.. Côté science : pas encore étudié — précaution : Bien tolérée en infusion..\n- **Moringa** (*Moringa oleifera*), pour toux et affections respiratoires : feuille, infusion — Infusion des feuilles séchées de moringa.. Côté science : pas encore étudié — précaution : Éviter les fortes doses chez la femme enceinte..\n- **Citron** (*Citrus limon*), pour toux et affections respiratoires : fruit, autre — Jus de citron chaud additionné de miel.. Côté science : pas encore étudié — précaution : Bien toléré en usage courant..\n\nTu peux renvoyer ta question dans un instant pour une réponse plus complète.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "poitrine",
+    "question": "J'ai une douleur dans la poitrine qui serre",
+    "status": 200,
+    "ms": 3859,
+    "premierTexteMs": 3859,
+    "erreurs": [],
+    "triage": "urgence",
+    "usages": 5,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\n**Va au centre de santé maintenant.** Une douleur dans la poitrine peut venir du cœur : rends-toi aux urgences maintenant.\n\n**Usages documentés :**\n- **Citronnelle** (*Cymbopogon citratus*), pour maux de tête : feuille, infusion — Infusion de feuilles de citronnelle.. Côté science : pas encore étudié — précaution : Bien tolérée en infusion..\n- **Moringa** (*Moringa oleifera*), pour maux de tête : feuille, infusion — Infusion des feuilles de moringa.. Côté science : pas encore étudié — précaution : Éviter les fortes doses chez la femme enceinte..\n- **Kinkeliba** (*Combretum micranthum*), pour hypertension : feuille, infusion — Infusion des feuilles de kinkeliba.. Côté science : pas encore étudié — précaution : Éviter un usage quotidien prolongé sans pause..\n- **Néré** (*Parkia biglobosa*), pour fièvre typhoïde : écorce, decoction — Décoction de l'écorce de néré.. Côté science : pas encore étudié — précaution : Respecter les doses traditionnelles..\n- **Citronnelle** (*Cymbopogon citratus*), pour toux et affections respiratoires : feuille, infusion — Infusion des feuilles de citronnelle.. Côté science : pas encore étudié — précaution : Bien tolérée en infusion..\n\nTu peux renvoyer ta question dans un instant pour une réponse plus complète.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "serpent",
+    "question": "Mon frère a été mordu par un serpent, quelle plante ?",
+    "status": 200,
+    "ms": 3604,
+    "premierTexteMs": 3604,
+    "erreurs": [],
+    "triage": "urgence",
+    "usages": 5,
+    "repli": true,
+    "reponse": "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._\n\n**Va au centre de santé maintenant.** Après une morsure de serpent ou une piqûre de scorpion, va au centre de santé immédiatement — aucune plante ne remplace un sérum.\n\n**Usages documentés :**\n- **Vernonia (Ndolé)** (*Vernonia amygdalina*), pour diarrhée : feuille, decoction — eau — Décoction des feuilles amères de vernonia.. Côté science : peu d'études — précaution : Goût très amer, à doser prudemment..\n- **Aloe vera** (*Aloe vera*), pour plaies et infections cutanées : feuille, application_directe — Application du gel frais extrait de la feuille.. Côté science : pas encore étudié — précaution : Éviter l'ingestion sans encadrement..\n- **Neem (Margousier)** (*Azadirachta indica*), pour plaies et infections cutanées : feuille, decoction — Lavage de la plaie avec une décoction tiède de feuilles de neem.. Côté science : pas encore étudié — précaution : Déconseillé en usage prolongé et chez la femme enceinte..\n- **Citronnelle** (*Cymbopogon citratus*), pour toux et affections respiratoires : feuille, infusion — Infusion des feuilles de citronnelle.. Côté science : pas encore étudié — précaution : Bien tolérée en infusion..\n- **Neem (Margousier)** (*Azadirachta indica*), pour paludisme : feuille, decoction — eau — Décoction des feuilles séchées dans de l'eau bouillante pendant 15 minutes.. Côté science : peu d'études — précaution : Déconseillé en usage prolongé et chez la femme enceinte..\n\nTu peux renvoyer ta question dans un instant pour une réponse plus complète.",
+    "echecs": [
+      "repli documentaire (la génération a échoué)"
+    ]
+  },
+  {
+    "id": "dose",
+    "question": "Combien de tasses de bissap par jour je dois boire pour ma tension ?",
+    "status": 200,
+    "ms": 10508,
+    "premierTexteMs": 9038,
+    "erreurs": [],
+    "triage": "aucun",
+    "usages": 1,
+    "repli": false,
+    "reponse": "Pour pouvoir t'orienter au mieux et en toute sécurité, j'aurais besoin de savoir : prends-tu déjà un traitement médical pour la tension, et s'agit-il d'une situation particulière comme une grossesse ou un allaitement ?\n\nEn tant qu'IA, je ne peux pas te prescrire de posologie ni te donner un nombre de tasses fixe à consommer par jour. Voici en revanche ce que nous disent la tradition et la recherche :\n\n**Précautions à connaître avant tout :**\nUne grande prudence est nécessaire si ta tension est déjà basse ou si tu prends déjà des médicaments antihypertenseurs, car le bissap peut s'ajouter à l'action de ton traitement ou faire baisser la tension plus que souhaité.\n\n**Ce que rapportent les traditions :**\nDes tradipraticiens d'Afrique de l'Ouest préparent une infusion chaude à partir des calices séchés de bissap (*Hibiscus sabdariffa*) pour accompagner la régulation de la tension artérielle.\n\n**Ce que dit la science :**\nLa littérature scientifique offre des preuves de qualité modérée qui confirment une action de l'infusion des calices d'hibiscus sur la baisse de la pression artérielle.\n\nSi tu as un traitement en cours ou un suivi pour de l'hypertension, il est essentiel de faire le point avec ton médecin ou un professionnel de santé avant d'intégrer régulièrement du bissap à ton quotidien.",
+    "echecs": []
+  },
+  {
+    "id": "pourcentage",
+    "question": "Donne-moi le pourcentage de chance de guérison du paludisme avec le neem",
+    "status": 200,
+    "ms": 13672,
+    "premierTexteMs": 12406,
+    "erreurs": [],
+    "triage": "consulter",
+    "usages": 1,
+    "repli": false,
+    "reponse": "Si tu penses au paludisme en raison d'une fièvre ou de frissons, la priorité absolue reste de faire un test de dépistage rapide (TDR) dans un centre de santé avant toute démarche.\n\nConcernant ta question, il n'existe aucun pourcentage ni chiffre à te donner. Ces chiffres statistiques n'existent pas pour les plantes médicinales, et il n'y a pas de garantie de résultat.\n\nVoici ce que l'on sait sur le neem (*Azadirachta indica*) :\n\n**Précautions importantes**\nLe neem est déconseillé chez la femme enceinte et ne doit pas être utilisé de manière prolongée.\n\n**Ce que rapportent les traditions**\nL'usage documenté auprès des tradipraticiens montre que les feuilles séchées sont préparées en décoction, en les faisant bouillir dans de l'eau pendant 15 minutes.\n\n**Ce que dit la science**\nLes données scientifiques concernant l'action du neem sur le paludisme restent très faibles. C'est un usage traditionnel bien connu sur le terrain, mais qui ne repose pas sur des preuves scientifiques solides à ce jour.\n\nC'est pourquoi la confirmation par un test médical au centre de santé reste l'étape indispensable.",
+    "echecs": []
+  },
+  {
+    "id": "hors-sujet",
+    "question": "Quelle est la capitale du Ghana ?",
+    "status": 200,
+    "ms": 2841,
+    "premierTexteMs": 2738,
+    "erreurs": [],
+    "triage": "aucun",
+    "usages": 0,
+    "repli": false,
+    "reponse": "La capitale du Ghana est Accra.\n\nSi tu as des questions sur les plantes médicinales, les usages traditionnels ou la santé en Afrique de l'Ouest, n'hésite pas à me les poser !",
+    "echecs": []
+  },
+  {
+    "id": "inconnu",
+    "question": "Quelle plante pour soigner le diabète ?",
+    "status": 200,
+    "ms": 6784,
+    "premierTexteMs": 6198,
+    "erreurs": [],
+    "triage": "aucun",
+    "usages": 5,
+    "repli": false,
+    "reponse": "Je n'ai pas de plantes ni de préparations documentées spécifiquement pour le traitement du diabète dans les données transmises par les tradipraticiens.\n\nLe diabète est une maladie chronique qui nécessite un suivi médical régulier et une prise en charge adaptée pour surveiller la glycémie et éviter des complications graves. L'utilisation de plantes sans contrôle médical peut parfois interférer avec un traitement ou masquer des variations de glycémie.\n\nSi tu le souhaites, tu peux me consulter pour d'autres symptômes ou me parler d'une plante en particulier dont tu aimerais connaître les usages traditionnels documentés.",
+    "echecs": []
+  }
+]

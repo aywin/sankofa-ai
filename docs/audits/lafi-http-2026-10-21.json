@@ -1,0 +1,136 @@
+{
+  "date": "2026-10-21",
+  "checks": [
+    {
+      "path": "/api/health",
+      "status": 200,
+      "ms": 565,
+      "text": "{\"status\":\"ok\",\"database\":\"connected\",\"maladies_count\":8}"
+    },
+    {
+      "path": "/decouverte",
+      "status": 200,
+      "ms": 747,
+      "text": " Découverte — Lafi Lafi Découverte Laboratoire Parler à Lafi Découverte 24 usage s traditionnel s — classés du niveau de preuve le plus solide au moins solide. La collecte de terrain auprès des tradipraticiens est en cours — une partie des sources affichées ici sont encore illustratives, clairement indiquées comme telles sur chaque carte. Mal ou indication Toutes Diarrhée ( 4 ) Fièvre typhoïde ( 3 ) Hypertension ( 3 ) Insomnie ( 2 ) Maux de tête ( 2 ) Paludisme ( 4 ) Plaies et infections cutanées ( 3 ) Toux et affections respiratoires ( 3 ) Partie utilisée Toutes calice ( 2 ) écorce ( 3 ) feuille ( 14 ) fruit ( 4 ) graine ( 1 ) Qualité de preuve scientifique Toutes Modérée ( 2 ) Faible ( 2 ) Très faible ( 4 ) Non évaluée ( 16 ) Filtrer Karité Vitellaria paradoxa — Sapotaceae Pour : Plaies et infections cutanées ( graine ) Étudié, résultats encourageants Groupement de praticiens du Plateau central (illustration) — Illustratif — aucune région réelle associée illustration Voir le raisonnement Bissap (Oseille de Guinée) Hibiscus sabdariffa — Malvaceae Pour : Hypertension ( calice ) Étudié, résultats encourageants Groupement de praticiens du Plateau central (illustration) — Illustratif — aucune région réelle associée illustration Voir le raisonnement Moringa Moringa oleifera — Moringaceae Pour : Hypertension ( feuille ) Peu d&#x27;études Voir le raisonnement Goyavier Psidium guajava — Myrtaceae Pour : Diarrhée ( feuille ) Peu d&#x27;études Groupement de praticiens du Plateau central (illustration) — Illustratif — aucune région réelle associée illustration Voir le raisonnement Papayer Carica papaya — Caricaceae Pour : Paludisme ( feuille ) Peu d&#x27;études Groupement de praticiens du Plateau central (illustration) — Illustratif — aucune région réelle associée illustration Voir le raisonnement Vernonia (Ndolé) Vernonia amygdalina — Asteraceae Pour : Diarrhée ( feuille ) Peu d&#x27;études Voir le raisonnement Neem (Margousier) Azadirachta indica — Meliaceae Pour : Paludisme ( feuille ) Peu d&#x27;études Groupement de praticiens du Plateau central (illustration) — Illustratif — aucune région réelle associée illustration Voir le raisonnement Caïlcédrat Khaya senegalensis — Meliaceae Pour : Paludisme ( écorce ) Peu d&#x27;études Voir le raisonnement Néré Parkia biglobosa Pour : Fièvre typhoïde ( écorce ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Tamarin Tamarindus indica Pour : Fièvre typhoïde ( fruit ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Baobab Adansonia digitata Pour : Fièvre typhoïde ( fruit ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Néré Parkia biglobosa Pour : Paludisme ( écorce ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Kinkeliba Combretum micranthum Pour : Diarrhée ( feuille ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Tamarin Tamarindus indica Pour : Diarrhée ( fruit ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Citron Citrus limon Pour : Toux et affections respiratoires ( fruit ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Citronnelle Cymbopogon citratus Pour : Toux et affections respiratoires ( feuille ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Moringa Moringa oleifera — Moringaceae Pour : Toux et affections respiratoires ( feuille ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Citronnelle Cymbopogon citratus Pour : Maux de tête ( feuille ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Moringa Moringa oleifera — Moringaceae Pour : Maux de tête ( feuille ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Kinkeliba Combretum micranthum Pour : Hypertension ( feuille ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Aloe vera Aloe vera Pour : Plaies et infections cutanées ( feuille ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Neem (Margousier) Azadirachta indica — Meliaceae Pour : Plaies et infections cutanées ( feuille ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Citronnelle Cymbopogon citratus Pour : Insomnie ( feuille ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Bissap (Oseille de Guinée) Hibiscus sabdariffa — Malvaceae Pour : Insomnie ( calice ) Pas encore étudié Démonstration — terrain non réalisé Corpus documentaire initial (illustration) illustration Voir le raisonnement Lafi On documente le savoir des tradipraticiens et on le rend accessible — croisé avec ce qu&#x27;en dit la science, sans jamais les confondre. Produit Découverte Laboratoire Parler à Lafi Ressources Indications documentées Preuves les mieux établies Lafi — information documentaire, pas un avis médical. Aucun élément de langage marchand : pas d&#x27;achat, pas de promotion. "
+    },
+    {
+      "path": "/laboratoire",
+      "status": 200,
+      "ms": 55,
+      "text": " Laboratoire — Lafi Lafi Découverte Laboratoire Parler à Lafi 🧪 Laboratoire Choisis une plante et une indication dans les deux premiers nœuds, puis lance : le raisonnement complet s&#x27;affiche nœud par nœud, et le résultat apparaît à droite. Mode simple Mode expert ✓ Contrôle sécurité — aucune contre-indication forte enregistrée Plante Bissap (Oseil… ▾ Indication Hypertension ▾ 3 Savoir traditionnel 4 Étude scientifique 5 Mise en commun 6 Synthèse IA Lancer Résultat En attente du lancement — choisis éventuellement une autre plante ou indication ci-contre, puis clique sur « Lancer ». Autre chose : explorer des synergies entre deux plantes (espace expérimental, distinct de ce qui est documenté ici). Lafi On documente le savoir des tradipraticiens et on le rend accessible — croisé avec ce qu&#x27;en dit la science, sans jamais les confondre. Produit Découverte Laboratoire Parler à Lafi Ressources Indications documentées Preuves les mieux établies Lafi — information documentaire, pas un avis médical. Aucun élément de langage marchand : pas d&#x27;achat, pas de promotion. "
+    },
+    {
+      "path": "/synergies",
+      "status": 200,
+      "ms": 1073,
+      "text": " Synergies — Lafi Lafi Découverte Laboratoire Parler à Lafi 🧪 Explorer des synergies Croise les profils chimiques déjà documentés de deux plantes et regarde ce que Lafi en observe — une piste de recherche, jamais un usage attesté. 🧪 Espace expérimental — Lafi croise des profils chimiques déjà documentés et formule une hypothèse. Ce n&#x27;est jamais un usage attesté ni un remède recommandé. Plante A Caïlcédrat ▾ Plante B Goyavier ▾ 3 Profil chimique A 4 Profil chimique B 5 Recoupe- ment 6 Hypothèse IA Croiser ces deux profils Hypothèse En attente du lancement — choisis éventuellement une autre plante ci-contre, puis clique sur « Croiser ces deux profils ». Lafi On documente le savoir des tradipraticiens et on le rend accessible — croisé avec ce qu&#x27;en dit la science, sans jamais les confondre. Produit Découverte Laboratoire Parler à Lafi Ressources Indications documentées Preuves les mieux établies Lafi — information documentaire, pas un avis médical. Aucun élément de langage marchand : pas d&#x27;achat, pas de promotion. "
+    },
+    {
+      "path": "/chat",
+      "status": 200,
+      "ms": 48,
+      "text": " Lafi Nouvelle conversation Explorer Découverte 🧪 Laboratoire Identifier une plante Contribuer Pas encore d&#x27;historique. Se connecter — synchroniser l&#x27;historique Lafi Décris un symptôme, une maladie — ou envoie une photo. Se soigner naturellement et efficacement. J&#x27;ai de la fièvre et des frissons depuis 2 jours Comment soigner une plaie qui commence à s&#x27;infecter ? Je n&#x27;arrive pas à dormir depuis plusieurs nuits Quelle plante pour faire baisser la tension ? Particulier Tradipraticien Professionnel de santé Lafi partage des usages traditionnels, pas un diagnostic — en cas de doute, va voir quelqu&#x27;un. "
+    },
+    {
+      "path": "/plants/bissap-oseille-de-guinee",
+      "status": 200,
+      "ms": 2979,
+      "text": " Lafi Lafi Découverte Laboratoire Parler à Lafi ← Toutes les plantes Plante entière Franz Xaver — CC BY-SA 3.0 Calices séchés (partie utilisée) Popperipopp — CC BY 3.0 Bissap (Oseille de Guinée) Hibiscus sabdariffa L. — Malvaceae Aucun spécimen déposé en herbier — donnée non publiable en l&#x27;état. Calices utilisés en infusion, traditionnellement associés à la régulation de la tension artérielle. Précautions Prudence en cas de tension déjà basse. Maladies traitées Insomnie Voir le raisonnement → Pas encore étudié Démonstration — terrain non réalisé Aucune attestation traditionnelle comptée pour l&#x27;instant — la collecte de terrain n&#x27;a pas encore eu lieu sur ce couple. Corpus documentaire initial (illustration) Regroupement illustratif du savoir documentaire de départ Structure d&#x27;illustration — Lafi travaillera avec des organisations réelles de tradipraticiens ; les partenariats ne sont pas encore établis. Ce nom ne désigne aucune organisation existante. Corpus documentaire initial — pas encore de vraie collecte de terrain sur ce couple. Infusion — calice Infusion légère de calices d&#x27;hibiscus en soirée. Hypertension Voir le raisonnement → Étudié, résultats encourageants Aucune attestation traditionnelle comptée pour l&#x27;instant — la collecte de terrain n&#x27;a pas encore eu lieu sur ce couple. Groupement de praticiens du Plateau central (illustration) Représente le type de structure régionale que Lafi visera — Sahel Structure d&#x27;illustration — Lafi travaillera avec des organisations réelles de tradipraticiens ; les partenariats ne sont pas encore établis. Ce nom ne désigne aucune organisation existante. Infusion — calice Infusion des calices séchés d&#x27;hibiscus. Solvant : eau chaude Effect of Hibiscus sabdariffa on blood pressure in patients with stage 1 hypertension (titre original) — essai clinique humain (2019) A Randomized, Double-Blind, Placebo-Controlled Trial to Determine the Effectiveness of a Polyphenolic Extract (Hibiscus sabdariffa and Lippia citriodora) for Reducing Blood Pressure (titre original) — essai clinique humain (2021) The effectiveness of Hibiscus sabdariffa in the treatment of hypertension: a systematic review (titre original) — revue systématique Ce que dit la science Aucun composé chimique documenté à ce jour pour cette plante. Lafi On documente le savoir des tradipraticiens et on le rend accessible — croisé avec ce qu&#x27;en dit la science, sans jamais les confondre. Produit Découverte Laboratoire Parler à Lafi Ressources Indications documentées Preuves les mieux établies Lafi — information documentaire, pas un avis médical. Aucun élément de langage marchand : pas d&#x27;achat, pas de promotion. "
+    }
+  ],
+  "synergies": {
+    "taxonA": {
+      "taxonId": "b76aabd0-1f11-4569-b2c9-d58e2e3ef179",
+      "nomPrincipal": "Goyavier",
+      "nomScientifique": "Psidium guajava",
+      "composes": [
+        {
+          "nom": "Quercétine",
+          "concentration": null,
+          "cibles": [
+            {
+              "source": "https://pubmed.ncbi.nlm.nih.gov/20696580/",
+              "affinite": "IC50 = 77 nM",
+              "proteine": "CYP1B1"
+            },
+            {
+              "source": "https://pubmed.ncbi.nlm.nih.gov/24328302/",
+              "affinite": "IC50 = 280 nM",
+              "proteine": "KDR"
+            },
+            {
+              "source": "https://pubmed.ncbi.nlm.nih.gov/24328302/",
+              "affinite": "IC50 = 300 nM",
+              "proteine": "IGF1R"
+            }
+          ]
+        },
+        {
+          "nom": "Acide ascorbique (vitamine C)",
+          "concentration": null,
+          "cibles": [
+            {
+              "source": "https://pubmed.ncbi.nlm.nih.gov/19243956/",
+              "affinite": "EC50 = 0.5 nM",
+              "proteine": "ADRA2B"
+            },
+            {
+              "source": "https://pubmed.ncbi.nlm.nih.gov/25726329/",
+              "affinite": "IC50 = 32500 nM",
+              "proteine": "TYR (tyrosinase)"
+            }
+          ]
+        }
+      ]
+    },
+    "taxonB": {
+      "taxonId": "e8a00e28-5ba5-4144-ba13-5aaab8c5167b",
+      "nomPrincipal": "Caïlcédrat",
+      "nomScientifique": "Khaya senegalensis",
+      "composes": [
+        {
+          "nom": "Limonoïde (21β-hydroxybourjotinolone A)",
+          "concentration": null,
+          "cibles": [
+            {
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10609173/",
+              "affinite": "IC50 = 2.5 ± 0.12 µg/mL",
+              "proteine": "Plasmodium falciparum (souche chloroquino-résistante PfDd2)"
+            },
+            {
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10609173/",
+              "affinite": "IC50 = 2.5 ± 0.12 µg/mL",
+              "proteine": "Plasmodium falciparum (souche chloroquino-résistante PfDd2)"
+            }
+          ]
+        },
+        {
+          "nom": "Quercétine",
+          "concentration": null,
+          "cibles": [
+            {
+              "source": "https://pubmed.ncbi.nlm.nih.gov/20696580/",
+              "affinite": "IC50 = 77 nM",
+              "proteine": "CYP1B1"
+            },
+            {
+              "source": "https://pubmed.ncbi.nlm.nih.gov/24328302/",
+              "affinite": "IC50 = 280 nM",
+              "proteine": "KDR"
+            },
+            {
+              "source": "https://pubmed.ncbi.nlm.nih.gov/24328302/",
+              "affinite": "IC50 = 300 nM",
+              "proteine": "IGF1R"
+            }
+          ]
+        }
+      ]
+    },
+    "ciblesCommunes": [
+      "cyp1b1",
+      "kdr",
+      "igf1r"
+    ]
+  }
+}

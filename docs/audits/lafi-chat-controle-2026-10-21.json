@@ -1,0 +1,361 @@
+[
+  {
+    "label": "bonjour",
+    "prompt": "Bonjour, qui es-tu ?",
+    "status": 200,
+    "ms": 8335,
+    "answer": "",
+    "errors": [
+      {
+        "type": "error",
+        "errorText": "An error occurred."
+      }
+    ],
+    "eventTypes": [
+      "start",
+      "error"
+    ],
+    "events": [
+      {
+        "type": "start"
+      },
+      {
+        "type": "error",
+        "errorText": "An error occurred."
+      }
+    ]
+  },
+  {
+    "label": "exemple-interface",
+    "prompt": "Quelle plante pour faire baisser la tension ?",
+    "status": 200,
+    "ms": 34758,
+    "answer": "Pour accompagner la régulation de la tension artérielle, la tradition et nos observations mettent en avant plusieurs plantes très efficaces :\n\n### 1. Le Bissap ou Oseille de Guinée (*Hibiscus sabdariffa*)\nC'est la plante la plus reconnue pour cet usage. On utilise ses calices séchés préparés en infusion.\n* **Ce qu'en dit la science :** La qualité de la preuve scientifique est **modérée**, ce qui en fait l'une des options les mieux étayées pour aider à faire baisser la tension.\n* **À savoir :** Soyez prudent si votre tension est déjà naturellement basse, car il peut la faire chuter davantage.\n\n### 2. Le Moringa (*Moringa oleifera*)\nSes feuilles séchées et réduites en poudre, délayées dans un verre d'eau, sont traditionnellement employées pour soutenir le système cardiovasculaire.\n* **Ce qu'en dit la science :** La qualité de la preuve scientifique reste **faible** à ce jour.\n* **Précautions :** À éviter à fortes doses chez la femme enceinte.\n\n### 3. Le Kinkeliba (*Combretum micranthum*)\nLes feuilles de kinkeliba préparées en infusion sont également employées dans la tradition pour la tension et la détoxification générale.\n* **Précautions :** Évitez d'en consommer tous les jours sur de très longues périodes sans faire de pauses.\n\n---\n\n### Une règle importante pour votre santé\nL'hypertension est une affection souvent silencieuse : elle ne donne pas toujours de symptômes visibles, mais elle sollicite l'organisme au quotidien. Les plantes sont de très bonnes alliées pour soutenir le corps, mais elles ne dispensent pas d'un suivi régulier. Je vous conseille vivement de faire mesurer votre tension dans un centre de santé ou auprès d'un agent de santé pour adapter votre prise en charge en toute sécurité.",
+    "errors": [],
+    "eventTypes": [
+      "start",
+      "start-step",
+      "tool-input-start",
+      "tool-input-delta",
+      "tool-input-available",
+      "tool-output-available",
+      "finish-step",
+      "start-step",
+      "tool-input-start",
+      "tool-input-delta",
+      "tool-input-available",
+      "tool-output-available",
+      "finish-step",
+      "start-step",
+      "text-start",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-delta",
+      "text-end",
+      "finish-step",
+      "finish"
+    ],
+    "events": [
+      {
+        "type": "start"
+      },
+      {
+        "type": "start-step"
+      },
+      {
+        "type": "tool-input-start",
+        "toolCallId": "call_185129",
+        "toolName": "rechercher_par_symptome",
+        "dynamic": false
+      },
+      {
+        "type": "tool-input-delta",
+        "toolCallId": "call_185129",
+        "inputTextDelta": "{\"description\":\"hypertension arterielle tension elevee baisser la tension\"}"
+      },
+      {
+        "type": "tool-input-available",
+        "toolCallId": "call_185129",
+        "toolName": "rechercher_par_symptome",
+        "input": {
+          "description": "hypertension arterielle tension elevee baisser la tension"
+        }
+      },
+      {
+        "type": "tool-output-available",
+        "toolCallId": "call_185129",
+        "output": {
+          "resultats": [
+            {
+              "claim_id": "11516552-46a7-4313-9f7a-20d27c619adc",
+              "taxon_id": "d07a3bd5-3a2f-4045-b770-aa390e766118",
+              "taxon_slug": "kinkeliba",
+              "nom_principal": "Kinkeliba",
+              "nom_scientifique": "Combretum micranthum",
+              "precautions": "Éviter un usage quotidien prolongé sans pause.",
+              "indication_nom": "Hypertension",
+              "partie_nom": "feuille",
+              "preparation_mode": "infusion",
+              "preparation_resume": "infusion — Infusion des feuilles de kinkeliba.",
+              "qualite_preuve_scientifique": null,
+              "contre_indication_forte": false,
+              "est_pilote": false,
+              "attestations_count": 0,
+              "lignees_distinctes": 0,
+              "regions_distinctes": 0,
+              "langues_distinctes": 0,
+              "similarity": 0.687081559141785
+            },
+            {
+              "claim_id": "c3034788-bd9c-432b-a62f-519154665c99",
+              "taxon_id": "184c04ea-25db-41fd-9801-46dea835e389",
+              "taxon_slug": "bissap-oseille-de-guinee",
+              "nom_principal": "Bissap (Oseille de Guinée)",
+              "nom_scientifique": "Hibiscus sabdariffa",
+              "precautions": "Prudence en cas de tension déjà basse.",
+              "indication_nom": "Hypertension",
+              "partie_nom": "calice",
+              "preparation_mode": "infusion",
+              "preparation_resume": "infusion — eau chaude — Infusion des calices séchés d'hibiscus.",
+              "qualite_preuve_scientifique": "moderee",
+              "contre_indication_forte": false,
+              "est_pilote": true,
+              "attestations_count": 0,
+              "lignees_distinctes": 0,
+              "regions_distinctes": 0,
+              "langues_distinctes": 0,
+              "similarity": 0.678079343487716
+            },
+            {
+              "claim_id": "b2b2935f-8e03-41d3-9761-12057e1720b5",
+              "taxon_id": "cdd2d26b-9928-4248-9a31-a14e9e503abb",
+              "taxon_slug": "moringa",
+              "nom_principal": "Moringa",
+              "nom_scientifique": "Moringa oleifera",
+              "precautions": "Éviter les fortes doses chez la femme enceinte.",
+              "indication_nom": "Hypertension",
+              "partie_nom": "feuille",
+              "preparation_mode": "poudre",
+              "preparation_resume": "poudre — eau — Poudre de feuilles de moringa diluée dans l'eau.",
+              "qualite_preuve_scientifique": "faible",
+              "contre_indication_forte": false,
+              "est_pilote": true,
+              "attestations_count": 0,
+              "lignees_distinctes": 0,
+              "regions_distinctes": 0,
+              "langues_distinctes": 0,
+              "similarity": 0.675738187990917
+            },
+            {
+              "claim_id": "941669da-d276-407b-8411-63438ef16357",
+              "taxon_id": "cdd2d26b-9928-4248-9a31-a14e9e503abb",
+              "taxon_slug": "moringa",
+              "nom_principal": "Moringa",
+              "nom_scientifique": "Moringa oleifera",
+              "precautions": "Éviter les fortes doses chez la femme enceinte.",
+              "indication_nom": "Maux de tête",
+              "partie_nom": "feuille",
+              "preparation_mode": "infusion",
+              "preparation_resume": "infusion — Infusion des feuilles de moringa.",
+              "qualite_preuve_scientifique": null,
+              "contre_indication_forte": false,
+              "est_pilote": false,
+              "attestations_count": 0,
+              "lignees_distinctes": 0,
+              "regions_distinctes": 0,
+              "langues_distinctes": 0,
+              "similarity": 0.619650983298046
+            },
+            {
+              "claim_id": "8a25a446-fa66-4996-8653-ce7cccc3b545",
+              "taxon_id": "cdd2d26b-9928-4248-9a31-a14e9e503abb",
+              "taxon_slug": "moringa",
+              "nom_principal": "Moringa",
+              "nom_scientifique": "Moringa oleifera",
+              "precautions": "Éviter les fortes doses chez la femme enceinte.",
+              "indication_nom": "Toux et affections respiratoires",
+              "partie_nom": "feuille",
+              "preparation_mode": "infusion",
+              "preparation_resume": "infusion — Infusion des feuilles séchées de moringa.",
+              "qualite_preuve_scientifique": null,
+              "contre_indication_forte": false,
+              "est_pilote": false,
+              "attestations_count": 0,
+              "lignees_distinctes": 0,
+              "regions_distinctes": 0,
+              "langues_distinctes": 0,
+              "similarity": 0.610799999678635
+            }
+          ]
+        },
+        "dynamic": false
+      },
+      {
+        "type": "finish-step"
+      },
+      {
+        "type": "start-step"
+      },
+      {
+        "type": "tool-input-start",
+        "toolCallId": "call_185956",
+        "toolName": "obtenir_details_plante",
+        "dynamic": false
+      },
+      {
+        "type": "tool-input-delta",
+        "toolCallId": "call_185956",
+        "inputTextDelta": "{\"nom\":\"Bissap (Oseille de Guinée)\"}"
+      },
+      {
+        "type": "tool-input-available",
+        "toolCallId": "call_185956",
+        "toolName": "obtenir_details_plante",
+        "input": {
+          "nom": "Bissap (Oseille de Guinée)"
+        }
+      },
+      {
+        "type": "tool-output-available",
+        "toolCallId": "call_185956",
+        "output": {
+          "plante": {
+            "id": "184c04ea-25db-41fd-9801-46dea835e389",
+            "slug": "bissap-oseille-de-guinee",
+            "famille": "Malvaceae",
+            "herbier": null,
+            "autorite": "L.",
+            "photo_url": null,
+            "created_at": "2026-08-06T10:39:24.384497+00:00",
+            "description": "Calices utilisés en infusion, traditionnellement associés à la régulation de la tension artérielle.",
+            "precautions": "Prudence en cas de tension déjà basse.",
+            "habitat_region": null,
+            "nom_scientifique": "Hibiscus sabdariffa",
+            "voucher_reference": null
+          }
+        },
+        "dynamic": false
+      },
+      {
+        "type": "finish-step"
+      },
+      {
+        "type": "start-step"
+      },
+      {
+        "type": "text-start",
+        "id": "0"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": "Pour accompagner la régulation de la tension"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": " artérielle, la tradition et nos observations mettent en avant plusieurs plantes très efficaces :\n\n### 1. Le Bissap"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": " ou Oseille de Guinée (*Hibiscus sabdariffa*)\nC'est la plante la plus recon"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": "nue pour cet usage. On utilise ses calices séchés préparés en infusion.\n* **Ce qu'en dit la science"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": " :** La qualité de la preuve scientifique est **modérée**, ce qui en fait l'une des options les mieux"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": " étayées pour aider à faire baisser la tension.\n* **À savoir :** Soyez prudent si votre tension est"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": " déjà naturellement basse, car il peut la faire chuter davantage.\n\n### 2. Le Moringa (*Moringa oleifera*)\nSes"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": " feuilles séchées et réduites en poudre, délayées dans un verre d'eau, sont traditionnellement employées pour soutenir le système card"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": "iovasculaire.\n* **Ce qu'en dit la science :** La qualité de la preuve scientifique reste **faible**"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": " à ce jour.\n* **Précautions :** À éviter à fortes doses chez la femme enceinte.\n\n### 3."
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": " Le Kinkeliba (*Combretum micranthum*)\nLes feuilles de kinkeliba préparées en infusion"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": " sont également employées dans la tradition pour la tension et la détoxification générale.\n* **Précautions :** Év"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": "itez d'en consommer tous les jours sur de très longues périodes sans faire de pauses.\n\n---\n\n### Une"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": " règle importante pour votre santé\nL'hypertension est une affection souvent silencieuse : elle ne donne pas toujours de symptômes"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": " visibles, mais elle sollicite l'organisme au quotidien. Les plantes sont de très bonnes alliées pour soutenir le corps, mais elles ne"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": " dispensent pas d'un suivi régulier. Je vous conseille vivement de faire mesurer votre tension dans un centre de santé ou auprès"
+      },
+      {
+        "type": "text-delta",
+        "id": "0",
+        "delta": " d'un agent de santé pour adapter votre prise en charge en toute sécurité."
+      },
+      {
+        "type": "text-end",
+        "id": "0"
+      },
+      {
+        "type": "finish-step"
+      },
+      {
+        "type": "finish",
+        "finishReason": "stop"
+      }
+    ]
+  }
+]

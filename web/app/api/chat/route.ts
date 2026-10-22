@@ -1,6 +1,8 @@
+import crypto from "crypto";
 import { google } from "@ai-sdk/google";
 import {
   convertToModelMessages,
+  createUIMessageStream,
   createUIMessageStreamResponse,
   stepCountIs,
   streamText,
@@ -9,160 +11,328 @@ import {
   type UIMessage,
 } from "ai";
 import { z } from "zod";
-import { supabaseServer } from "@/lib/supabase";
-import { embedQuery } from "@/lib/embedding";
 import { getTaxonByVernacularName } from "@/lib/taxon";
+import { rechercherUsages, usagesPourModele } from "@/lib/retrieval";
+import { evaluerTriage, triagePourModele, type TriageResultat } from "@/lib/triage";
+import { composerRepli } from "@/lib/chatRepli";
 import type { MatchClaimResult } from "@/lib/types";
 
-// Calibrage du ton — ne pas envoyer ces exemples au modèle, ils servent de repère
-// pour quiconque retouche SYSTEM_PROMPT :
+// Vercel : la génération avec un appel d'outil peut dépasser le délai par
+// défaut d'une fonction. Le délai du modèle (GENERATION_TIMEOUT_MS) est
+// plus court, pour que le repli documentaire ait le temps de partir.
+export const maxDuration = 60;
+
+const MODELE = "gemini-3.6-flash";
+const GENERATION_TIMEOUT_MS = 40_000;
+const CHUNK_TIMEOUT_MS = 20_000;
+
+// Bornes (lafi-v5.md P1.8) — ce que l'hébergement protège déjà est
+// documenté dans docs/triage.md, section "Bornes".
+const CORPS_MAX_OCTETS = 12_000_000;
+const MESSAGES_MAX = 60;
+const MESSAGES_ENVOYES_AU_MODELE = 20;
+const IMAGES_MAX = 4;
+const IMAGE_MAX_CARACTERES = 6_000_000; // data URL base64 ≈ 4,5 Mo d'image
+
+// Calibrage du ton — ne pas envoyer ces exemples au modèle, ils servent de
+// repère pour quiconque retouche SYSTEM_PROMPT :
 //
 // Mauvais : "En tant qu'assistant IA, je peux vous proposer quelques pistes
 //   documentées sur les usages traditionnels..."
-// Bon     : "Pour une fièvre avec des frissons comme ça, plusieurs plantes
-//   reviennent souvent : ..."
+// Bon     : "Pour une fièvre avec des frissons, commence par un test palu au
+//   CSPS. À côté de ça, au Plateau central, des tradipraticiens utilisent..."
 //
-// Mauvais : "Je suis un assistant conversationnel développé pour Lafi IA."
-// Bon     : "Je suis Lafi. Je connais les usages traditionnels des plantes
-//   médicinales africaines, croisés avec ce qu'on en sait scientifiquement."
+// Mauvais : "Je porte le savoir tradipraticien depuis toujours."
+// Bon     : "Je suis Lafi, une IA. Je m'appuie sur des usages recueillis
+//   auprès de tradipraticiens et sur ce que la science en dit."
 //
-// Mauvais : "Cette réponse ne remplace pas un avis médical professionnel."
-// Bon     : "Si ça persiste plus de deux jours ou que la fièvre grimpe fort,
-//   va voir quelqu'un — mieux vaut vérifier."
-const SYSTEM_PROMPT = `Tu es Lafi.
+// Mauvais : "plusieurs plantes très efficaces"
+// Bon     : "le bissap est la plus étudiée des trois — des essais montrent
+//   une baisse modeste de la tension —, les deux autres le sont peu."
+const SYSTEM_PROMPT = `Tu es Lafi. "Lafi" vient du mooré et veut dire "santé".
 
-"Lafi" vient du mooré et veut dire "santé". Tu incarnes le savoir tradipraticien
-accumulé sur les plantes médicinales africaines, croisé avec ce qu'on en sait
-scientifiquement. Tu ne "documentes" rien depuis l'extérieur : ce savoir, tu le
-portes, et tu le transmets avec l'assurance de quelqu'un qui le connaît depuis
-toujours — jamais avec la prudence hésitante d'un logiciel.
+Qui tu es — sans détour :
+- Tu es une IA. Tu t'appuies sur des usages de plantes médicinales recueillis
+  auprès de tradipraticiens d'Afrique de l'Ouest, croisés avec ce que la
+  littérature scientifique en dit. Si on te demande ce que tu es, tu le dis
+  simplement, sans t'excuser et sans te réduire à "un simple outil".
+- Tu TRANSMETS un savoir qui appartient à des praticiens ; tu ne prétends
+  jamais l'incarner ni le détenir. Quand l'origine est connue, attribue-la
+  ("des tradipraticiens du Plateau central préparent...", "c'est un usage
+  rapporté par plusieurs traditions"). Quand une donnée est marquée
+  "donnee_de_demonstration", ne la présente pas comme une collecte de terrain.
 
 Comment tu parles :
-- Direct, chaleureux, assuré. Tu recommandes, tu expliques une démarche, tu
-  conseilles — tu ne "proposes des pistes" du bout des lèvres.
-- Tu ne te décris jamais comme un assistant, une intelligence artificielle ou une
-  plateforme, même si on te le demande directement. Si on te demande qui tu es,
-  tu réponds "Lafi" et tu expliques ce que tu sais faire, sans te réduire à un
-  outil.
-- Français clair, sans jargon inutile, mais jamais infantilisant.
+- Direct, chaleureux, en "tu", français clair sans jargon, jamais
+  infantilisant. Tu expliques, tu compares, tu mets en perspective.
+- Ton assurance suit les preuves, jamais l'inverse. Un usage bien attesté mais
+  peu étudié se dit comme tel ; une étude solide se dit comme telle. Mots
+  interdits : "très efficace", "efficace à coup sûr", "guérit", "guérison",
+  "miracle", "sans danger", "naturel donc sans risque".
+- Les deux informations restent séparées : ce que rapportent les
+  tradipraticiens, et ce que dit la science. Jamais un seul jugement fusionné,
+  jamais de pourcentage ni de "X sur 10" — ces chiffres n'existent pas dans
+  tes données, même si on insiste.
+- Tu ne parles jamais de "base de données", de "résultats de recherche",
+  d'"outil" ou de "données fournies" : tu expliques, comme quelqu'un qui a lu
+  les sources.
 
-Règles impératives (le fond ne change jamais, seule la manière de les dire change) :
-- Avant de recommander une plante pour un symptôme ou une maladie, tu dois
-  TOUJOURS appeler l'outil "rechercher_par_symptome". Tu ne réponds jamais de
-  mémoire sur ce sujet, même si tu "sais".
-- Tu ne dois jamais inventer une plante, une préparation, une posologie ou un
-  usage qui n'apparaît pas dans les résultats retournés par les outils.
-- Si "rechercher_par_symptome" ne retourne rien de pertinent, dis-le franchement
-  plutôt que d'improviser.
-- Tu peux appeler "obtenir_details_plante" pour approfondir une plante déjà
-  trouvée (précautions notamment).
-- Mentionne, quand elles sont disponibles, la force de l'attestation
-  traditionnelle (combien de traditions indépendantes) ET la qualité de la
-  preuve scientifique séparément — jamais fusionnées en un seul chiffre ou
-  pourcentage. Un pourcentage de chance de guérison n'existe pas dans les
-  données que tu reçois : ne l'invente jamais, même si on te le demande.
-- L'interface affiche en plus une fiche par plante trouvée (préparation,
-  posologie, niveau de preuve) : pas besoin de recopier ces informations en
-  liste mécanique dans ton texte. Mais ça ne te limite pas — tu restes
-  totalement libre dans ta réponse : explique, mets en perspective, compare
-  les options entre elles, développe si la question l'appelle, réponds aux
-  relances en détail. Ce n'est pas une interface de recherche qui affiche des
-  résultats, c'est une conversation avec toi.
-- Un tradipraticien expérimenté connaît ses limites : quand les symptômes
-  décrits peuvent signaler quelque chose de grave (forte fièvre persistante,
-  douleur intense, saignement...), dis-le clairement et oriente vers un centre
-  de santé — comme un conseil de quelqu'un qui s'y connaît, pas comme une clause
-  juridique récitée en fin de message.
-- Si la question n'a rien à voir avec la santé ou les plantes, réponds
-  normalement, sans forcer un outil, et recentre naturellement sur ce que tu
-  sais faire.
+Deux sortes de questions :
+1. Question documentaire ("à quoi sert le kinkéliba ?", "le moringa contient
+   quoi ?") : réponds directement.
+2. Situation personnelle ("j'ai de la fièvre", "mon fils tousse") :
+   - Si le triage ci-dessous signale quelque chose, commence par cette
+     orientation, en une phrase naturelle.
+   - S'il te manque l'âge, une grossesse ou un allaitement, un traitement en
+     cours, ou depuis combien de temps ça dure, pose UNE seule question
+     groupée et courte avant de parler de préparations. Si l'essentiel est
+     déjà dit, ne redemande pas.
+   - Ensuite seulement : les usages documentés, précautions AVANT
+     préparations.
 
-Quand on t'envoie une photo :
-- Photo d'une plante : propose une identification prudente (jamais catégorique si
-  tu n'es pas sûr), puis appelle "rechercher_par_symptome" avec le nom identifié
-  pour voir si elle figure dans la base et ce qu'on en sait.
-- Photo de peau, plaie ou éruption : décris précisément ce que tu observes, puis
-  appelle "rechercher_par_symptome" avec cette description. Ne pose jamais de
-  diagnostic dermatologique ferme — décris et oriente, comme pour tout autre
-  symptôme.
-- Photo sans rapport avec la santé ou les plantes : dis-le simplement, sans
-  forcer une recherche.`;
+Règles sur le contenu :
+- Tu ne cites que des plantes, préparations et usages présents dans les
+  usages documentés qu'on te transmet (ci-dessous, ou via l'outil
+  "rechercher_par_symptome" pour une relance sur un autre sujet). Rien de
+  mémoire, même si tu "sais". S'il n'y a rien de pertinent, dis-le
+  franchement et propose une suite : consulter, ou raconter un remède connu.
+- Jamais de posologie, dose ou fréquence à l'impératif ("prends 2 tasses par
+  jour"). Tu peux décrire une pratique observée ("la préparation rapportée
+  est une infusion de calices séchés").
+- Une contre-indication ou une précaution connue est toujours dite, avant la
+  préparation.
+- Les usages transmis contiennent déjà préparation, précautions et niveau de
+  preuve. L'outil "obtenir_details_plante" ne sert que si l'utilisateur
+  demande explicitement plus de détails sur une plante (description,
+  habitat…) : chaque appel retarde ta réponse.
+- Hors santé et plantes : réponds normalement, puis recentre en une phrase.
 
-const PROFIL_INSTRUCTIONS: Record<string, string> = {
-  particulier:
-    "Ton interlocuteur est une personne sans connaissance médicale ou botanique particulière. Reste simple et pédagogique, sans jargon technique.",
-  tradipraticien:
-    "Ton interlocuteur est un tradipraticien : il connaît déjà les bases du soin par les plantes. Va droit au but, tu peux être plus technique sur les préparations et dosages, pas besoin de réexpliquer les évidences.",
-  pro_sante:
-    "Ton interlocuteur est un professionnel de santé. Mentionne explicitement les précautions et contre-indications connues quand elles existent dans les données, utilise un vocabulaire clinique assumé.",
-};
+Photos :
+- Plante : identification prudente, toujours "à confirmer", jamais
+  catégorique ; puis "rechercher_par_symptome" avec le nom identifié. Une
+  identification incertaine ne mène jamais à une préparation à avaler.
+- Peau, plaie, éruption : décris ce que tu observes, sans diagnostic ferme,
+  puis "rechercher_par_symptome" avec cette description.
+- Photo sans rapport : dis-le simplement.`;
+
+const MOTS_INTERDITS = /tr[eè]s efficace|efficace [àa] coup s[uû]r|gu[ée]ri(t|son|r)\b|miracle|sans (aucun )?danger|\d+\s*%/i;
+
+function journal(requestId: string, evenement: string, champs: Record<string, unknown> = {}) {
+  console.log(JSON.stringify({ scope: "chat", requestId, evenement, ...champs }));
+}
+
+function texteDe(message: UIMessage): string {
+  return message.parts
+    .filter((p): p is Extract<typeof p, { type: "text" }> => p.type === "text")
+    .map((p) => p.text)
+    .join(" ");
+}
+
+function verifierBornes(messages: unknown): string | null {
+  if (!Array.isArray(messages) || messages.length === 0) return "Conversation vide.";
+  if (messages.length > MESSAGES_MAX) return "Conversation trop longue : commence une nouvelle conversation.";
+  let images = 0;
+  for (const m of messages as UIMessage[]) {
+    for (const p of m.parts ?? []) {
+      if (p.type === "file") {
+        images += 1;
+        if (typeof p.url === "string" && p.url.length > IMAGE_MAX_CARACTERES) return "Une image est trop lourde (4 Mo maximum).";
+      }
+    }
+  }
+  if (images > IMAGES_MAX) return `Trop d'images dans cette conversation (${IMAGES_MAX} maximum).`;
+  return null;
+}
+
+function reponseRefusee(message: string, status: number) {
+  return Response.json({ message }, { status });
+}
 
 export async function POST(req: Request) {
-  const { messages, profil }: { messages: UIMessage[]; profil?: string } = await req.json();
+  const requestId = crypto.randomUUID().slice(0, 8);
+  const debut = Date.now();
 
-  const profilInstruction = PROFIL_INSTRUCTIONS[profil ?? "particulier"] ?? PROFIL_INSTRUCTIONS.particulier;
+  const brut = await req.text();
+  if (brut.length > CORPS_MAX_OCTETS) return reponseRefusee("Message trop volumineux.", 413);
 
-  const result = streamText({
-    // gemini-2.5-flash a été mis en retrait (l'API renvoie AI_APICallError
-    // "This model ... is no longer available") — gemini-3.6-flash est le
-    // modèle Flash stable actuel.
-    model: google("gemini-3.6-flash"),
-    system: `${SYSTEM_PROMPT}\n\nÀ qui tu t'adresses maintenant : ${profilInstruction}`,
-    messages: await convertToModelMessages(messages),
-    stopWhen: stepCountIs(5),
-    tools: {
-      rechercher_par_symptome: tool({
-        description:
-          "Recherche sémantique (par similarité, pas par mot-clé) des usages traditionnels de plantes correspondant à une description de symptômes ou de maladie.",
-        inputSchema: z.object({
-          description: z
-            .string()
-            .describe(
-              "Description des symptômes ou de la maladie, en français, telle que formulée ou reformulée à partir de la demande de l'utilisateur."
-            ),
-        }),
-        execute: async ({ description }) => {
-          const queryEmbedding = await embedQuery(description);
+  let messages: UIMessage[];
+  try {
+    ({ messages } = JSON.parse(brut) as { messages: UIMessage[] });
+  } catch {
+    return reponseRefusee("Requête illisible.", 400);
+  }
+  const refus = verifierBornes(messages);
+  if (refus) return reponseRefusee(refus, 400);
 
-          // Envoyé en JSON stringifié (text) et casté en vector() côté SQL :
-          // PostgREST ne lie pas toujours correctement un paramètre RPC de
-          // type extension (vector) — voir supabase/schema.sql.
-          const { data, error } = await supabaseServer.rpc("match_claims", {
-            query_embedding: JSON.stringify(queryEmbedding),
-            match_count: 5,
-            match_threshold: 0.3,
-          });
+  const messagesUtilisateur = messages.filter((m) => m.role === "user");
+  const dernierTexte = texteDe(messagesUtilisateur.at(-1)!);
+  // Le triage lit les 3 derniers messages : "il a 2 ans" envoyé après "mon
+  // fils a de la fièvre" doit compter.
+  const triage: TriageResultat = evaluerTriage(messagesUtilisateur.slice(-3).map(texteDe).join(" \n "));
+  // Une relance courte ("et pour un enfant ?") se comprend avec la question
+  // d'avant.
+  const requeteRecherche =
+    dernierTexte.length < 30 && messagesUtilisateur.length > 1
+      ? `${texteDe(messagesUtilisateur.at(-2)!)} ${dernierTexte}`
+      : dernierTexte;
 
-          if (error) {
-            return { erreur: error.message, resultats: [] };
-          }
+  journal(requestId, "debut", { messages: messages.length, triage: triage.niveau });
 
-          return { resultats: (data ?? []) as MatchClaimResult[] };
+  const stream = createUIMessageStream({
+    onError: (error) => {
+      journal(requestId, "erreur_flux", { erreur: String(error) });
+      return "Lafi n'a pas pu répondre. Réessaie dans un instant.";
+    },
+    execute: async ({ writer }) => {
+      writer.write({ type: "start" });
+
+      if (triage.niveau !== "aucun") {
+        writer.write({ type: "data-triage", data: triage });
+      }
+
+      // Recherche AVANT la génération (P1.2) : épargne un aller-retour du
+      // modèle — le premier texte arrive en une seule étape au lieu de deux.
+      // En urgence ou pour un jeune enfant, aucune fiche de préparation ne
+      // s'affiche et le modèle n'en reçoit pas — ni directement, ni par
+      // l'outil : rien ne doit détourner de la consultation (évaluation du
+      // 22/10 : 5 fiches sous "mon bébé convulse", une décoction de neem
+      // proposée pour un enfant de 3 ans).
+      const sansPreparations = triage.niveau === "urgence" || triage.groupesRisque.includes("enfant_jeune");
+      let usages: MatchClaimResult[] = [];
+      if (!sansPreparations && requeteRecherche.trim().length > 0) {
+        const t0 = Date.now();
+        try {
+          const recherche = await rechercherUsages(requeteRecherche);
+          usages = recherche.resultats;
+          journal(requestId, "recherche", { ms: Date.now() - t0, retenus: usages.length, ecartes: recherche.ecartes });
+        } catch (error) {
+          journal(requestId, "recherche_echec", { ms: Date.now() - t0, erreur: String(error) });
+        }
+      }
+      if (usages.length > 0) {
+        writer.write({ type: "data-usages", data: { resultats: usages } });
+      }
+
+      const contexte = [
+        triagePourModele(triage),
+        sansPreparations
+          ? "Volontairement, aucun usage de plante n'est transmis pour cette question (urgence ou jeune enfant) : n'en cherche pas."
+          : usages.length > 0
+            ? `Usages documentés pertinents pour la dernière question :\n${JSON.stringify(usagesPourModele(usages), null, 1)}`
+            : "Aucun usage documenté ne correspond clairement à la dernière question. Si elle porte sur un autre sujet que la précédente, tu peux appeler rechercher_par_symptome avec une reformulation.",
+      ].join("\n\n");
+
+      let echec: unknown = null;
+      let texteRecu = "";
+      let premierTexteMs: number | null = null;
+      let etapes = 0;
+
+      const result = streamText({
+        model: google(MODELE),
+        system: `${SYSTEM_PROMPT}\n\n---\n${contexte}`,
+        messages: await convertToModelMessages(messages.slice(-MESSAGES_ENVOYES_AU_MODELE)),
+        stopWhen: stepCountIs(3),
+        // Une seule nouvelle tentative : sur un quota dépassé (429, cause des
+        // échecs de l'audit du 21/10), les 3 essais par défaut retardaient
+        // le repli de 8 s pour rien ; une panne passagère (503) en profite.
+        maxRetries: 1,
+        activeTools: sansPreparations ? [] : undefined,
+        timeout: { totalMs: GENERATION_TIMEOUT_MS, chunkMs: CHUNK_TIMEOUT_MS },
+        abortSignal: req.signal,
+        onStepEnd: () => {
+          etapes += 1;
         },
-      }),
-      obtenir_details_plante: tool({
-        description:
-          "Récupère la fiche complète d'une plante (description, précautions) à partir de son nom local exact.",
-        inputSchema: z.object({
-          nom: z
-            .string()
-            .describe(
-              "Nom local exact de la plante, tel que retourné par rechercher_par_symptome (champ nom_principal)."
-            ),
-        }),
-        execute: async ({ nom }) => {
-          try {
-            const taxon = await getTaxonByVernacularName(nom);
-            return { plante: taxon };
-          } catch (error) {
-            return { erreur: error instanceof Error ? error.message : String(error), plante: null };
-          }
+        tools: {
+          rechercher_par_symptome: tool({
+            description:
+              "Recherche les usages traditionnels documentés correspondant à une description de symptômes, de maladie ou à un nom de plante. À utiliser pour une relance sur un sujet différent de celui déjà couvert par les usages transmis.",
+            inputSchema: z.object({
+              description: z
+                .string()
+                .describe("Description des symptômes, de la maladie ou nom de plante, en français."),
+            }),
+            execute: async ({ description }) => {
+              try {
+                const { resultats } = await rechercherUsages(description);
+                return { resultats, pour_toi: usagesPourModele(resultats) };
+              } catch (error) {
+                journal(requestId, "outil_echec", { erreur: String(error) });
+                return { erreur: "Recherche indisponible", resultats: [] as MatchClaimResult[] };
+              }
+            },
+          }),
+          obtenir_details_plante: tool({
+            description:
+              "Récupère la fiche complète d'une plante (description, précautions) à partir de son nom local exact.",
+            inputSchema: z.object({
+              nom: z.string().describe("Nom local exact de la plante, tel qu'il apparaît dans les usages transmis."),
+            }),
+            execute: async ({ nom }) => {
+              try {
+                return { plante: await getTaxonByVernacularName(nom) };
+              } catch (error) {
+                return { erreur: error instanceof Error ? error.message : String(error), plante: null };
+              }
+            },
+          }),
         },
-      }),
+      });
+
+      const reader = toUIMessageStream({
+        stream: result.stream,
+        sendStart: false,
+        sendFinish: false,
+        onError: (error) => {
+          echec = error;
+          return "generation";
+        },
+      }).getReader();
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          if (value.type === "error") {
+            echec ??= value.errorText;
+            continue;
+          }
+          if (value.type === "text-delta") {
+            premierTexteMs ??= Date.now() - debut;
+            texteRecu += value.delta;
+          }
+          writer.write(value);
+        }
+      } catch (error) {
+        echec ??= error;
+      }
+
+      if (echec) {
+        journal(requestId, "generation_echec", {
+          ms: Date.now() - debut,
+          erreur: echec instanceof Error ? `${echec.name}: ${echec.message}` : String(echec),
+          texteDejaEnvoye: texteRecu.length > 0,
+        });
+        const id = `repli-${requestId}`;
+        writer.write({ type: "text-start", id });
+        writer.write({
+          type: "text-delta",
+          id,
+          delta:
+            texteRecu.length > 0
+              ? "\n\n_La réponse a été interrompue. Renvoie ta question pour la suite._"
+              : composerRepli(triage, usages),
+        });
+        writer.write({ type: "text-end", id });
+      } else if (MOTS_INTERDITS.test(texteRecu)) {
+        // Pas de censure a posteriori d'un texte déjà affiché : on mesure,
+        // pour corriger le prompt. eval-chat.ts vérifie la même règle.
+        journal(requestId, "mot_interdit", { extrait: texteRecu.match(MOTS_INTERDITS)?.[0] });
+      }
+
+      writer.write({ type: "finish" });
+      journal(requestId, "fin", { ms: Date.now() - debut, premierTexteMs, etapes, repli: !!echec });
     },
   });
 
-  return createUIMessageStreamResponse({
-    stream: toUIMessageStream({ stream: result.stream }),
-  });
+  return createUIMessageStreamResponse({ stream, headers: { "x-lafi-request-id": requestId } });
 }
