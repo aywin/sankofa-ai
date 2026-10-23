@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-23",
+  "controles_structurels": "réussis",
+  "validation_clinique": "non réalisée",
+  "corpus": "partiel",
+  "lignes": {
+    "taxons": 14,
+    "noms_vernaculaires": 18,
+    "indications": 8,
+    "usages": 11,
+    "etudes": 7,
+    "composes": 3,
+    "medias": 2,
+    "remedes_non_vegetaux": 0,
+    "produits_homologues": 6,
+    "structures": 0,
+    "contexte": 15
+  }
+}
