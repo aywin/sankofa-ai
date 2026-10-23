@@ -7,6 +7,7 @@ import { HabitatAvailabilityBlock } from "@/components/plant/HabitatAvailability
 import { IndicationsList } from "@/components/plant/IndicationsList";
 import { ScienceSection } from "@/components/plant/ScienceSection";
 import { PrecautionsBanner } from "@/components/plant/PrecautionsBanner";
+import { OuLaTrouver, Securite, SourcesPlante } from "@/components/plant/InfosPratiques";
 import { CarteRemede } from "@/components/boutique/CarteRemede";
 import { getRemedes } from "@/lib/boutique";
 
@@ -70,6 +71,11 @@ export default async function PlantDetailPage({
         <HabitatAvailabilityBlock habitatRegion={taxon.habitat_region} />
       </div>
 
+      <div className="mt-4 space-y-4">
+        <OuLaTrouver taxon={taxon} />
+        <Securite taxon={taxon} />
+      </div>
+
       {taxon.precautions && (
         <div className="mt-4">
           <PrecautionsBanner precautions={taxon.precautions} />
@@ -108,6 +114,7 @@ export default async function PlantDetailPage({
       )}
 
       <footer className="mt-12 space-y-1 border-t border-neutral-200 pt-4 dark:border-neutral-800">
+        <SourcesPlante sources={taxon.sources} />
         <CreditsPhotos media={taxon.media} />
         <p className="text-xs text-neutral-500">
           {taxon.voucher_reference

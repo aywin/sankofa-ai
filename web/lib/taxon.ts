@@ -65,7 +65,16 @@ export interface ClaimDetail {
     temperature: string | null;
     description_libre: string | null;
     precautions_specifiques: string | null;
+    etapes?: string | null;
+    voie?: string | null;
+    mode_usage_rapporte?: string | null;
+    public_deconseille?: string | null;
+    signes_arret?: string | null;
   };
+  origine: "terrain" | "documentaire";
+  pays_region_usage: string | null;
+  resume_science: string | null;
+  sources_tradition: string | null;
   etudes: Etude[];
   // Toutes les attestations sont retournées pour l'affichage (une source
   // illustrative reste montrée, avec sa notice) — seules celles où
@@ -102,6 +111,10 @@ interface RawClaimRow {
   indication: { id: string; nom: string };
   partie: { id: string; nom: string };
   preparation: ClaimDetail["preparation"];
+  origine: "terrain" | "documentaire";
+  pays_region_usage: string | null;
+  resume_science: string | null;
+  sources_tradition: string | null;
   etudes: Etude[] | null;
   attestations: RawAttestation[] | null;
 }
@@ -115,9 +128,10 @@ export async function getClaimsForTaxon(taxonId: string): Promise<ClaimDetail[]>
     .from("claim")
     .select(
       `id, qualite_preuve_scientifique, contre_indication_forte, divergence_note, est_pilote,
+       origine, pays_region_usage, resume_science, sources_tradition,
        indication(id, nom),
        partie(id, nom),
-       preparation(id, mode, solvant, duree, temperature, description_libre, precautions_specifiques),
+       preparation(*),
        etudes:etude(id, claim_id, doi, titre, type, annee, resume, url),
        attestations:attestation(id, region, langue, niveau_divulgation, lignee_id, compte_dans_les_scores, contributeur(nom_affichage, preference_attribution), source_savoir(*))`
     )
@@ -146,6 +160,10 @@ export async function getClaimsForTaxon(taxonId: string): Promise<ClaimDetail[]>
       indication: row.indication,
       partie: row.partie,
       preparation: row.preparation,
+      origine: row.origine,
+      pays_region_usage: row.pays_region_usage,
+      resume_science: row.resume_science,
+      sources_tradition: row.sources_tradition,
       etudes: row.etudes ?? [],
       attestations: attestations.map((a) => ({
         id: a.id,

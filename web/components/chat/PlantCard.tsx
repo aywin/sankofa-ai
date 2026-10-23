@@ -37,11 +37,21 @@ export function PlantCard({
         </div>
       </dl>
 
-      {usage.precautions && (
-        <p className="mt-2 rounded-lg bg-amber-50 px-2 py-1.5 text-xs text-amber-800 dark:bg-amber-950 dark:text-amber-200">
-          <span className="font-medium">Précautions : </span>
-          {usage.precautions}
-        </p>
+      {(usage.precautions || usage.precautions_specifiques || usage.public_deconseille) && (
+        <div className="mt-2 space-y-0.5 rounded-lg bg-laterite-50 px-2 py-1.5 text-xs text-laterite-900 dark:bg-laterite-950 dark:text-laterite-100">
+          {(usage.precautions_specifiques || usage.precautions) && (
+            <p>
+              <span className="font-semibold">Précautions : </span>
+              {usage.precautions_specifiques ?? usage.precautions}
+            </p>
+          )}
+          {usage.public_deconseille && (
+            <p>
+              <span className="font-semibold">Déconseillé : </span>
+              {usage.public_deconseille}
+            </p>
+          )}
+        </div>
       )}
 
       <div className="mt-2">
@@ -55,7 +65,7 @@ export function PlantCard({
           }}
           contreIndicationForte={usage.contre_indication_forte}
           divergenceNote={null}
-          estPilote={usage.est_pilote}
+          estPilote={usage.est_pilote || usage.origine === "documentaire"}
         />
       </div>
     </div>

@@ -34,6 +34,19 @@ export interface Taxon {
   precautions: string | null;
   habitat_region: string | null;
   photo_url: string | null;
+  // Recherche documentaire (migration 0004).
+  synonymes?: string | null;
+  regions_burkina?: string | null;
+  localites?: string | null;
+  pays_presence?: string | null;
+  ou_la_trouver?: string | null;
+  saison_recolte?: string | null;
+  conservation?: string | null;
+  confusions_possibles?: string | null;
+  statut_protection?: string | null;
+  toxicite_connue?: string | null;
+  interactions_medicaments?: string | null;
+  sources?: string | null;
 }
 
 export interface NomVernaculaire {
@@ -212,4 +225,8 @@ export interface MatchClaimResult extends AttestationStats {
   contre_indication_forte: boolean;
   est_pilote: boolean;
   similarity: number;
+  precautions_specifiques?: string | null;
+  public_deconseille?: string | null;
+  signes_arret?: string | null;
+  origine?: "terrain" | "documentaire";
 }

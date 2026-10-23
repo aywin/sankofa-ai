@@ -54,10 +54,15 @@ export function usagesPourModele(resultats: MatchClaimResult[]) {
     partie: r.partie_nom,
     preparation: r.preparation_resume ?? r.preparation_mode,
     precautions: r.precautions,
+    precautions_de_cet_usage: r.precautions_specifiques ?? null,
+    deconseille_a: r.public_deconseille ?? null,
+    arreter_et_consulter_si: r.signes_arret ?? null,
     contre_indication_forte: r.contre_indication_forte,
     qualite_preuve_scientifique: r.qualite_preuve_scientifique ?? "aucune étude recensée",
     attestations_terrain_verifiees: r.attestations_count,
     traditions_distinctes: r.lignees_distinctes,
-    donnee_de_demonstration: !r.est_pilote,
+    // Une source documentaire (publication) est réelle, même sans terrain.
+    donnee_de_demonstration: !r.est_pilote && r.origine !== "documentaire",
+    origine: r.origine === "documentaire" ? "publication scientifique ou ethnobotanique" : "terrain",
   }));
 }

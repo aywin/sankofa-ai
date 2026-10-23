@@ -10,6 +10,25 @@ const MODE_LABELS: Record<string, string> = {
   autre: "Autre préparation",
 };
 
+const VOIES: Record<string, string> = {
+  orale: "à boire",
+  cutanee: "sur la peau",
+  bain: "en bain",
+  inhalation: "en inhalation",
+  gargarisme: "en gargarisme",
+  collyre: "dans les yeux",
+  autre: "autre",
+};
+
+function Ligne({ titre, alerte = false, children }: { titre: string; alerte?: boolean; children: React.ReactNode }) {
+  return (
+    <div className={alerte ? "text-laterite-800 dark:text-laterite-200" : "text-neutral-600 dark:text-neutral-400"}>
+      <dt className="inline font-semibold">{titre} : </dt>
+      <dd className="inline">{children}</dd>
+    </div>
+  );
+}
+
 // C'est le bloc le plus différenciant (§4 du brief) : l'écart entre savoir
 // traditionnel et pharmacologie n'est pas "quelle plante" mais "quelle
 // préparation délivre quelle dose". On documente une pratique observée —
@@ -50,8 +69,31 @@ export function PreparationCard({
           </div>
         )}
       </dl>
+      {preparation.etapes && (
+        <ol className="mt-2 list-decimal space-y-0.5 pl-5 text-neutral-700 dark:text-neutral-300">
+          {preparation.etapes.split(">").map((etape, i) => (
+            <li key={i}>{etape.trim()}</li>
+          ))}
+        </ol>
+      )}
+      <dl className="mt-2 space-y-1 text-xs">
+        {preparation.voie && (
+          <Ligne titre="Voie">{VOIES[preparation.voie] ?? preparation.voie}</Ligne>
+        )}
+        {preparation.mode_usage_rapporte && <Ligne titre="Usage rapporté">{preparation.mode_usage_rapporte}</Ligne>}
+        {preparation.public_deconseille && (
+          <Ligne titre="Déconseillé" alerte>
+            {preparation.public_deconseille}
+          </Ligne>
+        )}
+        {preparation.signes_arret && (
+          <Ligne titre="Arrêter et consulter si" alerte>
+            {preparation.signes_arret}
+          </Ligne>
+        )}
+      </dl>
       {preparation.precautions_specifiques && (
-        <p className="mt-1.5 text-xs font-medium text-amber-700 dark:text-amber-400">
+        <p className="mt-1.5 text-xs font-medium text-laterite-700 dark:text-laterite-300">
           {preparation.precautions_specifiques}
         </p>
       )}

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SyntheseBadge } from "@/components/shared/SyntheseBadge";
 import { PreparationCard } from "./PreparationCard";
 import { AttestationSection } from "./AttestationSection";
+import { SourcesPlante } from "./InfosPratiques";
 import type { ClaimDetail } from "@/lib/taxon";
 
 const ETUDE_TYPE_LABELS: Record<string, string> = {
@@ -48,9 +49,16 @@ export function IndicationsList({ claims }: { claims: ClaimDetail[] }) {
               stats={claim.stats}
               contreIndicationForte={claim.contre_indication_forte}
               divergenceNote={claim.divergence_note}
-              estPilote={claim.est_pilote}
+              estPilote={claim.est_pilote || claim.origine === "documentaire"}
             />
           </div>
+
+          {(claim.pays_region_usage || claim.resume_science) && (
+            <div className="mt-2 space-y-1 text-xs text-neutral-600 dark:text-neutral-400">
+              {claim.pays_region_usage && <p>Usage rapporté : {claim.pays_region_usage}</p>}
+              {claim.resume_science && <p>Science : {claim.resume_science}</p>}
+            </div>
+          )}
 
           <div className="mt-3">
             <AttestationSection stats={claim.stats} attestations={claim.attestations} estPilote={claim.est_pilote} />
@@ -59,6 +67,12 @@ export function IndicationsList({ claims }: { claims: ClaimDetail[] }) {
           <div className="mt-3">
             <PreparationCard partie={claim.partie} preparation={claim.preparation} />
           </div>
+
+          {claim.sources_tradition && (
+            <div className="mt-3 border-t border-neutral-200 pt-2 dark:border-neutral-800/70">
+              <SourcesPlante sources={claim.sources_tradition} />
+            </div>
+          )}
 
           {claim.etudes.length > 0 && (
             <ul className="mt-3 space-y-0.5 border-t border-neutral-200 pt-2 text-xs text-neutral-500 dark:border-neutral-800/70 dark:text-neutral-400">
