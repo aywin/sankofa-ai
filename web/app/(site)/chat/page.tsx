@@ -3,7 +3,7 @@
 import { useChat } from "@ai-sdk/react";
 import type { UIMessage } from "ai";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { DisclaimerBanner } from "@/components/chat/DisclaimerBanner";
 import { ChatMessages, plantesProposees } from "@/components/chat/ChatMessages";
 import { PanneauPlantes } from "@/components/chat/PanneauPlantes";
@@ -35,7 +35,7 @@ function ChatSession({
   initialMessages: UIMessage[];
   initialQuery: string | null;
   userId: string | null;
-  onMessagesChange: () => void;
+  onMessagesChange: (nombre: number) => void;
   onContribute: () => void;
 }) {
   const { messages, sendMessage, regenerate, clearError, status, stop, error } = useChat({
@@ -45,7 +45,7 @@ function ChatSession({
   const initialQuerySent = useRef(false);
 
   useEffect(() => {
-    saveConversation(userId, conversationId, messages).then(onMessagesChange);
+    saveConversation(userId, conversationId, messages).then(() => onMessagesChange(messages.length));
   }, [conversationId, messages, userId, onMessagesChange]);
 
   // Arrivée depuis la landing (ou depuis "En discuter avec Lafi" du
@@ -142,14 +142,38 @@ function ChatPageContenu() {
   const [conversations, setConversations] = useState<StoredConversation[] | null>(null);
   const [chargement, setChargement] = useState(true);
   const [contributeModalOpen, setContributeModalOpen] = useState(false);
-  // Une conversation neuve par valeur de ?nouveau (chaque clic sur
-  // "Nouvelle conversation" porte un horodatage différent).
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const idNeuf = useMemo(() => newConversationId(), [nouveau]);
-  const activeId = c ?? idNeuf;
+  // La conversation affichée est un état de la page, pas une valeur
+  // recalculée depuis l'URL : réécrire l'URL (?c=) au premier message ne
+  // doit ni changer d'identifiant ni remonter la session en cours.
+  const [{ activeId, creees }, setConv] = useState(() => {
+    const id = c ?? newConversationId();
+    // Conversations créées dans cet onglet : déjà en mémoire, jamais de
+    // chargement pour elles.
+    return { activeId: id, creees: new Set<string>(c ? [] : [id]) };
+  });
 
-  // Rechargé à chaque changement de conversation : une conversation
-  // reprise depuis la barre latérale démarre avec ses derniers messages.
+  // Navigation venue de l'extérieur : une conversation de la barre
+  // latérale (?c=), ou « Nouvelle conversation » (?nouveau=, horodaté à
+  // chaque clic).
+  // Le premier passage est ignoré : l'état initial reflète déjà l'URL (une
+  // question venue de l'accueil ne doit pas partir dans deux sessions).
+  const premierPassage = useRef(true);
+  useEffect(() => {
+    if (premierPassage.current) {
+      premierPassage.current = false;
+      return;
+    }
+    if (c) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setConv((e) => (e.activeId === c ? e : { ...e, activeId: c }));
+      return;
+    }
+    const id = newConversationId();
+    setConv((e) => ({ activeId: id, creees: new Set(e.creees).add(id) }));
+  }, [c, nouveau]);
+
+  // Rechargé quand on ouvre une conversation existante, pour démarrer avec
+  // ses derniers messages.
   useEffect(() => {
     let actif = true;
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -164,20 +188,21 @@ function ChatPageContenu() {
     };
   }, [user?.id, c]);
 
-  // Après chaque enregistrement : la barre latérale rafraîchit ses récents,
-  // et l'URL prend l'identifiant (recharger la page garde la conversation).
-  const handleMessagesChange = useCallback(() => {
-    window.dispatchEvent(new Event(EVENEMENT_CONVERSATIONS));
-    if (new URLSearchParams(window.location.search).get("c") !== activeId) {
-      window.history.replaceState(null, "", `/chat?c=${activeId}`);
-    }
-  }, [activeId]);
+  // Après chaque enregistrement : la barre latérale rafraîchit ses récents ;
+  // au premier message, l'URL prend l'identifiant (recharger la page garde
+  // la conversation).
+  const handleMessagesChange = useCallback(
+    (nombre: number) => {
+      if (nombre === 0) return;
+      window.dispatchEvent(new Event(EVENEMENT_CONVERSATIONS));
+      if (new URLSearchParams(window.location.search).get("c") !== activeId) {
+        window.history.replaceState(null, "", `/chat?c=${activeId}`);
+      }
+    },
+    [activeId]
+  );
 
-  // Une conversation demandée (?c=) n'est montée qu'une fois l'historique
-  // chargé, pour démarrer avec ses messages. Jamais pour la conversation en
-  // cours (c === idNeuf après le premier enregistrement) : la démonter
-  // couperait la réponse en train de s'écrire.
-  if (c && c !== idNeuf && chargement) {
+  if (!creees.has(activeId) && chargement) {
     return <p className="py-16 text-center text-sm text-neutral-500">Chargement de la conversation…</p>;
   }
   const active = conversations?.find((conv) => conv.id === activeId);
@@ -188,7 +213,7 @@ function ChatPageContenu() {
         key={activeId}
         conversationId={activeId}
         initialMessages={active?.messages ?? []}
-        initialQuery={c ? null : q}
+        initialQuery={creees.has(activeId) ? q : null}
         userId={user?.id ?? null}
         onMessagesChange={handleMessagesChange}
         onContribute={() => setContributeModalOpen(true)}
