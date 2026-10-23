@@ -67,20 +67,20 @@ function ChatSession({
 
   const isBusy = status === "submitted" || status === "streaming";
 
-  // Panneau des plantes : s'ouvre de lui-même sur chaque NOUVELLE réponse
-  // qui propose des plantes (pas sur une conversation rouverte), sur grand
-  // écran seulement — sur téléphone il cacherait la réponse en train de
+  // Panneau des plantes : s'ouvre de lui-même une fois la réponse terminée,
+  // sur chaque NOUVELLE réponse qui propose des plantes (pas sur une
+  // conversation rouverte), sur grand écran seulement — sur téléphone il cacherait la réponse en train de
   // s'écrire, la carte sous la réponse suffit.
   const [panneauId, setPanneauId] = useState<string | null>(null);
   const derniereAvecPlantes = [...messages].reverse().find((m) => plantesProposees(m).length > 0)?.id ?? null;
   const dejaVue = useRef(derniereAvecPlantes);
   useEffect(() => {
-    if (!derniereAvecPlantes || derniereAvecPlantes === dejaVue.current) return;
+    if (isBusy || !derniereAvecPlantes || derniereAvecPlantes === dejaVue.current) return;
     dejaVue.current = derniereAvecPlantes;
     const grandEcran = window.matchMedia("(min-width: 1024px)").matches;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (grandEcran) setPanneauId(derniereAvecPlantes);
-  }, [derniereAvecPlantes]);
+  }, [derniereAvecPlantes, isBusy]);
   const messagePanneau = panneauId ? messages.find((m) => m.id === panneauId) : undefined;
   const usagesPanneau = messagePanneau ? plantesProposees(messagePanneau) : [];
 
