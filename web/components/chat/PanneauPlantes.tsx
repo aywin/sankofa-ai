@@ -16,7 +16,7 @@ export function PanneauPlantes({ usages, onFermer }: { usages: MatchClaimResult[
       <div className="flex items-center justify-between gap-2 border-b border-neutral-200 px-4 py-3 dark:border-neutral-800">
         <p className="flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
           <LeafIcon className="h-4 w-4 text-emerald-600" />
-          {plantes} plante{plantes > 1 ? "s" : ""} proposée{plantes > 1 ? "s" : ""}
+          Sources : {plantes} plante{plantes > 1 ? "s" : ""}
         </p>
         <button
           type="button"
@@ -42,12 +42,12 @@ export function PanneauPlantes({ usages, onFermer }: { usages: MatchClaimResult[
   return (
     <>
       <aside
-        aria-label="Plantes proposées"
+        aria-label="Sources de la réponse"
         className="hidden w-[380px] shrink-0 flex-col border-l border-neutral-200 bg-sand-50 lg:flex dark:border-neutral-800/70 dark:bg-sand-950"
       >
         {contenu}
       </aside>
-      <div className="fixed inset-0 z-40 flex items-end lg:hidden" role="dialog" aria-modal="true" aria-label="Plantes proposées">
+      <div className="fixed inset-0 z-40 flex items-end lg:hidden" role="dialog" aria-modal="true" aria-label="Sources de la réponse">
         <button type="button" aria-label="Fermer" onClick={onFermer} className="absolute inset-0 bg-black/30" />
         <div className="relative flex max-h-[80dvh] w-full flex-col rounded-t-3xl bg-sand-50 shadow-xl dark:bg-sand-950">{contenu}</div>
       </div>

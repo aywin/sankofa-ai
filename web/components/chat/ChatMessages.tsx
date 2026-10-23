@@ -263,7 +263,7 @@ export function ChatMessages({
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                      {noms.length} plante{noms.length > 1 ? "s" : ""} proposée{noms.length > 1 ? "s" : ""}
+                      Sources : {noms.length} plante{noms.length > 1 ? "s" : ""} documentée{noms.length > 1 ? "s" : ""}
                     </span>
                     <span className="block truncate text-xs text-neutral-500">{noms.join(", ")}</span>
                   </span>
