@@ -1,6 +1,6 @@
 # Import de la recherche documentaire
 
-Essai à blanc (rien n'est écrit en base) le 23/10/2026 23:58:25.
+Appliqué le 24/10/2026 00:05:00.
 
 | Élément | À importer |
 |---|---|
