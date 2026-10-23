@@ -172,8 +172,11 @@ export function ChatMessages({
 
   return (
     <div className="mx-auto flex w-full max-w-[880px] flex-col gap-6 px-4 py-6">
-      {messages.map((message) => {
+      {messages.map((message, index) => {
         const isUser = message.role === "user";
+        // La réponse en train de s'écrire : sa carte n'apparaît qu'à la fin,
+        // sinon elle s'affiche sous une phrase coupée et le texte la pousse.
+        const enCours = index === messages.length - 1 && (status === "submitted" || status === "streaming");
         const textParts = message.parts.filter((p) => p.type === "text");
         const toolParts = message.parts.filter((p) =>
           p.type.startsWith("tool-")
@@ -237,19 +240,19 @@ export function ChatMessages({
                 ) : (
                   <div
                     key={i}
-                    className="prose prose-sm prose-neutral dark:prose-invert max-w-none prose-p:my-1.5 prose-headings:mt-3 prose-headings:mb-1.5"
+                    className="prose prose-sm prose-neutral dark:prose-invert max-w-none prose-p:my-1.5 prose-headings:mt-3 prose-headings:mb-1.5 prose-hr:my-4"
                   >
                     <ReactMarkdown>{part.text}</ReactMarkdown>
                   </div>
                 )
               )}
 
-              {noms.length > 0 && (
+              {noms.length > 0 && !enCours && (
                 <button
                   type="button"
                   onClick={() => onBasculerPanneau(message.id)}
                   aria-expanded={panneauId === message.id}
-                  className={`mt-3 flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${
+                  className={`mt-3 flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                     panneauId === message.id
                       ? "border-emerald-400 bg-emerald-50 dark:border-emerald-700 dark:bg-emerald-950/50"
                       : "border-neutral-200 bg-white hover:border-emerald-300 dark:border-neutral-800 dark:bg-neutral-900"
