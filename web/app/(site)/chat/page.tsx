@@ -5,7 +5,8 @@ import type { UIMessage } from "ai";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DisclaimerBanner } from "@/components/chat/DisclaimerBanner";
-import { ChatMessages } from "@/components/chat/ChatMessages";
+import { ChatMessages, plantesProposees } from "@/components/chat/ChatMessages";
+import { PanneauPlantes } from "@/components/chat/PanneauPlantes";
 import { ChatInput } from "@/components/chat/ChatInput";
 import { ContributeModal } from "@/components/chat/ContributeModal";
 import { EVENEMENT_CONVERSATIONS } from "@/components/app/Sidebar";
@@ -66,6 +67,23 @@ function ChatSession({
 
   const isBusy = status === "submitted" || status === "streaming";
 
+  // Panneau des plantes : s'ouvre de lui-même sur chaque NOUVELLE réponse
+  // qui propose des plantes (pas sur une conversation rouverte), sur grand
+  // écran seulement — sur téléphone il cacherait la réponse en train de
+  // s'écrire, la carte sous la réponse suffit.
+  const [panneauId, setPanneauId] = useState<string | null>(null);
+  const derniereAvecPlantes = [...messages].reverse().find((m) => plantesProposees(m).length > 0)?.id ?? null;
+  const dejaVue = useRef(derniereAvecPlantes);
+  useEffect(() => {
+    if (!derniereAvecPlantes || derniereAvecPlantes === dejaVue.current) return;
+    dejaVue.current = derniereAvecPlantes;
+    const grandEcran = window.matchMedia("(min-width: 1024px)").matches;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (grandEcran) setPanneauId(derniereAvecPlantes);
+  }, [derniereAvecPlantes]);
+  const messagePanneau = panneauId ? messages.find((m) => m.id === panneauId) : undefined;
+  const usagesPanneau = messagePanneau ? plantesProposees(messagePanneau) : [];
+
   const handleSend = ({ text, files }: { text: string; files?: FileList }) => {
     sendMessage({ text, files });
   };
@@ -75,35 +93,39 @@ function ChatSession({
   };
 
   return (
-    <>
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        <ChatMessages
-          messages={messages}
-          status={status}
-          onExampleClick={handleExampleClick}
-          onContribute={onContribute}
-          onFavoriteChange={() => {}}
-        />
-        {error && (
-          <div className="mx-auto max-w-[880px] px-4 pb-4">
-            <div className="flex items-center justify-between gap-3 rounded-xl bg-red-50 px-4 py-2.5 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
-              <p>{messageErreur(error)}</p>
-              <button
-                type="button"
-                onClick={() => {
-                  clearError();
-                  regenerate();
-                }}
-                className="shrink-0 rounded-full border border-red-300 px-3 py-1 font-medium transition hover:bg-red-100 dark:border-red-800 dark:hover:bg-red-900"
-              >
-                Réessayer
-              </button>
+    <div className="flex min-h-0 flex-1">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <ChatMessages
+            messages={messages}
+            status={status}
+            onExampleClick={handleExampleClick}
+            onContribute={onContribute}
+            panneauId={panneauId}
+            onBasculerPanneau={(id) => setPanneauId((actuel) => (actuel === id ? null : id))}
+          />
+          {error && (
+            <div className="mx-auto max-w-[880px] px-4 pb-4">
+              <div className="flex items-center justify-between gap-3 rounded-xl bg-red-50 px-4 py-2.5 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
+                <p>{messageErreur(error)}</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearError();
+                    regenerate();
+                  }}
+                  className="shrink-0 rounded-full border border-red-300 px-3 py-1 font-medium transition hover:bg-red-100 dark:border-red-800 dark:hover:bg-red-900"
+                >
+                  Réessayer
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        <ChatInput onSend={handleSend} onStop={stop} disabled={isBusy} />
       </div>
-      <ChatInput onSend={handleSend} onStop={stop} disabled={isBusy} />
-    </>
+      {usagesPanneau.length > 0 && <PanneauPlantes usages={usagesPanneau} onFermer={() => setPanneauId(null)} />}
+    </div>
   );
 }
 

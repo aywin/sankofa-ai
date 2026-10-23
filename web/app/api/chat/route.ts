@@ -4,6 +4,7 @@ import {
   convertToModelMessages,
   createUIMessageStream,
   createUIMessageStreamResponse,
+  smoothStream,
   stepCountIs,
   streamText,
   tool,
@@ -238,6 +239,9 @@ export async function POST(req: Request) {
         maxRetries: 1,
         activeTools: sansPreparations ? [] : undefined,
         timeout: { totalMs: GENERATION_TIMEOUT_MS, chunkMs: CHUNK_TIMEOUT_MS },
+        // Gemini envoie le texte par gros blocs : on le redécoupe en mots,
+        // espacés de 15 ms, pour une écriture régulière à l'écran.
+        experimental_transform: smoothStream({ delayInMs: 15, chunking: "word" }),
         abortSignal: req.signal,
         onStepEnd: () => {
           etapes += 1;

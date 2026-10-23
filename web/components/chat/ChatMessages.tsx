@@ -2,7 +2,6 @@
 
 import ReactMarkdown from "react-markdown";
 import type { UIMessage } from "ai";
-import { PlantCard } from "./PlantCard";
 import { LafiMark, LeafIcon } from "./icons";
 import { TriageBlock } from "./TriageBlock";
 import type { TriageResultat } from "@/lib/triage";
@@ -64,6 +63,15 @@ function stepForToolPart(part: ToolPart, index: number): ToolStep {
   return { key, done: isDone, label: isDone ? "Étape terminée" : "Étape en cours…" };
 }
 
+// Plantes proposées par une réponse — sauf en cas d'urgence : là, seul le
+// bloc d'orientation compte, pas de remède.
+export function plantesProposees(message: UIMessage): MatchClaimResult[] {
+  if (message.role !== "assistant") return [];
+  const triage = (message.parts.find((p) => p.type === "data-triage") as { data?: TriageResultat } | undefined)?.data;
+  if (triage?.niveau === "urgence") return [];
+  return collectPlantResults(message.parts);
+}
+
 function hasEmptySearch(parts: ToolPart[]): boolean {
   return parts.some((part) => {
     if (part.type !== "tool-rechercher_par_symptome" || part.state !== "output-available") return false;
@@ -74,7 +82,7 @@ function hasEmptySearch(parts: ToolPart[]): boolean {
 
 // Les usages arrivent de deux façons : la recherche faite par le serveur
 // avant la génération (part "data-usages") et les relances par l'outil.
-function collectPlantResults(parts: UIMessage["parts"]): MatchClaimResult[] {
+export function collectPlantResults(parts: UIMessage["parts"]): MatchClaimResult[] {
   const seen = new Set<string>();
   const results: MatchClaimResult[] = [];
 
@@ -124,13 +132,16 @@ export function ChatMessages({
   status,
   onExampleClick,
   onContribute,
-  onFavoriteChange,
+  panneauId,
+  onBasculerPanneau,
 }: {
   messages: UIMessage[];
   status: "submitted" | "streaming" | "ready" | "error";
   onExampleClick: (text: string) => void;
   onContribute: () => void;
-  onFavoriteChange: () => void;
+  // Réponse dont les plantes sont affichées dans le panneau (null = fermé).
+  panneauId: string | null;
+  onBasculerPanneau: (messageId: string) => void;
 }) {
   if (messages.length === 0) {
     return (
@@ -171,7 +182,8 @@ export function ChatMessages({
           (p): p is Extract<typeof p, { type: "file" }> =>
             p.type === "file" && !!p.mediaType?.startsWith("image/")
         );
-        const plantResults = isUser ? [] : collectPlantResults(message.parts);
+        const plantResults = isUser ? [] : plantesProposees(message);
+        const noms = [...new Set(plantResults.map((u) => u.nom_principal))];
         const triage = isUser
           ? null
           : ((message.parts.find((p) => p.type === "data-triage") as { data?: TriageResultat } | undefined)?.data ?? null);
@@ -207,18 +219,6 @@ export function ChatMessages({
 
               {!isUser && <ToolSteps parts={toolParts} />}
 
-              {!isUser && plantResults.length > 0 && (
-                <div className="mb-2 space-y-2">
-                  <p className="flex items-center gap-1.5 text-xs font-medium text-neutral-500 dark:text-neutral-500">
-                    <LeafIcon className="h-3.5 w-3.5" />
-                    Ce que dit le savoir traditionnel
-                  </p>
-                  {plantResults.map((usage) => (
-                    <PlantCard key={usage.claim_id} usage={usage} onFavoriteChange={onFavoriteChange} />
-                  ))}
-                </div>
-              )}
-
               {showContributeCta && (
                 <button
                   type="button"
@@ -243,6 +243,32 @@ export function ChatMessages({
                   </div>
                 )
               )}
+
+              {noms.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => onBasculerPanneau(message.id)}
+                  aria-expanded={panneauId === message.id}
+                  className={`mt-3 flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${
+                    panneauId === message.id
+                      ? "border-emerald-400 bg-emerald-50 dark:border-emerald-700 dark:bg-emerald-950/50"
+                      : "border-neutral-200 bg-white hover:border-emerald-300 dark:border-neutral-800 dark:bg-neutral-900"
+                  }`}
+                >
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">
+                    <LeafIcon className="h-4 w-4" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                      {noms.length} plante{noms.length > 1 ? "s" : ""} proposée{noms.length > 1 ? "s" : ""}
+                    </span>
+                    <span className="block truncate text-xs text-neutral-500">{noms.join(", ")}</span>
+                  </span>
+                  <span className="shrink-0 text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                    {panneauId === message.id ? "Fermer" : "Ouvrir"}
+                  </span>
+                </button>
+              )}
             </div>
           </div>
         );
@@ -250,9 +276,10 @@ export function ChatMessages({
 
       {status === "submitted" && (
         <div className="flex justify-start">
-          <div className="rounded-2xl bg-neutral-100 px-4 py-2.5 dark:bg-neutral-900">
+          <p className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
             <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-          </div>
+            Lafi consulte les usages documentés…
+          </p>
         </div>
       )}
     </div>
