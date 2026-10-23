@@ -40,8 +40,30 @@ export async function rechercherUsages(description: string): Promise<RechercheUs
     return { resultats: [], ecartes: candidats.length };
   }
   const plancher = candidats[0].similarity - ECART_MAX;
-  const resultats = candidats.filter((c) => c.similarity >= plancher).slice(0, RETENUS_MAX);
+  const resultats = candidats
+    .filter((c) => c.similarity >= plancher)
+    .slice(0, RETENUS_MAX)
+    .map((c) => ({ ...c, preparation_resume: resumePreparation(c) }));
   return { resultats, ecartes: candidats.length - resultats.length };
+}
+
+const MODES: Record<string, string> = {
+  decoction: "décoction",
+  infusion: "infusion",
+  maceration: "macération",
+  poudre: "poudre",
+  cataplasme: "cataplasme",
+  application_directe: "application directe",
+  autre: "",
+};
+
+// match_claims assemble « mode — solvant — description » avec les codes
+// bruts (application_directe, aucun…). On garde une phrase lisible : la
+// description si elle existe, sinon le mode en clair.
+function resumePreparation(c: MatchClaimResult): string | null {
+  const morceaux = (c.preparation_resume ?? "").split(" — ").map((m) => m.trim());
+  const description = morceaux.filter((m) => m && m !== c.preparation_mode && !["aucun", "autre", "non_documente"].includes(m)).at(-1);
+  return description ?? (MODES[c.preparation_mode] || null);
 }
 
 // Ce que le modèle reçoit pour chaque usage — uniquement des champs

@@ -16,6 +16,7 @@ import { getTaxonByVernacularName } from "@/lib/taxon";
 import { rechercherUsages, usagesPourModele } from "@/lib/retrieval";
 import { evaluerTriage, triagePourModele, type TriageResultat } from "@/lib/triage";
 import { composerRepli } from "@/lib/chatRepli";
+import { MODELES } from "@/lib/modeles";
 import type { MatchClaimResult } from "@/lib/types";
 
 // Vercel : la génération avec un appel d'outil peut dépasser le délai par
@@ -23,13 +24,6 @@ import type { MatchClaimResult } from "@/lib/types";
 // plus court, pour que le repli documentaire ait le temps de partir.
 export const maxDuration = 60;
 
-// Mesuré le 24/10/2026 sur une même question : 3.6 Flash en réflexion par
-// défaut (moyenne) donnait le premier mot en 6,6 s et 1 228 jetons facturés ;
-// 3.8 Flash en réflexion basse, 2,4 s et 132 jetons, pour une réponse
-// équivalente. La réflexion basse suffit : le raisonnement utile (triage,
-// sélection des usages) est fait avant l'appel.
-const MODELE = "gemini-3.8-flash";
-const NIVEAU_REFLEXION = "low" as const;
 const GENERATION_TIMEOUT_MS = 40_000;
 const CHUNK_TIMEOUT_MS = 20_000;
 
@@ -258,87 +252,98 @@ export async function POST(req: Request) {
       let premierTexteMs: number | null = null;
       let etapes = 0;
 
-      const result = streamText({
-        model: google(MODELE),
-        system: `${SYSTEM_PROMPT}\n\n---\n${contexte}`,
-        messages: await convertToModelMessages(messages.slice(-MESSAGES_ENVOYES_AU_MODELE)),
-        stopWhen: stepCountIs(3),
-        // Une seule nouvelle tentative : sur un quota dépassé (429, cause des
-        // échecs de l'audit du 21/10), les 3 essais par défaut retardaient
-        // le repli de 8 s pour rien ; une panne passagère (503) en profite.
-        maxRetries: 1,
-        activeTools: sansPreparations ? [] : undefined,
-        timeout: { totalMs: GENERATION_TIMEOUT_MS, chunkMs: CHUNK_TIMEOUT_MS },
-        // Gemini envoie le texte par gros blocs : on le redécoupe en mots,
-        // espacés de 15 ms, pour une écriture régulière à l'écran.
-        experimental_transform: smoothStream({ delayInMs: 15, chunking: "word" }),
-        providerOptions: { google: { thinkingConfig: { thinkingLevel: NIVEAU_REFLEXION } } },
-        abortSignal: req.signal,
-        onStepEnd: () => {
-          etapes += 1;
-        },
-        tools: {
-          rechercher_par_symptome: tool({
-            description:
-              "Recherche les usages traditionnels documentés correspondant à une description de symptômes, de maladie ou à un nom de plante. À utiliser pour une relance sur un sujet différent de celui déjà couvert par les usages transmis.",
-            inputSchema: z.object({
-              description: z
-                .string()
-                .describe("Description des symptômes, de la maladie ou nom de plante, en français."),
+      // Modèle principal, puis modèle de secours si le premier échoue avant
+      // d'avoir écrit quoi que ce soit (modèle indisponible pour la clé,
+      // quota…). Le texte documentaire sans IA reste le dernier recours.
+      for (const modele of MODELES) {
+        echec = null;
+        const result = streamText({
+          model: google(modele.id),
+          system: `${SYSTEM_PROMPT}\n\n---\n${contexte}`,
+          messages: await convertToModelMessages(messages.slice(-MESSAGES_ENVOYES_AU_MODELE)),
+          stopWhen: stepCountIs(3),
+          // Une seule nouvelle tentative : sur un quota dépassé (429, cause des
+          // échecs de l'audit du 21/10), les 3 essais par défaut retardaient
+          // le repli de 8 s pour rien ; une panne passagère (503) en profite.
+          maxRetries: 1,
+          activeTools: sansPreparations ? [] : undefined,
+          timeout: { totalMs: GENERATION_TIMEOUT_MS, chunkMs: CHUNK_TIMEOUT_MS },
+          // Gemini envoie le texte par gros blocs : on le redécoupe en mots,
+          // espacés de 15 ms, pour une écriture régulière à l'écran.
+          experimental_transform: smoothStream({ delayInMs: 15, chunking: "word" }),
+          providerOptions: { google: { thinkingConfig: { thinkingLevel: modele.reflexion } } },
+          abortSignal: req.signal,
+          onStepEnd: () => {
+            etapes += 1;
+          },
+          tools: {
+            rechercher_par_symptome: tool({
+              description:
+                "Recherche les usages traditionnels documentés correspondant à une description de symptômes, de maladie ou à un nom de plante. À utiliser pour une relance sur un sujet différent de celui déjà couvert par les usages transmis.",
+              inputSchema: z.object({
+                description: z
+                  .string()
+                  .describe("Description des symptômes, de la maladie ou nom de plante, en français."),
+              }),
+              execute: async ({ description }) => {
+                try {
+                  const { resultats } = await rechercherUsages(description);
+                  return { resultats, pour_toi: usagesPourModele(resultats) };
+                } catch (error) {
+                  journal(requestId, "outil_echec", { erreur: String(error) });
+                  return { erreur: "Recherche indisponible", resultats: [] as MatchClaimResult[] };
+                }
+              },
             }),
-            execute: async ({ description }) => {
-              try {
-                const { resultats } = await rechercherUsages(description);
-                return { resultats, pour_toi: usagesPourModele(resultats) };
-              } catch (error) {
-                journal(requestId, "outil_echec", { erreur: String(error) });
-                return { erreur: "Recherche indisponible", resultats: [] as MatchClaimResult[] };
-              }
-            },
-          }),
-          obtenir_details_plante: tool({
-            description:
-              "Récupère la fiche complète d'une plante (description, précautions) à partir de son nom local exact.",
-            inputSchema: z.object({
-              nom: z.string().describe("Nom local exact de la plante, tel qu'il apparaît dans les usages transmis."),
+            obtenir_details_plante: tool({
+              description:
+                "Récupère la fiche complète d'une plante (description, précautions) à partir de son nom local exact.",
+              inputSchema: z.object({
+                nom: z.string().describe("Nom local exact de la plante, tel qu'il apparaît dans les usages transmis."),
+              }),
+              execute: async ({ nom }) => {
+                try {
+                  return { plante: await getTaxonByVernacularName(nom) };
+                } catch (error) {
+                  return { erreur: error instanceof Error ? error.message : String(error), plante: null };
+                }
+              },
             }),
-            execute: async ({ nom }) => {
-              try {
-                return { plante: await getTaxonByVernacularName(nom) };
-              } catch (error) {
-                return { erreur: error instanceof Error ? error.message : String(error), plante: null };
-              }
-            },
-          }),
-        },
-      });
+          },
+        });
 
-      const reader = toUIMessageStream({
-        stream: result.stream,
-        sendStart: false,
-        sendFinish: false,
-        onError: (error) => {
-          echec = error;
-          return "generation";
-        },
-      }).getReader();
+        const reader = toUIMessageStream({
+          stream: result.stream,
+          sendStart: false,
+          sendFinish: false,
+          onError: (error) => {
+            echec = error;
+            return "generation";
+          },
+        }).getReader();
 
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          if (value.type === "error") {
-            echec ??= value.errorText;
-            continue;
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            if (value.type === "error") {
+              echec ??= value.errorText;
+              continue;
+            }
+            if (value.type === "text-delta") {
+              premierTexteMs ??= Date.now() - debut;
+              texteRecu += value.delta;
+            }
+            writer.write(value);
           }
-          if (value.type === "text-delta") {
-            premierTexteMs ??= Date.now() - debut;
-            texteRecu += value.delta;
-          }
-          writer.write(value);
+        } catch (error) {
+          echec ??= error;
         }
-      } catch (error) {
-        echec ??= error;
+        if (!echec || texteRecu.length > 0) break;
+        journal(requestId, "modele_echec", {
+          modele: modele.id,
+          erreur: echec instanceof Error ? `${echec.name}: ${echec.message}` : String(echec),
+        });
       }
 
       if (echec) {

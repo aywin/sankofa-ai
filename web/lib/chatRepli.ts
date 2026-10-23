@@ -1,4 +1,3 @@
-import { qualiteLabelGrandPublic } from "./synthese";
 import type { TriageResultat } from "./triage";
 import type { MatchClaimResult } from "./types";
 
@@ -8,9 +7,7 @@ import type { MatchClaimResult } from "./types";
 // règles que le modèle : précautions avant préparations, pas de dose à
 // l'impératif, pas de promesse d'efficacité.
 export function composerRepli(triage: TriageResultat, resultats: MatchClaimResult[]): string {
-  const lignes: string[] = [
-    "_Lafi n'a pas pu rédiger de réponse complète cette fois-ci. Voici directement ce qui est documenté et qui correspond à ta question._",
-  ];
+  const lignes: string[] = ["Je n'ai pas pu rédiger de réponse complète cette fois-ci. Voici ce qui est documenté pour ta question."];
 
   if (triage.niveau !== "aucun") {
     lignes.push("", `**${triage.titre}.** ${triage.conseils[0] ?? ""}`);
@@ -24,17 +21,18 @@ export function composerRepli(triage: TriageResultat, resultats: MatchClaimResul
     return lignes.join("\n");
   }
 
-  lignes.push("", "**Usages documentés :**");
+  lignes.push("");
   for (const r of resultats) {
+    const preparation = (r.preparation_resume ?? "").replace(/\.+$/, "");
     const prudence = r.contre_indication_forte
-      ? ". ⚠️ Une contre-indication a été signalée, demande un avis avant tout usage"
-      : r.precautions
-        ? `. Précaution : ${r.precautions}`
+      ? "Une contre-indication a été signalée : demande un avis avant tout usage."
+      : r.precautions_specifiques || r.precautions
+        ? `Précaution : ${(r.precautions_specifiques || r.precautions)!.replace(/\.+$/, "")}.`
         : "";
     lignes.push(
-      `- **${r.nom_principal}** (*${r.nom_scientifique}*), pour ${r.indication_nom.toLowerCase()} : ${r.partie_nom.toLowerCase()}, ${r.preparation_resume ?? r.preparation_mode}. Côté science : ${qualiteLabelGrandPublic(r.qualite_preuve_scientifique).toLowerCase()}${prudence}.`
+      `- **${r.nom_principal}**, ${r.partie_nom.toLowerCase()}${preparation ? ` : ${preparation}` : ""}. ${prudence}`.trim()
     );
   }
-  lignes.push("", "Tu peux renvoyer ta question dans un instant pour une réponse plus complète.");
+  lignes.push("", "Les détails sont dans les sources à côté. Renvoie ta question dans un instant pour une réponse complète.");
   return lignes.join("\n");
 }

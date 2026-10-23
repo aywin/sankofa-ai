@@ -28,7 +28,7 @@ export function PlantCard({
 
       <p className="mt-1 text-xs font-medium text-neutral-500 dark:text-neutral-400">{usage.indication_nom}</p>
 
-      <dl className="mt-2 space-y-1 text-sm text-neutral-700 dark:text-neutral-300">
+      <dl className="mt-2 space-y-1 text-sm text-neutral-900 dark:text-neutral-100">
         <div>
           <dt className="inline font-medium text-neutral-500 dark:text-neutral-400">Préparation : </dt>
           <dd className="inline">

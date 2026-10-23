@@ -2,6 +2,7 @@ import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 import { supabaseServer } from "@/lib/supabase";
 import { embedQuery } from "@/lib/embedding";
+import { MODELES } from "@/lib/modeles";
 
 // /api/health            -> base seule (léger, pour une sonde fréquente)
 // /api/health?complet=1  -> base + embedding + génération, chacun mesuré
@@ -37,10 +38,19 @@ export async function GET(req: Request) {
   }
 
   const embedding = await mesurer(() => embedQuery("fièvre"));
-  const generation = await mesurer(() =>
-    generateText({ model: google("gemini-3.6-flash"), prompt: "Réponds seulement : ok", maxRetries: 0 })
-  );
-  const ok = embedding.ok && generation.ok;
+  // Chaque modèle du chat, avec le même réglage que le chat.
+  const generation: Record<string, Awaited<ReturnType<typeof mesurer>>> = {};
+  for (const m of MODELES) {
+    generation[m.id] = await mesurer(() =>
+      generateText({
+        model: google(m.id),
+        prompt: "Réponds seulement : ok",
+        maxRetries: 0,
+        providerOptions: { google: { thinkingConfig: { thinkingLevel: m.reflexion } } },
+      })
+    );
+  }
+  const ok = embedding.ok && Object.values(generation).some((g) => g.ok);
 
   return Response.json(
     { status: ok ? "ok" : "degraded", database: "connected", maladies_count: count, embedding, generation },

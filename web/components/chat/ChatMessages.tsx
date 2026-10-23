@@ -240,7 +240,7 @@ export function ChatMessages({
                 ) : (
                   <div
                     key={i}
-                    className="prose prose-sm prose-neutral dark:prose-invert max-w-none prose-p:my-1.5 prose-headings:mt-3 prose-headings:mb-1.5 prose-hr:my-4"
+                    className="prose prose-neutral dark:prose-invert max-w-none text-[15px] leading-relaxed text-neutral-900 prose-p:my-2 prose-p:text-neutral-900 prose-li:text-neutral-900 prose-strong:text-neutral-900 prose-headings:mt-3 prose-headings:mb-1.5 prose-hr:my-4 dark:text-neutral-100 dark:prose-p:text-neutral-100 dark:prose-li:text-neutral-100"
                   >
                     <ReactMarkdown>{part.text}</ReactMarkdown>
                   </div>
