@@ -45,7 +45,11 @@ Un dossier contenant les 11 fichiers ci-dessous, encodés en UTF-8, avec le sép
 | autorite | Ex. `J.F.Gmel.` |
 | famille | Ex. `Combretaceae` |
 | description | 2 ou 3 phrases simples : à quoi elle ressemble, où elle pousse |
-| habitat_region | Zones du Burkina où on la trouve (sahélienne, soudano-sahélienne, soudanienne) |
+| habitat_region | Zone climatique du Burkina où elle pousse (sahélienne, soudano-sahélienne, soudanienne) et son milieu (savane, bord de cours d'eau, champs, villages…) |
+| regions_burkina | Régions administratives du Burkina où elle est présente, séparées par ` | `. Garde le nom donné par la source et ajoute le nom actuel de la région s'il a changé (découpage de 2025) |
+| localites | Provinces, villes ou villages cités par les sources (lieu de récolte, de vente, d'enquête) |
+| pays_presence | Autres pays d'Afrique de l'Ouest où elle est présente |
+| abondance | courante, peu courante, rare, en régression, selon la source |
 | ou_la_trouver | Où se la procurer : à l'état sauvage (milieu), cultivée, vendue sur les marchés (lesquels, si la source le dit), chez les herboristes |
 | saison_recolte | Période de récolte ou de disponibilité, par partie si possible |
 | prix_marche | Prix observé sur un marché, avec l'unité, le lieu et l'année, si une source le donne |
