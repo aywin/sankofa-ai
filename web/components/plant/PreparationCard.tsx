@@ -23,9 +23,9 @@ export function PreparationCard({
   preparation: ClaimDetail["preparation"];
 }) {
   return (
-    <div className="rounded-xl border border-neutral-200/70 p-3 text-sm dark:border-neutral-800/70">
+    <div className="rounded-xl border border-neutral-200 p-3 text-sm dark:border-neutral-800/70">
       <p className="font-medium text-neutral-800 dark:text-neutral-200">
-        {MODE_LABELS[preparation.mode] ?? preparation.mode} — {partie.nom}
+        {MODE_LABELS[preparation.mode] ?? preparation.mode} · {partie.nom}
       </p>
       {preparation.description_libre && (
         <p className="mt-1 text-neutral-600 dark:text-neutral-400">{preparation.description_libre}</p>

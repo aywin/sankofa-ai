@@ -19,7 +19,7 @@ export function EnteteMarche({ actif }: { actif: "remedes" | "tradipraticiens" }
 
   return (
     <header>
-      <h1 className="font-serif text-2xl font-semibold text-neutral-900 sm:text-3xl dark:text-neutral-100">
+      <h1 className="text-2xl font-semibold text-neutral-900 sm:text-3xl dark:text-neutral-100">
         {actif === "remedes" ? "Remèdes" : "Tradipraticiens"}
       </h1>
       <p className="mt-1 max-w-2xl text-sm text-neutral-600 dark:text-neutral-300">

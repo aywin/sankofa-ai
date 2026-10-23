@@ -1,6 +1,6 @@
 import { AdminVentes } from "@/components/boutique/AdminVentes";
 
-export const metadata = { title: "Ventes — administration Lafi", robots: { index: false } };
+export const metadata = { title: "Ventes · administration Lafi", robots: { index: false } };
 
 export default function AdminVentesPage() {
   return (

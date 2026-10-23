@@ -9,7 +9,7 @@ export function CarteRemede({ remede }: { remede: ProduitDisponible }) {
   return (
     <Link
       href={`/b/${remede.boutique.slug}#p-${remede.id}`}
-      className="flex flex-col overflow-hidden rounded-2xl border border-neutral-200/70 bg-white transition hover:border-emerald-300 hover:shadow-sm dark:border-neutral-800/70 dark:bg-neutral-900/60"
+      className="flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:border-emerald-300 hover:shadow-sm dark:border-neutral-800/70 dark:bg-neutral-900/60"
     >
       {remede.image_url ? (
         // eslint-disable-next-line @next/next/no-img-element

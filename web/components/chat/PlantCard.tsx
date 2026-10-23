@@ -14,7 +14,7 @@ export function PlantCard({
   onFavoriteChange?: () => void;
 }) {
   return (
-    <div className="rounded-2xl border border-neutral-200/70 bg-neutral-50/60 p-3 dark:border-neutral-800/70 dark:bg-neutral-900/40">
+    <div className="rounded-2xl border border-neutral-200 bg-white p-3 dark:border-neutral-800/70 dark:bg-neutral-900/40">
       <div className="flex items-start justify-between gap-2">
         <Link
           href={`/plants/${usage.taxon_slug}`}
@@ -32,7 +32,7 @@ export function PlantCard({
         <div>
           <dt className="inline font-medium text-neutral-500 dark:text-neutral-400">Préparation : </dt>
           <dd className="inline">
-            {usage.partie_nom} — {usage.preparation_resume ?? usage.preparation_mode}
+            {usage.partie_nom} · {usage.preparation_resume ?? usage.preparation_mode}
           </dd>
         </div>
       </dl>

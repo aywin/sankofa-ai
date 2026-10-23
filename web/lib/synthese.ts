@@ -56,7 +56,7 @@ export const STATUT_LABELS: Record<StatutSynthese, string> = {
 // Point de vigilance qui a déjà produit une erreur une fois (corrigée) :
 // ne jamais laisser le langage simplifié grossir l'affirmation. GRADE
 // "modérée" veut dire confiance modérée dans l'estimation de l'effet,
-// PAS confirmation — donc "Étudié, résultats encourageants", jamais
+// PAS confirmation — donc "Résultats encourageants", jamais
 // "Confirmé par la science". C'est la seule règle de ce fichier qui
 // touche à la sécurité de l'utilisateur plutôt qu'à la clarté.
 export function forceLabelGrandPublic(force: ForceAttestation): string {
@@ -77,7 +77,7 @@ export function forceLabelGrandPublic(force: ForceAttestation): string {
 export function qualiteLabelGrandPublic(qualite: GradeTier | null): string {
   if (qualite === null) return "Pas encore étudié";
   if (qualite === "elevee") return "Bien étudié";
-  if (qualite === "moderee") return "Étudié, résultats encourageants";
+  if (qualite === "moderee") return "Résultats encourageants";
   return "Peu d'études";
 }
 
@@ -155,7 +155,7 @@ export function explainSyntheseStatus(
 
   if (contreIndicationForte) {
     raisonnement.push(
-      "Le nœud sécurité a détecté une contre-indication forte pour cette préparation — cette sortie prime toujours sur le reste du pipeline."
+      "Le nœud sécurité a détecté une contre-indication forte pour cette préparation. Cette sortie prime toujours sur le reste du pipeline."
     );
     return { statut: "contre_indique", raisonnement };
   }

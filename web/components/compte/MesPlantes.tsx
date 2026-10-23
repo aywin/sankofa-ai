@@ -40,7 +40,7 @@ export function MesPlantes() {
   return (
     <ul className="grid gap-2 sm:grid-cols-2">
       {plantes.map((p) => (
-        <li key={p.planteNom} className="flex items-center justify-between gap-2 rounded-2xl border border-neutral-200/70 bg-white px-4 py-3 dark:border-neutral-800/70 dark:bg-neutral-900/60">
+        <li key={p.planteNom} className="flex items-center justify-between gap-2 rounded-2xl border border-neutral-200 bg-white px-4 py-3 dark:border-neutral-800/70 dark:bg-neutral-900/60">
           <Link href={`/plants/${slugify(p.planteNom)}`} className="font-medium text-emerald-800 hover:underline dark:text-emerald-300">
             🌿 {p.planteNom}
           </Link>

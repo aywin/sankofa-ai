@@ -1,6 +1,6 @@
 import { SuiviCommande } from "@/components/boutique/SuiviCommande";
 
-export const metadata = { title: "Suivi de commande — Lafi", robots: { index: false } };
+export const metadata = { title: "Suivi de commande · Lafi", robots: { index: false } };
 
 // Page de retour du paiement SasPay (return_url) — l'acheteur n'a pas de
 // compte : le jeton `j` de l'URL est son droit d'accès.

@@ -1,7 +1,7 @@
 import { getEligibleTaxaForSynergies, getSynergieData } from "@/lib/synergies";
 import { SynergiesCanvas } from "@/components/synergies/SynergiesCanvas";
 
-export const metadata = { title: "Synergies — Lafi" };
+export const metadata = { title: "Synergies · Lafi" };
 
 // Deuxième workflow, volontairement séparé du Laboratoire : celui-ci
 // documente du réel (usages attestés), celui-ci explore une hypothèse en
@@ -47,7 +47,7 @@ export default async function SynergiesPage({
         🧪 Explorer des synergies
       </h1>
       <p className="mb-6 text-sm text-neutral-500 dark:text-neutral-400">
-        Croise les profils chimiques déjà documentés de deux plantes et regarde ce que Lafi en observe — une piste
+        Croise les profils chimiques déjà documentés de deux plantes et regarde ce que Lafi en observe. C&apos;est une piste
         de recherche, jamais un usage attesté.
       </p>
 

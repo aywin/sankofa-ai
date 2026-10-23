@@ -56,7 +56,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <CoquilleContexte.Provider value={{ replie, setReplie }}>
       <div className="flex h-dvh flex-col md:flex-row">
         <aside
-          className={`hidden shrink-0 border-r border-neutral-200/70 bg-sand-50 transition-[width] duration-200 md:block dark:border-neutral-800/70 dark:bg-sand-950 ${
+          className={`hidden shrink-0 border-r border-neutral-200 bg-sand-50 transition-[width] duration-200 md:block dark:border-neutral-800/70 dark:bg-sand-950 ${
             replie ? "w-[72px]" : "w-[264px]"
           }`}
         >
@@ -65,7 +65,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Suspense>
         </aside>
 
-        <header className="flex h-12 shrink-0 items-center justify-between border-b border-neutral-200/70 px-2 md:hidden dark:border-neutral-800/70">
+        <header className="flex h-12 shrink-0 items-center justify-between border-b border-neutral-200 px-2 md:hidden dark:border-neutral-800/70">
           <button type="button" onClick={() => setTiroir(true)} aria-label="Ouvrir le menu" className="rounded-lg p-2 text-neutral-600 dark:text-neutral-300">
             {ICONES.menu("h-5 w-5")}
           </button>
@@ -97,7 +97,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         {/* Pas de <main> ici : chaque page porte le sien. */}
         <div className="min-h-0 min-w-0 flex-1 overflow-y-auto">{children}</div>
 
-        <nav aria-label="Navigation" className="grid shrink-0 grid-cols-4 border-t border-neutral-200/70 bg-sand-50 pb-[env(safe-area-inset-bottom)] md:hidden dark:border-neutral-800/70 dark:bg-sand-950">
+        <nav aria-label="Navigation" className="grid shrink-0 grid-cols-4 border-t border-neutral-200 bg-sand-50 pb-[env(safe-area-inset-bottom)] md:hidden dark:border-neutral-800/70 dark:bg-sand-950">
           {BAS.map((b) => {
             const actif = estActif(pathname, b.prefixes);
             return (

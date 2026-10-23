@@ -43,7 +43,7 @@ export async function LaboratoryPreview() {
         <span className="font-medium">
           {nom} × {indication.nom}
         </span>{" "}
-        — le pipeline complet, nœud par nœud, données réelles à l&apos;appui.
+        : le raisonnement complet, étape par étape, sur des données réelles.
       </p>
       <Link
         href={`/laboratoire/${claim.id}`}

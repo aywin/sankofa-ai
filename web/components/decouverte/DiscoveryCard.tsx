@@ -26,7 +26,7 @@ export function DiscoveryCard({ result }: { result: DiscoveryResult }) {
           </div>
           <p className="text-xs italic text-neutral-500 dark:text-neutral-400">
             {result.nomScientifique}
-            {result.famille ? ` — ${result.famille}` : ""}
+            {result.famille ? ` · ${result.famille}` : ""}
           </p>
 
           <p className="mt-2 text-sm text-neutral-700 dark:text-neutral-300">

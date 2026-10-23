@@ -22,14 +22,13 @@ export function AttestationSection({
         <p className="mb-2 text-xs text-neutral-600 dark:text-neutral-300">
           <span className="font-medium">
             {traditions} tradition{traditions > 1 ? "s" : ""} indépendante{traditions > 1 ? "s" : ""}
-          </span>{" "}
-          — comptée sur des lignées d&apos;apprentissage distinctes, pas sur le nombre de fois où l&apos;usage a été
+          </span>
+          , comptées sur des lignées d&apos;apprentissage distinctes, pas sur le nombre de fois où l&apos;usage a été
           rapporté : dix personnes formées par le même maître comptent pour une seule tradition.
         </p>
       ) : (
-        <p className="mb-2 text-xs italic text-neutral-500 dark:text-neutral-400">
-          Aucune attestation traditionnelle comptée pour l&apos;instant — la collecte de terrain n&apos;a pas encore
-          eu lieu sur ce couple.
+        <p className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">
+          Pas encore d&apos;attestation recueillie sur le terrain pour cet usage.
         </p>
       )}
 
@@ -53,8 +52,8 @@ export function AttestationSection({
       )}
 
       {!estPilote && (
-        <p className="mt-2 text-xs italic text-neutral-500 dark:text-neutral-400">
-          Corpus documentaire initial — pas encore de vraie collecte de terrain sur ce couple.
+        <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">
+          Source documentaire, pas encore confirmée sur le terrain.
         </p>
       )}
     </div>

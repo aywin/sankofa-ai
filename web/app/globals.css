@@ -16,9 +16,10 @@
   --color-emerald-900: #2c3a23;
   --color-emerald-950: #161f10;
 
-  /* Sable chaud — remplace le blanc/noir pur du fond de page. */
-  --color-sand-50: #faf8f3;
-  --color-sand-950: #16130e;
+  /* Fond de page : blanc cassé franc (les cartes, blanches, s'en
+     détachent nettement) ; nuit chaude en mode sombre. */
+  --color-sand-50: #f5f5f1;
+  --color-sand-950: #141310;
 
   /* Doré de latérite — deuxième accent chaud (statuts intermédiaires,
      moments "manifeste" sur fond sombre). Jamais l'amber générique de
@@ -42,11 +43,8 @@
   --color-ink-900: #1a1610;
   --color-ink-950: #100d09;
 
-  /* Serif pour les moments manifeste (hero, titres de section) — le
-     texte courant reste en grotesque (sans-serif). La double nature du
-     projet, patrimoine + calcul, passe aussi par la typo. */
-  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Une seule famille (Figtree). */
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {

@@ -5,7 +5,7 @@ import { getDiscoveryData } from "@/lib/decouverte";
 import { obtenirExecution } from "@/lib/laboratoireAnalyse";
 import { LaboratoireCanvas } from "@/components/laboratoire/LaboratoireCanvas";
 
-export const metadata = { title: "Laboratoire — Lafi" };
+export const metadata = { title: "Laboratoire · Lafi" };
 
 export default async function LaboratoirePage({
   params,

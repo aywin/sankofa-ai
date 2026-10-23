@@ -10,7 +10,7 @@ type ContributionType = "ajout" | "contestation";
 type NiveauDivulgation = "declaratif" | "documente" | "complet";
 
 const NIVEAU_OPTIONS: { value: NiveauDivulgation; label: string; description: string }[] = [
-  { value: "declaratif", label: "Déclaratif", description: "Juste la plante et le mal — rien d'autre à remplir." },
+  { value: "declaratif", label: "Déclaratif", description: "Juste la plante et le mal, rien d'autre à remplir." },
   { value: "documente", label: "Documenté", description: "+ la préparation utilisée." },
   { value: "complet", label: "Complet", description: "+ région, langue, associations de plantes." },
 ];
@@ -97,7 +97,7 @@ export function ContributeModal({ onClose }: { onClose: () => void }) {
             </p>
             <p className="mb-4 text-xs text-neutral-500 dark:text-neutral-500">
               Envie de compléter cette info plus tard (préparation, région...) ? Ressoumets le formulaire en le
-              précisant — on ne sait pas encore relier deux envois entre eux automatiquement.
+              précisant : on ne sait pas encore relier deux envois entre eux automatiquement.
             </p>
             <button
               type="button"
@@ -137,7 +137,7 @@ export function ContributeModal({ onClose }: { onClose: () => void }) {
             <p className="mb-4 text-xs text-neutral-500 dark:text-neutral-400">
               {type === "ajout"
                 ? "Un usage traditionnel que tu connais et qui ne figure pas encore dans les réponses de Lafi ? On le vérifie avant de l'ajouter."
-                : "Une information qui te semble fausse, incomplète, ou qui contredit ce que tu sais ? Dis-le — un désaccord documenté est aussi utile qu'un ajout."}
+                : "Une information qui te semble fausse, incomplète, ou qui contredit ce que tu sais ? Dis-le : un désaccord documenté est aussi utile qu'un ajout."}
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-2.5">

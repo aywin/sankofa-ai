@@ -193,21 +193,21 @@ export function LaboratoireCanvas({
           titre: "Savoir traditionnel",
           technique: "Attestation traditionnelle",
           entree: `${data.taxon.nomScientifique} × ${data.indication.nom}`,
-          sortie: `${FORCE_LABELS[force]} — ${data.stats.attestations_count} attestation${data.stats.attestations_count > 1 ? "s" : ""} comptée${data.stats.attestations_count > 1 ? "s" : ""}`,
+          sortie: `${FORCE_LABELS[force]} · ${data.stats.attestations_count} attestation${data.stats.attestations_count > 1 ? "s" : ""} comptée${data.stats.attestations_count > 1 ? "s" : ""}`,
         };
       case 4:
         return {
           titre: "Étude scientifique",
           technique: "Littérature",
           entree: `${data.taxon.nomScientifique} × ${data.indication.nom}`,
-          sortie: `${data.qualitePreuveScientifique ? GRADE_LABELS[data.qualitePreuveScientifique] : "non évaluée"} — ${data.etudes.length} étude${data.etudes.length > 1 ? "s" : ""}`,
+          sortie: `${data.qualitePreuveScientifique ? GRADE_LABELS[data.qualitePreuveScientifique] : "non évaluée"} · ${data.etudes.length} étude${data.etudes.length > 1 ? "s" : ""}`,
         };
       case 5:
         return {
           titre: "Mise en commun",
           technique: "Croisement",
           entree: "Sorties des nœuds 3 et 4",
-          sortie: `${forceLabelGrandPublic(force)} · ${qualiteLabelGrandPublic(data.qualitePreuveScientifique)} — jamais fusionnés en un seul mot`,
+          sortie: `${forceLabelGrandPublic(force)} · ${qualiteLabelGrandPublic(data.qualitePreuveScientifique)} · jamais fusionnés en un seul mot`,
         };
       case 6:
         return {
@@ -253,11 +253,11 @@ export function LaboratoireCanvas({
             }`}
           >
             {data.contreIndicationForte
-              ? "⚠️ Contrôle sécurité — contre-indication signalée pour cette préparation"
-              : "✓ Contrôle sécurité — aucune contre-indication forte enregistrée"}
+              ? "⚠️ Contrôle sécurité · contre-indication signalée pour cette préparation"
+              : "✓ Contrôle sécurité · aucune contre-indication forte enregistrée"}
           </div>
 
-          <div className="overflow-x-auto rounded-2xl border border-neutral-200/70 bg-white p-2 dark:border-neutral-800/70 dark:bg-neutral-900/40">
+          <div className="overflow-x-auto rounded-2xl border border-neutral-200 bg-white p-2 dark:border-neutral-800/70 dark:bg-neutral-900/40">
             <svg viewBox="0 0 850 320" className="h-auto w-full min-w-[640px]">
               {EDGES.map((e, i) => (
                 <CanvasEdge key={i} d={edgePath(POS[e.from], POS[e.to])} actif={edgesDone.has(i)} />
@@ -330,7 +330,7 @@ export function LaboratoireCanvas({
 
           {openNode === 1 && (
             <div className="mt-3 rounded-xl border border-laterite-200 bg-laterite-50/60 p-3 dark:border-laterite-900 dark:bg-laterite-950/30">
-              <label className="text-xs font-medium uppercase tracking-wide text-laterite-700 dark:text-laterite-400">
+              <label className="text-xs font-medium text-laterite-700 dark:text-laterite-400">
                 Choisir une plante
               </label>
               <select
@@ -354,7 +354,7 @@ export function LaboratoireCanvas({
 
           {openNode === 2 && (
             <div className="mt-3 rounded-xl border border-laterite-200 bg-laterite-50/60 p-3 dark:border-laterite-900 dark:bg-laterite-950/30">
-              <label className="text-xs font-medium uppercase tracking-wide text-laterite-700 dark:text-laterite-400">
+              <label className="text-xs font-medium text-laterite-700 dark:text-laterite-400">
                 Choisir une indication pour {nomPlanteActuel}
               </label>
               <select
@@ -372,9 +372,9 @@ export function LaboratoireCanvas({
           )}
 
           {mode === "expert" && openNode && openNode >= 3 && nodeDetail(openNode) && (
-            <div className="mt-3 rounded-xl border border-neutral-200/70 bg-neutral-50/60 p-3 text-sm dark:border-neutral-800/70 dark:bg-neutral-900/40">
-              <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-                {nodeDetail(openNode)!.titre} — nom technique : {nodeDetail(openNode)!.technique}
+            <div className="mt-3 rounded-xl border border-neutral-200 bg-white p-3 text-sm dark:border-neutral-800/70 dark:bg-neutral-900/40">
+              <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
+                {nodeDetail(openNode)!.titre} · nom technique : {nodeDetail(openNode)!.technique}
               </p>
               <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-300">Entrée : {nodeDetail(openNode)!.entree}</p>
               <p className="text-xs text-neutral-600 dark:text-neutral-300">Sortie : {nodeDetail(openNode)!.sortie}</p>
@@ -383,11 +383,11 @@ export function LaboratoireCanvas({
 
           {mode === "expert" && (
             <div className="mt-3 space-y-1.5">
-              <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+              <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
                 Nœuds complémentaires, hors canvas principal
               </p>
               {data.composes.length > 0 ? (
-                <div className="rounded-xl border border-neutral-200/70 p-3 text-xs text-neutral-600 dark:border-neutral-800/70 dark:text-neutral-300">
+                <div className="rounded-xl border border-neutral-200 p-3 text-xs text-neutral-600 dark:border-neutral-800/70 dark:text-neutral-300">
                   Profil phytochimique connu : {data.composes.map((c) => c.nom).join(", ")}
                 </div>
               ) : (
@@ -420,7 +420,7 @@ export function LaboratoireCanvas({
 
           {!data.estPilote && (
             <p className="mt-4 rounded-xl bg-neutral-100 px-3 py-2 text-xs text-neutral-600 dark:bg-neutral-900 dark:text-neutral-300">
-              Couple issu du corpus documentaire initial — pas encore enrichi de vraies données de terrain ni
+              Couple issu du corpus documentaire initial, pas encore enrichi de vraies données de terrain ni
               d&apos;une évaluation de la qualité de preuve. Préparation : {preparationResume}.
             </p>
           )}
@@ -431,11 +431,11 @@ export function LaboratoireCanvas({
             présent, jamais relégué en dessous. */}
         <div className="lg:sticky lg:top-20">
           <div className="rounded-2xl border-2 border-emerald-200 bg-white p-5 dark:border-emerald-900 dark:bg-neutral-950">
-            <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Résultat</p>
+            <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Résultat</p>
 
             {phase === "idle" && !resultat && (
               <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-                En attente du lancement — choisis éventuellement une autre plante ou indication ci-contre, puis
+                En attente du lancement. Choisis éventuellement une autre plante ou indication ci-contre, puis
                 clique sur « Lancer ».
               </p>
             )}
@@ -449,22 +449,22 @@ export function LaboratoireCanvas({
                 <p className="mt-2 text-sm leading-relaxed text-neutral-800 dark:text-neutral-200">{resultat.texte}</p>
 
                 {data.etudes.length > 0 && (
-                  <div className="mt-4 border-t border-neutral-200/70 pt-3 dark:border-neutral-800/70">
-                    <p className="mb-1.5 text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                  <div className="mt-4 border-t border-neutral-200 pt-3 dark:border-neutral-800/70">
+                    <p className="mb-1.5 text-xs font-medium text-neutral-500 dark:text-neutral-400">
                       Justificatifs
                     </p>
                     <ul className="space-y-1 text-xs text-neutral-500 dark:text-neutral-400">
                       {data.etudes.map((e) => (
                         <li key={e.id}>
                           {e.url ? (
-                            <a href={e.url} target="_blank" rel="noreferrer" className="italic underline-offset-2 hover:underline">
+                            <a href={e.url} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
                               {e.titre}
                             </a>
                           ) : (
-                            <span className="italic">{e.titre}</span>
+                            <span>{e.titre}</span>
                           )}{" "}
                           <span className="not-italic">(titre original de l&apos;étude)</span>
-                          {e.annee ? ` — ${e.annee}` : ""}
+                          {e.annee ? ` · ${e.annee}` : ""}
                         </li>
                       ))}
                     </ul>

@@ -75,7 +75,7 @@ export function CanvasNode(
           strokeWidth={2.5}
           className={`transition-colors duration-200 ${PILL_RING[ouvert ? "ouvert" : "repos"]} ${PILL_FILL[ouvert ? "ouvert" : "repos"]}`}
         />
-        <text textAnchor="middle" y={-5} className="fill-laterite-600 text-[9px] font-semibold uppercase tracking-wide dark:fill-laterite-400">
+        <text textAnchor="middle" y={-5} className="fill-laterite-600 text-[9px] font-semibold dark:fill-laterite-400">
           {props.pillCaption}
         </text>
         <text textAnchor="middle" y={12} className="fill-neutral-800 text-[13px] font-semibold dark:fill-neutral-100">

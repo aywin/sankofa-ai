@@ -45,8 +45,8 @@ export function Espace({ children }: { children: ReactNode }) {
 
   if (!user || !compte) {
     return (
-      <div className="mx-auto max-w-md rounded-3xl border border-neutral-200/70 bg-white p-6 text-center dark:border-neutral-800/70 dark:bg-neutral-900/60">
-        <h1 className="font-serif text-2xl font-semibold">Mon espace</h1>
+      <div className="mx-auto max-w-md rounded-3xl border border-neutral-200 bg-white p-6 text-center dark:border-neutral-800/70 dark:bg-neutral-900/60">
+        <h1 className="text-2xl font-semibold">Mon espace</h1>
         <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
           Connecte-toi pour retrouver tes plantes, tes informations et, si tu es tradipraticien, ta boutique.
         </p>
@@ -72,7 +72,7 @@ export function Espace({ children }: { children: ReactNode }) {
           {nom[0] ?? "?"}
         </span>
         <div className="min-w-0">
-          <h1 className="truncate font-serif text-2xl font-semibold">{compte.nomAffichage ?? "Mon espace"}</h1>
+          <h1 className="truncate text-2xl font-semibold">{compte.nomAffichage ?? "Mon espace"}</h1>
           <p className="truncate text-sm text-neutral-500">
             {user.email}
             {compte.tradipraticien && <span className="ml-2 text-emerald-700 dark:text-emerald-400">· Tradipraticien</span>}

@@ -124,7 +124,7 @@ export function Sidebar({
 
       {!replie && (
         <div className="mt-2 min-h-0 flex-1 overflow-y-auto border-t border-neutral-200 pt-3 dark:border-neutral-800">
-          <p className="px-3 pb-1 text-[11px] font-medium uppercase tracking-wide text-neutral-500">Récents</p>
+          <p className="px-3 pb-1 text-[11px] font-medium text-neutral-500">Récents</p>
           {conversations.length === 0 ? (
             <p className="px-3 py-2 text-xs text-neutral-500">Tes conversations apparaîtront ici.</p>
           ) : (

@@ -43,7 +43,7 @@ export function PanneauPlantes({ usages, onFermer }: { usages: MatchClaimResult[
     <>
       <aside
         aria-label="Plantes proposées"
-        className="hidden w-[380px] shrink-0 flex-col border-l border-neutral-200/70 bg-sand-50 lg:flex dark:border-neutral-800/70 dark:bg-sand-950"
+        className="hidden w-[380px] shrink-0 flex-col border-l border-neutral-200 bg-sand-50 lg:flex dark:border-neutral-800/70 dark:bg-sand-950"
       >
         {contenu}
       </aside>

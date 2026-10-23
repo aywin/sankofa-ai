@@ -2,9 +2,8 @@ import Link from "next/link";
 import { getLafiStats } from "@/lib/stats";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { KnowledgeGraph } from "@/components/landing/KnowledgeGraph";
 import { HeroSearch } from "@/components/landing/HeroSearch";
-import { HeroPreviewCard } from "@/components/landing/HeroPreviewCard";
+import { HeroPhotos } from "@/components/landing/HeroPhotos";
 import { StatsSection } from "@/components/landing/StatsSection";
 import { PlantsPreview } from "@/components/landing/PlantsPreview";
 import { IndicationsPreview } from "@/components/landing/IndicationsPreview";
@@ -13,11 +12,11 @@ import { LaboratoryPreview } from "@/components/landing/LaboratoryPreview";
 import { ContributeSection } from "@/components/landing/ContributeSection";
 import { WhatWeDontDoSection } from "@/components/landing/WhatWeDontDoSection";
 
-export const metadata = { title: "Lafi — Le savoir des tradipraticiens, documenté et accessible" };
+export const metadata = { title: "Lafi · Le savoir des tradipraticiens, documenté et accessible" };
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="mb-1.5 text-center font-serif text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
+    <h2 className="mb-1.5 text-center text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
       {children}
     </h2>
   );
@@ -40,9 +39,9 @@ function BentoTile({
 }) {
   return (
     <div
-      className={`flex flex-col rounded-2xl border border-neutral-200/70 bg-white p-5 dark:border-neutral-800/70 dark:bg-neutral-900/60 ${className}`}
+      className={`flex flex-col rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800/70 dark:bg-neutral-900/60 ${className}`}
     >
-      <p className="font-serif text-lg font-semibold text-neutral-900 dark:text-neutral-100">{title}</p>
+      <p className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{title}</p>
       <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">{description}</p>
       <div className="mt-4 flex-1">{children}</div>
       <Link href={href} className="mt-4 inline-block text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400">
@@ -59,69 +58,49 @@ export default async function LandingPage() {
     <div className="flex min-h-dvh flex-col">
       <SiteHeader />
 
-      {/* 1. Entrée directe — le moment "manifeste" : fond sombre, mais un
-          dégradé chaud + deux halos de couleur plutôt qu'un noir plat
-          (retour utilisateur : "on peut éviter le tout noir"). Le titre
-          occupe toute la largeur du conteneur (pas la moitié d'une
-          grille) pour tenir sur une seule ligne en desktop. Le graphe
-          reste confiné à la colonne de droite, en dessous, et n'a plus
-          le droit de déborder sous le texte — un chevauchement
-          graphe/texte avait déjà cassé une version précédente de ce
-          hero. */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-950 via-ink-950 to-laterite-950 px-4 pb-28 pt-16 sm:pb-40 sm:pt-24">
-        <div className="pointer-events-none absolute -left-32 -top-32 h-[30rem] w-[30rem] rounded-full bg-laterite-600/45 blur-[110px]" />
-        <div className="pointer-events-none absolute -bottom-40 -right-20 h-[30rem] w-[30rem] rounded-full bg-emerald-500/35 blur-[110px]" />
-        <div className="relative mx-auto max-w-[1100px]">
-          <h1 className="text-center font-serif text-3xl font-semibold leading-tight text-sand-50 sm:text-left sm:text-4xl lg:whitespace-nowrap lg:text-[2rem]">
-            Rendre le savoir <span className="text-laterite-400">traditionnel</span> accessible à tous.
-          </h1>
-
-          <div className="mt-10 grid items-center gap-12 sm:grid-cols-2">
-            <div className="text-center sm:text-left">
-              <p className="mx-auto max-w-md text-base text-sand-50/70 sm:mx-0">
-                Les usages des plantes recueillis auprès des tradipraticiens, croisés avec la science — réunis au même
-                endroit, alors qu&apos;il fallait autrefois les chercher ville par ville, guérisseur par guérisseur.
-              </p>
-              <div className="mt-9">
-                <HeroSearch />
-              </div>
+      {/* 1. Entrée directe : la question au centre, de vraies photos de
+          plantes à côté. */}
+      <section className="mx-auto w-full max-w-[1100px] px-4 pb-12 pt-10 sm:pt-16">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
+          <div>
+            <h1 className="text-4xl font-bold leading-[1.1] text-neutral-900 sm:text-5xl dark:text-neutral-50">
+              Rendre le savoir <span className="text-emerald-700 dark:text-emerald-400">traditionnel</span> accessible à
+              tous.
+            </h1>
+            <p className="mt-5 max-w-lg text-lg text-neutral-600 dark:text-neutral-300">
+              Les usages des plantes recueillis auprès des tradipraticiens, croisés avec la science et réunis au même
+              endroit. Avant, il fallait les chercher ville par ville, guérisseur par guérisseur.
+            </p>
+            <div className="mt-8">
+              <HeroSearch />
             </div>
-            <div className="relative hidden min-h-[380px] items-center justify-end sm:flex">
-              <div className="pointer-events-none absolute inset-0 opacity-70">
-                <KnowledgeGraph />
-              </div>
-              <div className="relative z-10">
-                <HeroPreviewCard />
-              </div>
-            </div>
+          </div>
+          <div className="hidden h-[420px] sm:block">
+            <HeroPhotos />
           </div>
         </div>
       </section>
 
-      {/* Bandeau de stats flottant, à cheval sur le hero et la section
-          suivante — la preuve chiffrée, pas juste une promesse. */}
-      <div className="relative z-10 mx-auto -mt-14 w-full max-w-[880px] px-4 sm:-mt-16">
-        <div className="rounded-2xl border border-neutral-200/70 bg-white p-5 shadow-2xl shadow-black/20 dark:border-neutral-800/70 dark:bg-neutral-900 sm:p-6">
-          <StatsSection stats={stats} />
-        </div>
+      <div className="mx-auto w-full max-w-[1100px] border-y border-neutral-200 px-4 py-6 dark:border-neutral-800">
+        <StatsSection stats={stats} />
       </div>
 
       {/* 2. Explorer — grille bento : le laboratoire en pièce maîtresse,
           les deux portes d'entrée (plante / mal) autour. */}
       <section className="mx-auto w-full max-w-[1100px] px-4 pb-6 pt-16 sm:pt-20">
-        <SectionTitle>Un seul écosystème, trois façons d&apos;y entrer</SectionTitle>
+        <SectionTitle>Trois façons d&apos;y entrer</SectionTitle>
         <p className="mx-auto mb-8 max-w-lg text-center text-sm text-neutral-600 dark:text-neutral-300">
-          Par la plante, par le mal, ou en ouvrant le raisonnement complet — tout mène au même savoir documenté.
+          Par la plante, par le mal, ou en ouvrant le raisonnement complet. Tout mène au même savoir documenté.
         </p>
 
         <div className="grid gap-4 sm:grid-cols-3 sm:grid-rows-2">
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-6 dark:border-emerald-900 dark:bg-emerald-950/30 sm:col-span-2 sm:row-span-2">
-            <p className="font-serif text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+            <p className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
               Le laboratoire
             </p>
             <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
               Le raisonnement complet, nœud par nœud : d&apos;où vient la donnée, comment elle est pondérée, ce
-              qu&apos;en dit la science et la tradition — jamais fondu en un seul chiffre.
+              qu&apos;en disent la science et la tradition, sans jamais tout fondre en un seul chiffre.
             </p>
             <div className="mt-5">
               <LaboratoryPreview />

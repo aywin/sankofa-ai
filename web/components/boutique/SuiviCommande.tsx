@@ -91,8 +91,8 @@ export function SuiviCommande({ id, jeton }: { id: string; jeton: string }) {
         <p className="mt-1 text-sm">{message.texte}</p>
       </div>
 
-      <section className="mt-6 rounded-2xl border border-neutral-200/70 bg-white p-5 dark:border-neutral-800/70 dark:bg-neutral-900/60">
-        <p className="text-xs uppercase tracking-wide text-neutral-500">Commande</p>
+      <section className="mt-6 rounded-2xl border border-neutral-200 bg-white p-5 dark:border-neutral-800/70 dark:bg-neutral-900/60">
+        <p className="text-xs text-neutral-500">Commande</p>
         <p className="font-mono text-xl font-semibold tracking-wider">{commande.reference}</p>
         <p className="mt-1 text-xs text-neutral-500">Garde cette référence : le vendeur peut te la demander.</p>
         <ul className="mt-4 space-y-1.5 text-sm">

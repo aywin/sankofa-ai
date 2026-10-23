@@ -1,9 +1,9 @@
 // §9 du brief : "assumé, pas relégué en pied de page." Reprend
 // directement les garde-fous structurels du §8.
 const POINTS = [
-  "Aucun diagnostic. Lafi documente des usages traditionnels et ce qu'en dit la science — jamais un avis médical.",
+  "Aucun diagnostic. Lafi documente des usages traditionnels et ce qu'en dit la science. Jamais un avis médical.",
   "Aucune dose ni fréquence à l'impératif. On décrit une pratique observée, pas une prescription.",
-  "Aucun pourcentage de chance de guérison. Ce que le moteur calcule, c'est une plausibilité mécanistique et un niveau d'attestation — pas une probabilité clinique.",
+  "Aucun pourcentage de chance de guérison. Ce que le moteur calcule, c'est une plausibilité mécanistique et un niveau d'attestation, pas une probabilité clinique.",
   "Aucun élément marchand. Pas d'achat, pas de promotion, pas d'urgence, pas d'étoiles ni de notes.",
   "Aucun statut sans son incertitude affichée à côté.",
 ];

@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTaxonBySlug, getClaimsForTaxon, getComposesForTaxon } from "@/lib/taxon";
-import { LeafIcon } from "@/components/chat/icons";
 import { FavoriteButton } from "@/components/chat/FavoriteButton";
-import { PlantGallery } from "@/components/plant/PlantGallery";
+import { CreditsPhotos, PlantGallery } from "@/components/plant/PlantGallery";
 import { HabitatAvailabilityBlock } from "@/components/plant/HabitatAvailabilityBlock";
 import { IndicationsList } from "@/components/plant/IndicationsList";
 import { ScienceSection } from "@/components/plant/ScienceSection";
@@ -37,37 +36,34 @@ export default async function PlantDetailPage({
         href="/decouverte"
         className="mb-6 inline-block text-sm text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
       >
-        ← Toutes les plantes
+        ← Plantes
       </Link>
 
-      <div className="flex items-start gap-4">
-        <PlantGallery media={taxon.media} />
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{nomPrincipal}</h1>
-            <FavoriteButton planteNom={nomPrincipal} />
-          </div>
-          {autresNoms.length > 0 && (
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              Aussi appelée{" "}
-              {autresNoms.map((n) => (n.langue !== "non précisé" ? `${n.libelle} (${n.langue})` : n.libelle)).join(", ")}
-            </p>
-          )}
-          <p className="italic text-neutral-500 dark:text-neutral-400">
-            {taxon.nom_scientifique}
-            {taxon.autorite ? ` ${taxon.autorite}` : ""}
-            {taxon.famille ? ` — ${taxon.famille}` : ""}
-          </p>
-          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-500">
-            {taxon.voucher_reference
-              ? `Spécimen déposé : ${taxon.voucher_reference}${taxon.herbier ? ` (${taxon.herbier})` : ""}`
-              : "Aucun spécimen déposé en herbier — donnée non publiable en l'état."}
-          </p>
+      <PlantGallery media={taxon.media} nom={nomPrincipal} />
+
+      <div className="mt-6">
+        <div className="flex items-center gap-2">
+          <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-50">{nomPrincipal}</h1>
+          <FavoriteButton planteNom={nomPrincipal} />
         </div>
+        <p className="mt-1 text-neutral-500 dark:text-neutral-400">
+          <span className="italic">{taxon.nom_scientifique}</span>
+          {taxon.famille ? `, famille des ${taxon.famille}` : ""}
+        </p>
+        {autresNoms.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {autresNoms.map((n) => (
+              <span key={n.libelle} className="rounded-lg bg-white px-2.5 py-1 text-sm text-neutral-700 ring-1 ring-neutral-200 dark:bg-neutral-900 dark:text-neutral-200 dark:ring-neutral-800">
+                {n.libelle}
+                {n.langue !== "non précisé" && <span className="text-neutral-400"> {n.langue}</span>}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       {taxon.description && (
-        <p className="mt-4 text-neutral-700 dark:text-neutral-300">{taxon.description}</p>
+        <p className="mt-4 text-lg text-neutral-700 dark:text-neutral-300">{taxon.description}</p>
       )}
 
       <div className="mt-4">
@@ -80,13 +76,12 @@ export default async function PlantDetailPage({
         </div>
       )}
 
-      <h2 className="mb-3 mt-8 text-sm font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+      <h2 className="mb-3 mt-10 text-xl font-semibold text-neutral-900 dark:text-neutral-100">
         Usages documentés
       </h2>
       <IndicationsList claims={claims} />
 
-      <h2 className="mb-3 mt-8 flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
-        <LeafIcon className="h-3.5 w-3.5" />
+      <h2 className="mb-3 mt-10 text-xl font-semibold text-neutral-900 dark:text-neutral-100">
         Ce que dit la science
       </h2>
       <ScienceSection composes={composes} />
@@ -95,7 +90,7 @@ export default async function PlantDetailPage({
           ce bloc dit seulement où des tradipraticiens vendent une préparation
           à base de cette plante. Le chat, lui, ne vend rien. */}
       {remedes.length > 0 && (
-        <section className="mt-12 rounded-3xl border border-neutral-200/70 bg-neutral-50 p-5 dark:border-neutral-800/70 dark:bg-neutral-900/40">
+        <section className="mt-12 rounded-3xl border border-neutral-200 bg-neutral-50 p-5 dark:border-neutral-800/70 dark:bg-neutral-900/40">
           <h2 className="font-semibold text-neutral-900 dark:text-neutral-100">Remèdes disponibles chez des tradipraticiens</h2>
           <p className="mt-1 text-xs text-neutral-500">
             Préparations vendues par des tradipraticiens, sous leur responsabilité. Lafi ne les a pas évaluées : les
@@ -111,6 +106,16 @@ export default async function PlantDetailPage({
           </Link>
         </section>
       )}
+
+      <footer className="mt-12 space-y-1 border-t border-neutral-200 pt-4 dark:border-neutral-800">
+        <CreditsPhotos media={taxon.media} />
+        <p className="text-xs text-neutral-500">
+          {taxon.voucher_reference
+            ? `Spécimen de référence : ${taxon.voucher_reference}${taxon.herbier ? ` (${taxon.herbier})` : ""}.`
+            : "Pas encore de spécimen de référence déposé en herbier."}
+          {taxon.autorite ? ` Nom complet : ${taxon.nom_scientifique} ${taxon.autorite}.` : ""}
+        </p>
+      </footer>
     </div>
   );
 }

@@ -1,21 +1,13 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Figtree } from "next/font/google";
 import "./globals.css";
 
-// Serif (Fraunces) pour les moments manifeste, grotesque (Inter) pour le
-// reste — voir le commentaire dans globals.css. Chargées ici via
-// next/font pour être auto-hébergées (pas de requête vers Google Fonts
-// au runtime).
-const fraunces = Fraunces({
+// Une seule famille pour tout le site : les titres se distinguent par la
+// graisse et la taille. Auto-hébergée par next/font.
+const figtree = Figtree({
   subsets: ["latin"],
-  weight: ["500", "600"],
-  variable: "--font-fraunces",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-figtree",
   display: "swap",
 });
 
@@ -30,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${fraunces.variable} ${inter.variable}`}>
+    <html lang="fr" className={figtree.variable}>
       <body className="bg-sand-50 text-neutral-900 antialiased dark:bg-sand-950 dark:text-neutral-100">
         {children}
       </body>

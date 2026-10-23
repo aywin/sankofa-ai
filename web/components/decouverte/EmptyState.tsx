@@ -8,15 +8,15 @@ import type { FilterOption } from "@/lib/decouverte";
 // contribution.
 export function EmptyState({ suggestions }: { suggestions: FilterOption[] }) {
   return (
-    <div className="rounded-2xl border border-neutral-200/70 bg-neutral-50/60 p-6 text-center dark:border-neutral-800/70 dark:bg-neutral-900/40">
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6 text-center dark:border-neutral-800/70 dark:bg-neutral-900/40">
       <p className="text-sm text-neutral-600 dark:text-neutral-300">
-        Aucun résultat pour cette combinaison de filtres — ça ne veut pas dire qu&apos;il n&apos;existe rien,
+        Aucun résultat pour cette combinaison de filtres. Ça ne veut pas dire qu&apos;il n&apos;existe rien,
         seulement que ce croisement précis n&apos;est pas encore documenté chez Lafi.
       </p>
 
       {suggestions.length > 0 && (
         <div className="mt-4">
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+          <p className="mb-2 text-xs font-medium text-neutral-500 dark:text-neutral-500">
             Indications couvertes actuellement
           </p>
           <div className="flex flex-wrap justify-center gap-1.5">

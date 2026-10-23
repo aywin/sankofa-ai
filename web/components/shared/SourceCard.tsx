@@ -51,7 +51,7 @@ export function SourceCard({
         </span>
         <span className="truncate">
           {source.nom_affichage}
-          {localisation ? ` — ${localisation}` : ""}
+          {localisation ? ` · ${localisation}` : ""}
         </span>
         {illustratif && (
           <span className="shrink-0 rounded-full bg-neutral-100 px-1.5 py-0.5 text-[10px] font-medium text-neutral-500 dark:bg-neutral-900 dark:text-neutral-500">
@@ -66,7 +66,7 @@ export function SourceCard({
     <div
       className={`flex gap-3 rounded-xl p-3 ${
         illustratif
-          ? "border border-dashed border-neutral-300 bg-neutral-50/60 dark:border-neutral-700 dark:bg-neutral-900/30"
+          ? "border border-dashed border-neutral-300 bg-white dark:border-neutral-700 dark:bg-neutral-900/30"
           : "border border-emerald-200 bg-emerald-50/40 dark:border-emerald-900 dark:bg-emerald-950/20"
       }`}
     >
@@ -88,11 +88,11 @@ export function SourceCard({
         <p className="font-medium text-neutral-900 dark:text-neutral-100">{source.nom_affichage}</p>
         {(source.role || localisation) && (
           <p className="text-xs text-neutral-500 dark:text-neutral-400">
-            {[source.role, localisation].filter(Boolean).join(" — ")}
+            {[source.role, localisation].filter(Boolean).join(" · ")}
           </p>
         )}
         {illustratif && source.notice && (
-          <p className="mt-1 text-xs italic text-neutral-500 dark:text-neutral-400">{source.notice}</p>
+          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{source.notice}</p>
         )}
         {!illustratif && source.reference_url && (
           <a

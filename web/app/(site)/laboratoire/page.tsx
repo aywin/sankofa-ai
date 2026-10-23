@@ -4,7 +4,7 @@ import { getDiscoveryData } from "@/lib/decouverte";
 import { getLaboratoireData } from "@/lib/laboratoire";
 import { LaboratoireCanvas } from "@/components/laboratoire/LaboratoireCanvas";
 
-export const metadata = { title: "Laboratoire — Lafi" };
+export const metadata = { title: "Laboratoire · Lafi" };
 
 // Point d'entrée du laboratoire (§5 du brief) : le canvas lui-même, pas
 // une liste de liens — on démarre sur un couple par défaut et on change
@@ -46,7 +46,7 @@ export default async function LaboratoireIndexPage() {
 
       <LaboratoireCanvas initialData={data} couples={couples} />
 
-      <p className="mt-8 border-t border-neutral-200/70 pt-4 text-xs text-neutral-500 dark:border-neutral-800/70 dark:text-neutral-400">
+      <p className="mt-8 border-t border-neutral-200 pt-4 text-xs text-neutral-500 dark:border-neutral-800/70 dark:text-neutral-400">
         Autre chose : <Link href="/synergies" className="text-violet-700 hover:underline dark:text-violet-400">explorer des synergies entre deux plantes</Link>{" "}
         (espace expérimental, distinct de ce qui est documenté ici).
       </p>

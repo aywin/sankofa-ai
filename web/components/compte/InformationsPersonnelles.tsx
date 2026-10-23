@@ -16,7 +16,7 @@ function Section({ titre, children, danger = false }: { titre: string; children:
   return (
     <section
       className={`rounded-3xl border bg-white p-5 dark:bg-neutral-900/60 ${
-        danger ? "border-red-200 dark:border-red-900" : "border-neutral-200/70 dark:border-neutral-800/70"
+        danger ? "border-red-200 dark:border-red-900" : "border-neutral-200 dark:border-neutral-800/70"
       }`}
     >
       <h2 className={`mb-3 font-semibold ${danger ? "text-red-800 dark:text-red-300" : "text-neutral-900 dark:text-neutral-100"}`}>{titre}</h2>

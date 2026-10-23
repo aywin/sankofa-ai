@@ -8,7 +8,7 @@ export function HabitatAvailabilityBlock({ habitatRegion }: { habitatRegion: str
   if (!habitatRegion) return null;
 
   return (
-    <div className="rounded-2xl border border-neutral-200/70 bg-neutral-50/60 p-4 text-sm text-neutral-700 dark:border-neutral-800/70 dark:bg-neutral-900/40 dark:text-neutral-300">
+    <div className="rounded-2xl border border-neutral-200 bg-white p-4 text-sm text-neutral-700 dark:border-neutral-800/70 dark:bg-neutral-900/40 dark:text-neutral-300">
       <p className="mb-1 font-medium text-neutral-500 dark:text-neutral-400">Habitat et disponibilité</p>
       <p>{habitatRegion}</p>
     </div>

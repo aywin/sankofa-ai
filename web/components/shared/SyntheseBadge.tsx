@@ -1,14 +1,37 @@
 import { computeForceAttestation, forceLabelGrandPublic, qualiteLabelGrandPublic } from "@/lib/synthese";
 import type { AttestationStats, GradeTier } from "@/lib/types";
 
-// Vocabulaire grand public (lafi-best.md P2) — remplace le badge fusionné
-// à 6 valeurs (ConfidenceBadge historique, puis le premier SyntheseBadge)
-// par deux pastilles séparées : "ce que disent les tradipraticiens" et
-// "ce que dit la science" répondent à deux questions différentes,
-// jamais réduites à un seul mot. Le vocabulaire technique (GRADE,
-// "Plausible", statut à 6 valeurs) reste disponible dans le laboratoire
-// et le mode expert — pas ici.
-const PILL_CLASS = "rounded-full px-2.5 py-1 text-xs font-semibold";
+// Deux signaux séparés, jamais fusionnés (lafi-best.md P2) : ce que
+// rapportent les tradipraticiens, et ce que dit la science. Chacun en
+// trois traits + un mot, lisible d'un coup d'œil. Le vocabulaire technique
+// (GRADE, statuts) reste dans le laboratoire.
+
+const NIVEAU_SCIENCE: Record<GradeTier, number> = { elevee: 3, moderee: 2, faible: 1, tres_faible: 1 };
+
+function Traits({ niveau }: { niveau: number }) {
+  return (
+    <span className="inline-flex items-end gap-[2px]" aria-hidden>
+      {[1, 2, 3].map((i) => (
+        <span
+          key={i}
+          className={`w-[3px] rounded-sm ${i === 1 ? "h-1.5" : i === 2 ? "h-2.5" : "h-3.5"} ${
+            i <= niveau ? "bg-emerald-600 dark:bg-emerald-400" : "bg-neutral-300 dark:bg-neutral-700"
+          }`}
+        />
+      ))}
+    </span>
+  );
+}
+
+function Signal({ titre, niveau, libelle }: { titre: string; niveau: number; libelle: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 text-xs text-neutral-600 dark:text-neutral-300">
+      <span className="text-neutral-500">{titre}</span>
+      <Traits niveau={niveau} />
+      <span className="font-medium text-neutral-800 dark:text-neutral-100">{libelle}</span>
+    </span>
+  );
+}
 
 export function SyntheseBadge({
   qualitePreuve,
@@ -24,34 +47,21 @@ export function SyntheseBadge({
   estPilote: boolean;
 }) {
   const force = computeForceAttestation(stats, !!divergenceNote);
-  // Un usage documenté (le claim existe) n'est pas la même chose qu'une
-  // attestation de terrain vérifiée — mais cette nuance est une affaire
-  // d'équipe, pas d'utilisateur : personne n'a besoin de lire "Pas encore
-  // documenté" à côté d'une plante dont l'usage est déjà affiché sur la
-  // page. Sur le badge public, on montre un signal seulement quand il y
-  // en a un ; l'absence de collecte de terrain reste expliquée en détail
-  // dans le bloc attestation de la fiche, pas répétée sur chaque carte.
-  const afficherTradition = force !== "non_renseignee";
+  const niveauTradition = force === "multi_traditions" ? 3 : force === "convergente" ? 2 : force === "tradition_unique" ? 1 : 0;
 
   return (
-    <div className="flex flex-wrap items-center gap-1.5">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
       {contreIndicationForte ? (
-        <span className={`${PILL_CLASS} bg-red-600 text-white`}>Prudence — risque signalé</span>
+        <span className="text-xs font-semibold text-red-700 dark:text-red-400">Risque signalé : demande un avis avant tout usage</span>
       ) : force === "contredite" || divergenceNote ? (
-        <span className={`${PILL_CLASS} bg-laterite-500 text-white`}>Avis partagés</span>
+        <span className="text-xs font-semibold text-laterite-700 dark:text-laterite-300">Avis partagés entre praticiens</span>
       ) : (
         <>
-          {afficherTradition && (
-            <span className={`${PILL_CLASS} bg-emerald-600 text-white`}>{forceLabelGrandPublic(force)}</span>
-          )}
-          <span className={`${PILL_CLASS} bg-sky-600 text-white`}>{qualiteLabelGrandPublic(qualitePreuve)}</span>
+          {niveauTradition > 0 && <Signal titre="Tradition" niveau={niveauTradition} libelle={forceLabelGrandPublic(force)} />}
+          <Signal titre="Science" niveau={qualitePreuve ? NIVEAU_SCIENCE[qualitePreuve] : 0} libelle={qualiteLabelGrandPublic(qualitePreuve)} />
         </>
       )}
-      {!estPilote && (
-        <span className="rounded-full bg-neutral-200 px-2 py-0.5 text-[11px] font-medium text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
-          Démonstration — terrain non réalisé
-        </span>
-      )}
+      {!estPilote && <span className="text-xs text-neutral-400">Exemple de démonstration</span>}
     </div>
   );
 }

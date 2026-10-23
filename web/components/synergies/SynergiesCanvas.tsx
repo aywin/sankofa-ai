@@ -128,19 +128,19 @@ export function SynergiesCanvas({ initialData, taxa }: { initialData: SynergieDa
     switch (numero) {
       case 3:
         return {
-          titre: `Profil chimique — ${data.taxonA.nomPrincipal}`,
+          titre: `Profil chimique · ${data.taxonA.nomPrincipal}`,
           entree: data.taxonA.nomScientifique,
           sortie: data.taxonA.composes.length > 0 ? data.taxonA.composes.map((c) => c.nom).join(", ") : "Aucun composé documenté",
         };
       case 4:
         return {
-          titre: `Profil chimique — ${data.taxonB.nomPrincipal}`,
+          titre: `Profil chimique · ${data.taxonB.nomPrincipal}`,
           entree: data.taxonB.nomScientifique,
           sortie: data.taxonB.composes.length > 0 ? data.taxonB.composes.map((c) => c.nom).join(", ") : "Aucun composé documenté",
         };
       case 5:
         return {
-          titre: "Recoupement — calcul factuel, pas une sortie du modèle",
+          titre: "Recoupement · calcul factuel, pas une sortie du modèle",
           entree: "Sorties des nœuds 3 et 4",
           sortie:
             data.ciblesCommunes.length > 0
@@ -149,7 +149,7 @@ export function SynergiesCanvas({ initialData, taxa }: { initialData: SynergieDa
         };
       case 6:
         return {
-          titre: "Hypothèse IA — validée avant affichage",
+          titre: "Hypothèse IA · validée avant affichage",
           entree: "Sortie du nœud 5, plus la note libre éventuelle",
           sortie: resultat ? "Texte généré et validé (aucune affirmation d'efficacité, jamais de dose)" : "En attente du lancement",
         };
@@ -161,13 +161,13 @@ export function SynergiesCanvas({ initialData, taxa }: { initialData: SynergieDa
   return (
     <div>
       <div className="mb-4 rounded-xl bg-violet-600 px-4 py-3 text-sm font-medium text-white">
-        🧪 Espace expérimental — Lafi croise des profils chimiques déjà documentés et formule une hypothèse.{" "}
+        🧪 Espace expérimental · Lafi croise des profils chimiques déjà documentés et formule une hypothèse.{" "}
         <strong>Ce n&apos;est jamais un usage attesté ni un remède recommandé.</strong>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_340px] lg:items-start">
         <div>
-          <div className="overflow-x-auto rounded-2xl border border-neutral-200/70 bg-white p-2 dark:border-neutral-800/70 dark:bg-neutral-900/40">
+          <div className="overflow-x-auto rounded-2xl border border-neutral-200 bg-white p-2 dark:border-neutral-800/70 dark:bg-neutral-900/40">
             <svg viewBox="0 0 850 320" className="h-auto w-full min-w-[640px]">
               {EDGES.map((e, i) => (
                 <CanvasEdge key={i} d={edgePath(POS[e.from], POS[e.to])} actif={edgesDone.has(i)} />
@@ -240,7 +240,7 @@ export function SynergiesCanvas({ initialData, taxa }: { initialData: SynergieDa
 
           {openNode === 1 && (
             <div className="mt-3 rounded-xl border border-violet-200 bg-violet-50/60 p-3 dark:border-violet-900 dark:bg-violet-950/30">
-              <label className="text-xs font-medium uppercase tracking-wide text-violet-700 dark:text-violet-400">Choisir la plante A</label>
+              <label className="text-xs font-medium text-violet-700 dark:text-violet-400">Choisir la plante A</label>
               <select
                 value={taxonAId}
                 onChange={(e) => setTaxonAId(e.target.value)}
@@ -257,7 +257,7 @@ export function SynergiesCanvas({ initialData, taxa }: { initialData: SynergieDa
 
           {openNode === 2 && (
             <div className="mt-3 rounded-xl border border-violet-200 bg-violet-50/60 p-3 dark:border-violet-900 dark:bg-violet-950/30">
-              <label className="text-xs font-medium uppercase tracking-wide text-violet-700 dark:text-violet-400">Choisir la plante B</label>
+              <label className="text-xs font-medium text-violet-700 dark:text-violet-400">Choisir la plante B</label>
               <select
                 value={taxonBId}
                 onChange={(e) => setTaxonBId(e.target.value)}
@@ -273,8 +273,8 @@ export function SynergiesCanvas({ initialData, taxa }: { initialData: SynergieDa
           )}
 
           {openNode && openNode >= 3 && nodeDetail(openNode) && (
-            <div className="mt-3 rounded-xl border border-neutral-200/70 bg-neutral-50/60 p-3 text-sm dark:border-neutral-800/70 dark:bg-neutral-900/40">
-              <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{nodeDetail(openNode)!.titre}</p>
+            <div className="mt-3 rounded-xl border border-neutral-200 bg-white p-3 text-sm dark:border-neutral-800/70 dark:bg-neutral-900/40">
+              <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">{nodeDetail(openNode)!.titre}</p>
               <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-300">Entrée : {nodeDetail(openNode)!.entree}</p>
               <p className="text-xs text-neutral-600 dark:text-neutral-300">Sortie : {nodeDetail(openNode)!.sortie}</p>
             </div>
@@ -303,11 +303,11 @@ export function SynergiesCanvas({ initialData, taxa }: { initialData: SynergieDa
 
         <div className="lg:sticky lg:top-20">
           <div className="rounded-2xl border-2 border-violet-200 bg-white p-5 dark:border-violet-900 dark:bg-neutral-950">
-            <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Hypothèse</p>
+            <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Hypothèse</p>
 
             {phase === "idle" && !resultat && (
               <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-                En attente du lancement — choisis éventuellement une autre plante ci-contre, puis clique sur « Croiser ces deux profils ».
+                En attente du lancement · choisis éventuellement une autre plante ci-contre, puis clique sur « Croiser ces deux profils ».
               </p>
             )}
 
@@ -318,12 +318,12 @@ export function SynergiesCanvas({ initialData, taxa }: { initialData: SynergieDa
             {resultat && (
               <>
                 <p className="mt-2 rounded-lg bg-violet-50 px-2.5 py-1.5 text-xs font-medium text-violet-800 dark:bg-violet-950/50 dark:text-violet-300">
-                  Piste de recherche non vérifiée — pas un usage attesté.
+                  Piste de recherche non vérifiée · pas un usage attesté.
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-neutral-800 dark:text-neutral-200">{resultat.texte}</p>
 
-                <div className="mt-4 border-t border-neutral-200/70 pt-3 dark:border-neutral-800/70">
-                  <p className="mb-1.5 text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Recoupement factuel</p>
+                <div className="mt-4 border-t border-neutral-200 pt-3 dark:border-neutral-800/70">
+                  <p className="mb-1.5 text-xs font-medium text-neutral-500 dark:text-neutral-400">Recoupement factuel</p>
                   <p className="text-xs text-neutral-600 dark:text-neutral-300">
                     {data.ciblesCommunes.length > 0
                       ? `Cible(s) commune(s) déjà documentée(s) : ${data.ciblesCommunes.join(", ")}.`

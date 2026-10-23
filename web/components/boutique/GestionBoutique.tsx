@@ -189,11 +189,11 @@ function FormulaireBoutique({
   return (
     <form
       onSubmit={enregistrer}
-      className="mx-auto max-w-xl space-y-4 rounded-3xl border border-neutral-200/70 bg-white p-5 sm:p-7 dark:border-neutral-800/70 dark:bg-neutral-900/60"
+      className="mx-auto max-w-xl space-y-4 rounded-3xl border border-neutral-200 bg-white p-5 sm:p-7 dark:border-neutral-800/70 dark:bg-neutral-900/60"
     >
       {!boutique && (
         <div>
-          <h2 className="font-serif text-2xl font-semibold">Créer ta boutique</h2>
+          <h2 className="text-2xl font-semibold">Créer ta boutique</h2>
           <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
             Tu pourras ajouter tes produits juste après. Tout reste modifiable.
           </p>
@@ -356,7 +356,7 @@ function TableauBoutique({ user, boutique, onBoutiqueChange }: { user: User; bou
 
   return (
     <div className="space-y-5">
-      <h2 className="font-serif text-xl font-semibold">{boutique.nom}</h2>
+      <h2 className="text-xl font-semibold">{boutique.nom}</h2>
 
       {boutique.statut === "suspendue" && (
         <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-950 dark:text-red-200" role="alert">
@@ -474,7 +474,7 @@ function OngletProduits({ user, boutique }: { user: User; boutique: Boutique }) 
       )}
       <ul className="space-y-2">
         {produits.map((p) => (
-          <li key={p.id} className="flex gap-3 rounded-2xl border border-neutral-200/70 bg-white p-3 dark:border-neutral-800/70 dark:bg-neutral-900/60">
+          <li key={p.id} className="flex gap-3 rounded-2xl border border-neutral-200 bg-white p-3 dark:border-neutral-800/70 dark:bg-neutral-900/60">
             {p.image_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={p.image_url} alt="" loading="lazy" className="h-16 w-16 shrink-0 rounded-xl object-cover" />
@@ -610,7 +610,7 @@ function OngletCommandes({ boutiqueId }: { boutiqueId: string }) {
 
       <ul className="space-y-2">
         {commandes.map((c) => (
-          <li key={c.id} className="rounded-2xl border border-neutral-200/70 bg-white p-4 dark:border-neutral-800/70 dark:bg-neutral-900/60">
+          <li key={c.id} className="rounded-2xl border border-neutral-200 bg-white p-4 dark:border-neutral-800/70 dark:bg-neutral-900/60">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="font-mono font-semibold tracking-wider">{c.reference}</p>
               <span className="text-xs text-neutral-500">{formatDate(c.created_at)}</span>
@@ -622,7 +622,7 @@ function OngletCommandes({ boutiqueId }: { boutiqueId: string }) {
                 {c.acheteur_telephone}
               </a>
             </p>
-            {c.acheteur_note && <p className="mt-1 text-sm italic text-neutral-500">« {c.acheteur_note} »</p>}
+            {c.acheteur_note && <p className="mt-1 text-sm text-neutral-500">« {c.acheteur_note} »</p>}
             <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
               <span>
                 Payé {formatFcfa(c.montant_total)}

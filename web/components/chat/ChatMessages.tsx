@@ -149,7 +149,7 @@ export function ChatMessages({
         <LafiMark className="h-10 w-10 text-emerald-600 dark:text-emerald-400" />
         <div>
           <p className="text-lg font-medium text-neutral-700 dark:text-neutral-300">
-            Décris un symptôme, une maladie — ou envoie une photo.
+            Décris un symptôme ou une maladie, ou envoie une photo.
           </p>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-500">
             Comprendre les usages des plantes, leurs preuves et leurs précautions.

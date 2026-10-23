@@ -14,13 +14,13 @@ export function SiteFooter() {
             Lafi
           </span>
           <p className="mt-2 max-w-xs text-sm text-sand-50/60">
-            On documente le savoir des tradipraticiens et on le rend accessible — croisé avec ce qu&apos;en dit la
+            On documente le savoir des tradipraticiens et on le rend accessible, croisé avec ce qu&apos;en dit la
             science, sans jamais les confondre.
           </p>
         </div>
 
         <div>
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-sand-50/50">Produit</p>
+          <p className="mb-3 text-xs font-semibold text-sand-50/50">Produit</p>
           <ul className="space-y-2 text-sm">
             <li>
               <Link href="/decouverte" className="hover:text-sand-50">
@@ -46,7 +46,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-sand-50/50">Ressources</p>
+          <p className="mb-3 text-xs font-semibold text-sand-50/50">Ressources</p>
           <ul className="space-y-2 text-sm">
             <li>
               <Link href="/maladies" className="hover:text-sand-50">
@@ -63,7 +63,7 @@ export function SiteFooter() {
       </div>
 
       <div className="mx-auto mt-10 max-w-[1100px] border-t border-sand-50/10 pt-6 text-xs text-sand-50/50">
-        Lafi — information documentaire, pas un avis médical. Les fiches et le chat ne vendent rien et ne
+        Lafi donne une information documentaire, pas un avis médical. Les fiches et le chat ne vendent rien et ne
         recommandent aucun vendeur ; les boutiques sont tenues par les tradipraticiens eux-mêmes, sous leur
         responsabilité.
       </div>

@@ -30,7 +30,7 @@ function CarteProduit({
   return (
     <article
       id={`p-${produit.id}`}
-      className="flex scroll-mt-20 flex-col overflow-hidden rounded-2xl border border-neutral-200/70 bg-white target:ring-2 target:ring-emerald-500 dark:border-neutral-800/70 dark:bg-neutral-900/60"
+      className="flex scroll-mt-20 flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white target:ring-2 target:ring-emerald-500 dark:border-neutral-800/70 dark:bg-neutral-900/60"
     >
       {produit.image_url ? (
         // eslint-disable-next-line @next/next/no-img-element
@@ -140,9 +140,9 @@ export function Vitrine({ boutique }: { boutique: BoutiquePublique }) {
 
   return (
     <main className="mx-auto max-w-[1100px] px-4 pb-32 pt-8">
-      <header className="rounded-3xl border border-neutral-200/70 bg-white p-5 sm:p-7 dark:border-neutral-800/70 dark:bg-neutral-900/60">
-        <p className="text-xs font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">Boutique de tradipraticien</p>
-        <h1 className="mt-1 font-serif text-2xl font-semibold text-neutral-900 sm:text-3xl dark:text-neutral-100">{boutique.nom}</h1>
+      <header className="rounded-3xl border border-neutral-200 bg-white p-5 sm:p-7 dark:border-neutral-800/70 dark:bg-neutral-900/60">
+        <p className="text-xs font-medium text-emerald-700 dark:text-emerald-400">Boutique de tradipraticien</p>
+        <h1 className="mt-1 text-2xl font-semibold text-neutral-900 sm:text-3xl dark:text-neutral-100">{boutique.nom}</h1>
         {boutique.ville && <p className="mt-0.5 text-sm text-neutral-500 dark:text-neutral-400">{boutique.ville}</p>}
         {boutique.description && (
           <p className="mt-3 max-w-2xl whitespace-pre-line text-sm text-neutral-700 dark:text-neutral-300">{boutique.description}</p>
@@ -179,7 +179,7 @@ export function Vitrine({ boutique }: { boutique: BoutiquePublique }) {
       )}
 
       {articles > 0 && (
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-neutral-200/70 bg-sand-50/95 px-4 py-3 backdrop-blur dark:border-neutral-800/70 dark:bg-sand-950/95">
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-neutral-200 bg-sand-50/95 px-4 py-3 backdrop-blur dark:border-neutral-800/70 dark:bg-sand-950/95">
           <div className="mx-auto flex max-w-[1100px] items-center justify-between gap-3">
             <p className="text-sm text-neutral-700 dark:text-neutral-300">
               {articles} article{articles > 1 ? "s" : ""} · <span className="font-semibold">{formatFcfa(total)}</span>

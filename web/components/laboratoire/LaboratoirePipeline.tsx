@@ -85,7 +85,7 @@ export function LaboratoirePipeline({ data }: { data: LaboratoireData }) {
           titre="Résolution taxonomique"
           entree={`"${data.nomPrincipal}" (nom recherché)`}
           sortie={`${data.taxon.nomScientifique}${data.taxon.autorite ? ` ${data.taxon.autorite}` : ""}${
-            data.taxon.famille ? ` — ${data.taxon.famille}` : ""
+            data.taxon.famille ? ` · ${data.taxon.famille}` : ""
           }`}
         >
           {data.autresNoms.length > 0 && (
@@ -103,8 +103,8 @@ export function LaboratoirePipeline({ data }: { data: LaboratoireData }) {
           entree={`${data.taxon.nomScientifique} × ${data.indication.nom}`}
           sortie={
             mode === "expert" && !inclureAttestation
-              ? "Exclu — traité comme non renseigné"
-              : `${FORCE_LABELS[forceReelle]} — ${data.stats.attestations_count} attestation${data.stats.attestations_count > 1 ? "s" : ""}, ${data.stats.lignees_distinctes} tradition${data.stats.lignees_distinctes > 1 ? "s" : ""} indépendante${data.stats.lignees_distinctes > 1 ? "s" : ""}`
+              ? "Exclu · traité comme non renseigné"
+              : `${FORCE_LABELS[forceReelle]} · ${data.stats.attestations_count} attestation${data.stats.attestations_count > 1 ? "s" : ""}, ${data.stats.lignees_distinctes} tradition${data.stats.lignees_distinctes > 1 ? "s" : ""} indépendante${data.stats.lignees_distinctes > 1 ? "s" : ""}`
           }
           toggle={
             mode === "expert"
@@ -118,13 +118,13 @@ export function LaboratoirePipeline({ data }: { data: LaboratoireData }) {
                 <li key={a.id}>
                   {[a.region, a.langue].filter(Boolean).join(", ") || "Origine non précisée"}
                   {a.contributeur?.preferenceAttribution === "nommement" && a.contributeur.nomAffichage
-                    ? ` — ${a.contributeur.nomAffichage}`
+                    ? ` · ${a.contributeur.nomAffichage}`
                     : ""}
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-xs italic text-neutral-500 dark:text-neutral-500">
+            <p className="text-xs text-neutral-500 dark:text-neutral-500">
               Aucune attestation traditionnelle enregistrée pour l&apos;instant.
             </p>
           )}
@@ -149,7 +149,7 @@ export function LaboratoirePipeline({ data }: { data: LaboratoireData }) {
                   {data.composes.map((c) => (
                     <li key={c.id}>
                       {c.nom}
-                      {c.methode_identification ? ` — ${c.methode_identification}` : ""}
+                      {c.methode_identification ? ` · ${c.methode_identification}` : ""}
                     </li>
                   ))}
                 </ul>
@@ -166,7 +166,7 @@ export function LaboratoirePipeline({ data }: { data: LaboratoireData }) {
             <UncalculatedNode
               numero="④"
               titre="Cinétique d'extraction"
-              raison="Modèle physique à données rares (PINN) — aucune donnée expérimentale d'extraction (solvant/durée/température → fraction extraite) en base."
+              raison="Modèle physique à données rares (PINN) · aucune donnée expérimentale d'extraction (solvant/durée/température → fraction extraite) en base."
             />
             <PipelineArrow />
 
@@ -212,7 +212,7 @@ export function LaboratoirePipeline({ data }: { data: LaboratoireData }) {
             <UncalculatedNode
               numero="⑧"
               titre="Convergence réseau"
-              raison="Dépend des nœuds ⑥ et ⑦ — non calculable tant qu'ils ne sont pas peuplés pour ce couple."
+              raison="Dépend des nœuds ⑥ et ⑦ · non calculable tant qu'ils ne sont pas peuplés pour ce couple."
             />
             <PipelineArrow />
           </>
@@ -224,8 +224,8 @@ export function LaboratoirePipeline({ data }: { data: LaboratoireData }) {
           entree={`${data.taxon.nomScientifique} × ${data.indication.nom}`}
           sortie={
             mode === "expert" && !inclureLitterature
-              ? "Exclu — traité comme non évalué"
-              : `Qualité GRADE : ${data.qualitePreuveScientifique ? GRADE_LABELS[data.qualitePreuveScientifique] : "non évaluée"} — ${data.etudes.length} étude${data.etudes.length > 1 ? "s" : ""}`
+              ? "Exclu · traité comme non évalué"
+              : `Qualité GRADE : ${data.qualitePreuveScientifique ? GRADE_LABELS[data.qualitePreuveScientifique] : "non évaluée"} · ${data.etudes.length} étude${data.etudes.length > 1 ? "s" : ""}`
           }
           toggle={
             mode === "expert"
@@ -241,13 +241,13 @@ export function LaboratoirePipeline({ data }: { data: LaboratoireData }) {
           entree={`${data.taxon.nomScientifique}, préparation : ${MODE_LABELS[data.preparation.mode] ?? data.preparation.mode}`}
           sortie={
             data.contreIndicationForte
-              ? "Contre-indication détectée — bloque la sortie"
+              ? "Contre-indication détectée · bloque la sortie"
               : "Aucune contre-indication forte enregistrée"
           }
         >
           {mode === "expert" && (
-            <p className="mb-1.5 text-xs italic text-neutral-500 dark:text-neutral-500">
-              Non manipulable — la sortie de ce nœud prime toujours sur le reste (§8 du brief).
+            <p className="mb-1.5 text-xs text-neutral-500 dark:text-neutral-500">
+              Non manipulable · la sortie de ce nœud prime toujours sur le reste (§8 du brief).
             </p>
           )}
           {(data.precautions || data.preparation.precautionsSpecifiques) && (

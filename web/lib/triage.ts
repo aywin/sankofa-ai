@@ -79,7 +79,7 @@ const REGLES: Regle[] = [
   {
     niveau: "urgence",
     motif: /morsure de serpent|mordu par un serpent|piqure de scorpion/,
-    conseil: "Après une morsure de serpent ou une piqûre de scorpion, va au centre de santé immédiatement — aucune plante ne remplace un sérum.",
+    conseil: "Après une morsure de serpent ou une piqûre de scorpion, va au centre de santé immédiatement. Aucune plante ne remplace un sérum.",
   },
   {
     niveau: "urgence",
@@ -197,7 +197,7 @@ export function triagePourModele(r: TriageResultat): string {
     return "Triage automatique : aucun signe d'alerte repéré dans les mots de l'utilisateur (ce qui ne prouve pas l'absence de gravité).";
   }
   return [
-    `Triage automatique : niveau "${r.niveau}". L'interface affiche DÉJÀ au-dessus de ta réponse un bloc d'orientation : "${r.titre}" — ${r.conseils.join(" ")}`,
+    `Triage automatique : niveau "${r.niveau}". L'interface affiche DÉJÀ au-dessus de ta réponse un bloc d'orientation : "${r.titre}" : ${r.conseils.join(" ")}`,
     r.groupesRisque.length > 0 ? `Groupes à risque repérés : ${r.groupesRisque.join(", ")}.` : "",
     r.niveau === "urgence"
       ? "Ta réponse commence par confirmer cette orientation en une phrase, sans dramatiser. Ne propose AUCUNE préparation à la place d'une consultation ; tu peux seulement dire ce qui peut accompagner une fois l'avis médical obtenu, si on te le demande."

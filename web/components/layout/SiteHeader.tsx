@@ -6,7 +6,7 @@ import { BoutonCompte } from "@/components/compte/BoutonCompte";
 // (components/app/AppShell, qui a sa barre latérale).
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-neutral-200/70 bg-sand-50/90 backdrop-blur dark:border-neutral-800/70 dark:bg-sand-950/90">
+    <header className="sticky top-0 z-40 border-b border-neutral-200 bg-sand-50/90 backdrop-blur dark:border-neutral-800/70 dark:bg-sand-950/90">
       <div className="mx-auto flex max-w-[1100px] items-center justify-between px-4 py-4">
         <Link
           href="/"

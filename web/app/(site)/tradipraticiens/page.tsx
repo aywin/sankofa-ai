@@ -6,7 +6,7 @@ import { EnteteMarche } from "@/components/boutique/EnteteMarche";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Tradipraticiens — Lafi",
+  title: "Tradipraticiens · Lafi",
   description: "Les tradipraticiens qui vendent leurs préparations sur Lafi.",
 };
 
@@ -30,7 +30,7 @@ export default async function TradipraticiensPage() {
             <li key={t.slug}>
               <Link
                 href={`/b/${t.slug}`}
-                className="flex h-full gap-3 rounded-2xl border border-neutral-200/70 bg-white p-4 transition hover:border-emerald-300 hover:shadow-sm dark:border-neutral-800/70 dark:bg-neutral-900/60"
+                className="flex h-full gap-3 rounded-2xl border border-neutral-200 bg-white p-4 transition hover:border-emerald-300 hover:shadow-sm dark:border-neutral-800/70 dark:bg-neutral-900/60"
               >
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-lg font-semibold uppercase text-white" aria-hidden>
                   {t.nom[0]}

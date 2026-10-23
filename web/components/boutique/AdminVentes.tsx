@@ -101,7 +101,7 @@ export function AdminVentes() {
 
   return (
     <div className="space-y-10">
-      <h1 className="font-serif text-2xl font-semibold">Ventes et modération</h1>
+      <h1 className="text-2xl font-semibold">Ventes et modération</h1>
       {erreur && <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">{erreur}</p>}
 
       <section>
@@ -122,13 +122,13 @@ export function AdminVentes() {
         <h2 className="text-lg font-semibold">Signalements ({donnees.signalements.length})</h2>
         <ul className="mt-4 space-y-2">
           {donnees.signalements.map((s) => (
-            <li key={s.id} className="rounded-2xl border border-neutral-200/70 bg-white p-4 dark:border-neutral-800/70 dark:bg-neutral-900/60">
+            <li key={s.id} className="rounded-2xl border border-neutral-200 bg-white p-4 dark:border-neutral-800/70 dark:bg-neutral-900/60">
               <p className="text-sm">
                 <span className="font-medium">{s.produit?.nom ?? "Produit supprimé"}</span>
                 {s.produit && (
                   <>
                     {" "}
-                    — <Link href={`/b/${s.produit.boutique.slug}`} className="text-emerald-700 hover:underline dark:text-emerald-400">{s.produit.boutique.nom}</Link>
+                    · <Link href={`/b/${s.produit.boutique.slug}`} className="text-emerald-700 hover:underline dark:text-emerald-400">{s.produit.boutique.nom}</Link>
                   </>
                 )}
                 <span className="ml-2 text-xs text-neutral-500">{formatDate(s.created_at)}</span>
@@ -161,9 +161,9 @@ export function AdminVentes() {
         <h2 className="text-lg font-semibold">Produits retirés</h2>
         <ul className="mt-4 space-y-2">
           {donnees.retires.map((p) => (
-            <li key={p.id} className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-neutral-200/70 bg-white p-3 text-sm dark:border-neutral-800/70 dark:bg-neutral-900/60">
+            <li key={p.id} className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-neutral-200 bg-white p-3 text-sm dark:border-neutral-800/70 dark:bg-neutral-900/60">
               <span>
-                <span className="font-medium">{p.nom}</span> — {p.boutique.nom}
+                <span className="font-medium">{p.nom}</span> · {p.boutique.nom}
                 {p.retire_motif && <span className="block text-xs text-neutral-500">{p.retire_motif}</span>}
               </span>
               <button type="button" onClick={() => agir({ action: "retablir_produit", produitId: p.id })} className="text-emerald-700 hover:underline dark:text-emerald-400">
@@ -191,7 +191,7 @@ function GroupeReversement({
   const total = commandes.reduce((s, c) => s + Number(c.montant_a_reverser), 0);
 
   return (
-    <div className="rounded-2xl border border-neutral-200/70 bg-white p-4 dark:border-neutral-800/70 dark:bg-neutral-900/60">
+    <div className="rounded-2xl border border-neutral-200 bg-white p-4 dark:border-neutral-800/70 dark:bg-neutral-900/60">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="font-semibold">{boutique.nom}</p>
@@ -201,7 +201,7 @@ function GroupeReversement({
               {boutique.reversement_nom && ` · ${boutique.reversement_nom}`}
             </p>
           ) : (
-            <p className="text-sm text-red-700 dark:text-red-300">Numéro de reversement manquant — contacter {boutique.telephone_contact}</p>
+            <p className="text-sm text-red-700 dark:text-red-300">Numéro de reversement manquant · contacter {boutique.telephone_contact}</p>
           )}
         </div>
         <p className="text-xl font-semibold">{formatFcfa(total)}</p>

@@ -30,7 +30,7 @@ export function IndicationsList({ claims }: { claims: ClaimDetail[] }) {
       {claims.map((claim) => (
         <div
           key={claim.id}
-          className="rounded-2xl border border-neutral-200/70 bg-neutral-50/60 p-4 dark:border-neutral-800/70 dark:bg-neutral-900/40"
+          className="rounded-2xl border border-neutral-200 bg-white p-4 dark:border-neutral-800/70 dark:bg-neutral-900/40"
         >
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="font-semibold text-neutral-900 dark:text-neutral-100">{claim.indication.nom}</span>
@@ -61,17 +61,17 @@ export function IndicationsList({ claims }: { claims: ClaimDetail[] }) {
           </div>
 
           {claim.etudes.length > 0 && (
-            <ul className="mt-3 space-y-0.5 border-t border-neutral-200/70 pt-2 text-xs text-neutral-500 dark:border-neutral-800/70 dark:text-neutral-400">
+            <ul className="mt-3 space-y-0.5 border-t border-neutral-200 pt-2 text-xs text-neutral-500 dark:border-neutral-800/70 dark:text-neutral-400">
               {claim.etudes.map((etude) => (
                 <li key={etude.id}>
                   {etude.url ? (
-                    <a href={etude.url} target="_blank" rel="noreferrer" className="italic underline-offset-2 hover:underline">
+                    <a href={etude.url} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
                       {etude.titre}
                     </a>
                   ) : (
-                    <span className="italic">{etude.titre}</span>
+                    <span>{etude.titre}</span>
                   )}{" "}
-                  <span className="not-italic">(titre original)</span> — {ETUDE_TYPE_LABELS[etude.type] ?? etude.type}
+                  <span>(titre original)</span> · {ETUDE_TYPE_LABELS[etude.type] ?? etude.type}
                   {etude.annee ? ` (${etude.annee})` : ""}
                 </li>
               ))}

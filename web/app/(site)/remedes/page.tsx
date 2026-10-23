@@ -5,7 +5,7 @@ import { EnteteMarche } from "@/components/boutique/EnteteMarche";
 import { CHAMP } from "@/components/boutique/styles";
 
 export const metadata = {
-  title: "Remèdes — Lafi",
+  title: "Remèdes · Lafi",
   description: "Les préparations des tradipraticiens, à commander et payer par mobile money.",
 };
 

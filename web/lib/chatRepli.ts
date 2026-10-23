@@ -27,9 +27,9 @@ export function composerRepli(triage: TriageResultat, resultats: MatchClaimResul
   lignes.push("", "**Usages documentés :**");
   for (const r of resultats) {
     const prudence = r.contre_indication_forte
-      ? " — ⚠️ une contre-indication a été signalée, demande un avis avant tout usage"
+      ? ". ⚠️ Une contre-indication a été signalée, demande un avis avant tout usage"
       : r.precautions
-        ? ` — précaution : ${r.precautions}`
+        ? `. Précaution : ${r.precautions}`
         : "";
     lignes.push(
       `- **${r.nom_principal}** (*${r.nom_scientifique}*), pour ${r.indication_nom.toLowerCase()} : ${r.partie_nom.toLowerCase()}, ${r.preparation_resume ?? r.preparation_mode}. Côté science : ${qualiteLabelGrandPublic(r.qualite_preuve_scientifique).toLowerCase()}${prudence}.`

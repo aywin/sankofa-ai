@@ -11,7 +11,7 @@ export function NouveauMotDePasse() {
   const [fait, setFait] = useState(false);
 
   return (
-    <section className="rounded-3xl border border-neutral-200/70 bg-white p-5 dark:border-neutral-800/70 dark:bg-neutral-900/60">
+    <section className="rounded-3xl border border-neutral-200 bg-white p-5 dark:border-neutral-800/70 dark:bg-neutral-900/60">
       <h2 className="mb-3 font-semibold">Choisis un nouveau mot de passe</h2>
       {fait ? (
         <p className="text-sm">

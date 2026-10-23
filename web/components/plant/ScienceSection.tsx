@@ -16,7 +16,7 @@ export function ScienceSection({ composes }: { composes: Array<Compose & { cible
   return (
     <div className="space-y-2">
       {composes.map((c) => (
-        <div key={c.id} className="rounded-xl border border-neutral-200/70 p-3 text-sm dark:border-neutral-800/70">
+        <div key={c.id} className="rounded-xl border border-neutral-200 p-3 text-sm dark:border-neutral-800/70">
           <p className="font-medium text-neutral-800 dark:text-neutral-200">{c.nom}</p>
           {c.methode_identification && (
             <p className="text-xs text-neutral-500 dark:text-neutral-400">{c.methode_identification}</p>

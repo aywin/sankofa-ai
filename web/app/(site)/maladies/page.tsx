@@ -2,7 +2,7 @@ import { supabaseServer } from "@/lib/supabase";
 import { ActivityIcon } from "@/components/chat/icons";
 import type { Indication } from "@/lib/types";
 
-export const metadata = { title: "Maladies — Lafi" };
+export const metadata = { title: "Maladies · Lafi" };
 
 export default async function MaladiesIndexPage() {
   const { data: indications, error } = await supabaseServer
@@ -27,7 +27,7 @@ export default async function MaladiesIndexPage() {
         {(indications ?? []).map((i) => (
           <div
             key={i.id}
-            className="rounded-2xl border border-neutral-200/70 bg-neutral-50/60 p-4 dark:border-neutral-800/70 dark:bg-neutral-900/40"
+            className="rounded-2xl border border-neutral-200 bg-white p-4 dark:border-neutral-800/70 dark:bg-neutral-900/40"
           >
             <p className="font-medium text-neutral-900 dark:text-neutral-100">{i.nom}</p>
             <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">{i.symptomes}</p>

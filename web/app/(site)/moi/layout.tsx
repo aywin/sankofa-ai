@@ -1,6 +1,6 @@
 import { Espace } from "@/components/compte/Espace";
 
-export const metadata = { title: "Mon espace — Lafi", robots: { index: false } };
+export const metadata = { title: "Mon espace · Lafi", robots: { index: false } };
 
 export default function EspaceLayout({ children }: { children: React.ReactNode }) {
   return (

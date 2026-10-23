@@ -32,7 +32,7 @@ export function OutputPanel({
 }) {
   return (
     <div className="rounded-2xl border-2 border-emerald-200 bg-white p-5 dark:border-emerald-900 dark:bg-neutral-950">
-      <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+      <p className="text-xs font-medium text-neutral-500 dark:text-neutral-500">
         Statut de plausibilité
       </p>
       <span
@@ -42,7 +42,7 @@ export function OutputPanel({
       </span>
 
       <div className="mt-4">
-        <p className="mb-1.5 text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+        <p className="mb-1.5 text-xs font-medium text-neutral-500 dark:text-neutral-500">
           Comment ce statut a été obtenu (nœud ⑩ Agrégation)
         </p>
         <ul className="list-inside list-disc space-y-1 text-sm text-neutral-700 dark:text-neutral-300">
@@ -54,8 +54,8 @@ export function OutputPanel({
 
       {etudes.length > 0 && (
         <div className="mt-4">
-          <p className="mb-1.5 text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
-            Justificatifs — littérature ({etudes.length})
+          <p className="mb-1.5 text-xs font-medium text-neutral-500 dark:text-neutral-500">
+            Justificatifs · littérature ({etudes.length})
           </p>
           <ul className="space-y-0.5 text-xs text-neutral-500 dark:text-neutral-400">
             {etudes.map((e) => (
@@ -67,7 +67,7 @@ export function OutputPanel({
                 ) : (
                   e.titre
                 )}{" "}
-                — {ETUDE_TYPE_LABELS[e.type] ?? e.type}
+                · {ETUDE_TYPE_LABELS[e.type] ?? e.type}
                 {e.annee ? ` (${e.annee})` : ""}
               </li>
             ))}
@@ -77,7 +77,7 @@ export function OutputPanel({
 
       <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-500">
         {attestationsCount} attestation{attestationsCount > 1 ? "s" : ""} traditionnelle
-        {attestationsCount > 1 ? "s" : ""} prise{attestationsCount > 1 ? "s" : ""} en compte — détail dans le nœud ②
+        {attestationsCount > 1 ? "s" : ""} prise{attestationsCount > 1 ? "s" : ""} en compte · détail dans le nœud ②
         ci-dessus.
       </p>
 

@@ -29,7 +29,7 @@ export function PipelineNode({
       className={`rounded-2xl border p-4 transition ${
         toggle && !toggle.enabled
           ? "border-neutral-200/40 bg-neutral-50/30 opacity-50 dark:border-neutral-800/40 dark:bg-neutral-900/20"
-          : "border-neutral-200/70 bg-neutral-50/60 dark:border-neutral-800/70 dark:bg-neutral-900/40"
+          : "border-neutral-200 bg-white dark:border-neutral-800/70 dark:bg-neutral-900/40"
       }`}
     >
       <div className="flex items-center justify-between gap-2">

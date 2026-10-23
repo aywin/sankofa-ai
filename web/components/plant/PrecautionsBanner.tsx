@@ -4,9 +4,14 @@
 // nécessiter un clic supplémentaire.
 export function PrecautionsBanner({ precautions }: { precautions: string }) {
   return (
-    <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200">
-      <p className="mb-1 font-medium">Précautions</p>
-      <p>{precautions}</p>
+    <div className="flex gap-3 rounded-2xl border border-laterite-200 bg-laterite-50 p-4 text-laterite-900 dark:border-laterite-800 dark:bg-laterite-950 dark:text-laterite-100">
+      <span aria-hidden className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-laterite-500 text-xs font-bold text-white">
+        !
+      </span>
+      <div>
+        <p className="font-semibold">Précautions</p>
+        <p className="mt-0.5">{precautions}</p>
+      </div>
     </div>
   );
 }

@@ -7,10 +7,10 @@ import { Vitrine } from "@/components/boutique/Vitrine";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const boutique = await getBoutiquePublique(slug);
-  if (!boutique) return { title: "Boutique introuvable — Lafi" };
+  if (!boutique) return { title: "Boutique introuvable · Lafi" };
   const description = boutique.description ?? `Les préparations de ${boutique.nom}${boutique.ville ? `, ${boutique.ville}` : ""}.`;
   return {
-    title: `${boutique.nom} — boutique sur Lafi`,
+    title: `${boutique.nom}, boutique sur Lafi`,
     description,
     openGraph: { title: boutique.nom, description, images: boutique.produits.find((p) => p.image_url)?.image_url ?? undefined },
   };
