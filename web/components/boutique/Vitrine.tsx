@@ -28,7 +28,10 @@ function CarteProduit({
   const max = Math.min(produit.stock ?? 99, 99);
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl border border-neutral-200/70 bg-white dark:border-neutral-800/70 dark:bg-neutral-900/60">
+    <article
+      id={`p-${produit.id}`}
+      className="flex scroll-mt-20 flex-col overflow-hidden rounded-2xl border border-neutral-200/70 bg-white target:ring-2 target:ring-emerald-500 dark:border-neutral-800/70 dark:bg-neutral-900/60"
+    >
       {produit.image_url ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={produit.image_url} alt={produit.nom} loading="lazy" className="aspect-[4/3] w-full object-cover" />

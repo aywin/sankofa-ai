@@ -2,10 +2,8 @@ import Link from "next/link";
 import { LafiMark } from "@/components/chat/icons";
 import { BoutonCompte } from "@/components/compte/BoutonCompte";
 
-// Navigation persistante partagée par toutes les pages hors chat (qui a
-// sa propre coquille avec sidebar) — corrige l'absence de navigation
-// relevée sur /plants, /maladies, /decouverte, /laboratoire : chacune
-// vivait auparavant sans aucun moyen de circuler ailleurs dans le site.
+// En-tête de l'accueil, seule page hors de la coquille de l'application
+// (components/app/AppShell, qui a sa barre latérale).
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-neutral-200/70 bg-sand-50/90 backdrop-blur dark:border-neutral-800/70 dark:bg-sand-950/90">
@@ -18,11 +16,15 @@ export function SiteHeader() {
           Lafi
         </Link>
         <nav className="flex items-center gap-4 text-sm sm:gap-5 font-medium text-neutral-600 dark:text-neutral-300">
-          <Link href="/decouverte" className="hover:text-emerald-700 dark:hover:text-emerald-400">
-            Découverte
+          {/* Mêmes entrées que la barre latérale de l'application. */}
+          <Link href="/decouverte" className="hidden hover:text-emerald-700 sm:inline dark:hover:text-emerald-400">
+            Plantes
           </Link>
-          <Link href="/laboratoire" className="hover:text-emerald-700 dark:hover:text-emerald-400">
-            Laboratoire
+          <Link href="/remedes" className="hidden hover:text-emerald-700 sm:inline dark:hover:text-emerald-400">
+            Remèdes
+          </Link>
+          <Link href="/tradipraticiens" className="hidden hover:text-emerald-700 md:inline dark:hover:text-emerald-400">
+            Tradipraticiens
           </Link>
           <Link
             href="/chat"

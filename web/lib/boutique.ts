@@ -80,42 +80,124 @@ export async function getBoutiquePublique(slug: string): Promise<BoutiquePubliqu
   };
 }
 
-// Vitrine générale : derniers produits en ligne, toutes boutiques actives
-// confondues. Affichée dans l'espace d'un vendeur qui n'a pas encore de
-// boutique, pour qu'il voie ce qui se vend déjà sur Lafi.
+// ---------- Remèdes (toutes boutiques) et tradipraticiens ----------
+
 export interface ProduitDisponible {
   id: string;
   nom: string;
   prix: number;
   prixInitial: number | null;
   image_url: string | null;
+  ville: string | null;
+  plantes: { slug: string; nom_scientifique: string }[];
+  planteLibre: string | null;
   boutique: { nom: string; slug: string; ville: string | null };
 }
 
-export async function getProduitsDisponibles(limite = 12): Promise<ProduitDisponible[]> {
+export interface FiltresRemedes {
+  texte?: string;
+  plante?: string; // slug du taxon
+  ville?: string;
+  prixMax?: number;
+  taxonId?: string;
+}
+
+function sansAccents(t: string) {
+  return t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+// Le catalogue du pilote est petit : une requête, puis filtres en mémoire
+// (texte insensible aux accents, ville du produit OU de la boutique). À
+// passer en filtres SQL quand il dépassera quelques centaines de remèdes.
+export async function getRemedes(filtres: FiltresRemedes = {}, limite = 200): Promise<ProduitDisponible[]> {
   const { data, error } = await supabaseServer
     .from("produit")
-    .select("id, nom, prix, prix_reduit, image_url, boutique!inner(nom, slug, ville, statut)")
+    .select(
+      "id, nom, description, prix, prix_reduit, image_url, ville, plante_origine_libre, produit_taxon(taxon(id, slug, nom_scientifique)), boutique!inner(nom, slug, ville, statut)"
+    )
     .eq("statut", "publie")
     .eq("boutique.statut", "active")
     .order("created_at", { ascending: false })
     .limit(limite);
   if (error) throw new Error(error.message);
+
   type Ligne = {
     id: string;
     nom: string;
+    description: string | null;
     prix: number | string;
     prix_reduit: number | string | null;
     image_url: string | null;
+    ville: string | null;
+    plante_origine_libre: string | null;
+    produit_taxon: { taxon: { id: string; slug: string; nom_scientifique: string } | null }[];
     boutique: { nom: string; slug: string; ville: string | null };
   };
-  return ((data ?? []) as unknown as Ligne[]).map((p) => ({
-    id: p.id,
-    nom: p.nom,
-    prix: Number(p.prix_reduit ?? p.prix),
-    prixInitial: p.prix_reduit !== null ? Number(p.prix) : null,
-    image_url: p.image_url,
-    boutique: { nom: p.boutique.nom, slug: p.boutique.slug, ville: p.boutique.ville },
+
+  const texte = filtres.texte ? sansAccents(filtres.texte.trim()) : "";
+  const ville = filtres.ville ? sansAccents(filtres.ville) : "";
+
+  return ((data ?? []) as unknown as Ligne[])
+    .map((p) => {
+      const taxons = p.produit_taxon.flatMap((pt) => (pt.taxon ? [pt.taxon] : []));
+      return {
+        brut: p,
+        taxons,
+        remede: {
+          id: p.id,
+          nom: p.nom,
+          prix: Number(p.prix_reduit ?? p.prix),
+          prixInitial: p.prix_reduit !== null ? Number(p.prix) : null,
+          image_url: p.image_url,
+          ville: p.ville ?? p.boutique.ville,
+          plantes: taxons.map((t) => ({ slug: t.slug, nom_scientifique: t.nom_scientifique })),
+          planteLibre: p.plante_origine_libre,
+          boutique: { nom: p.boutique.nom, slug: p.boutique.slug, ville: p.boutique.ville },
+        } satisfies ProduitDisponible,
+      };
+    })
+    .filter(({ brut, taxons, remede }) => {
+      if (filtres.taxonId && !taxons.some((t) => t.id === filtres.taxonId)) return false;
+      if (filtres.plante && !taxons.some((t) => t.slug === filtres.plante)) return false;
+      if (ville && !sansAccents(remede.ville ?? "").includes(ville)) return false;
+      if (filtres.prixMax && remede.prix > filtres.prixMax) return false;
+      if (texte) {
+        const champ = sansAccents(
+          [brut.nom, brut.description, brut.plante_origine_libre, brut.boutique.nom, ...taxons.map((t) => t.nom_scientifique)].join(" ")
+        );
+        if (!champ.includes(texte)) return false;
+      }
+      return true;
+    })
+    .map(({ remede }) => remede);
+}
+
+export async function getProduitsDisponibles(limite = 12): Promise<ProduitDisponible[]> {
+  return (await getRemedes()).slice(0, limite);
+}
+
+export interface Tradipraticien {
+  slug: string;
+  nom: string;
+  description: string | null;
+  ville: string | null;
+  remedes: number;
+}
+
+export async function getTradipraticiens(): Promise<Tradipraticien[]> {
+  const { data, error } = await supabaseServer
+    .from("boutique")
+    .select("slug, nom, description, ville, produit(id, statut)")
+    .eq("statut", "active")
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(error.message);
+  type Ligne = { slug: string; nom: string; description: string | null; ville: string | null; produit: { statut: string }[] };
+  return ((data ?? []) as unknown as Ligne[]).map((b) => ({
+    slug: b.slug,
+    nom: b.nom,
+    description: b.description,
+    ville: b.ville,
+    remedes: b.produit.filter((p) => p.statut === "publie").length,
   }));
 }
 

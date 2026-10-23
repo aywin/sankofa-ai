@@ -1,12 +1,7 @@
-import { SiteHeader } from "@/components/layout/SiteHeader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { AppShell } from "@/components/app/AppShell";
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex min-h-dvh flex-col">
-      <SiteHeader />
-      <div className="flex-1">{children}</div>
-      <SiteFooter />
-    </div>
-  );
+// Toute l'application (hors accueil) vit dans la même coquille : barre
+// latérale globale sur ordinateur, menu + barre du bas sur téléphone.
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+  return <AppShell>{children}</AppShell>;
 }

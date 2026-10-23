@@ -8,6 +8,8 @@ import { HabitatAvailabilityBlock } from "@/components/plant/HabitatAvailability
 import { IndicationsList } from "@/components/plant/IndicationsList";
 import { ScienceSection } from "@/components/plant/ScienceSection";
 import { PrecautionsBanner } from "@/components/plant/PrecautionsBanner";
+import { CarteRemede } from "@/components/boutique/CarteRemede";
+import { getRemedes } from "@/lib/boutique";
 
 export default async function PlantDetailPage({
   params,
@@ -18,7 +20,12 @@ export default async function PlantDetailPage({
   const taxon = await getTaxonBySlug(slug);
   if (!taxon) notFound();
 
-  const [claims, composes] = await Promise.all([getClaimsForTaxon(taxon.id), getComposesForTaxon(taxon.id)]);
+  const [claims, composes, remedes] = await Promise.all([
+    getClaimsForTaxon(taxon.id),
+    getComposesForTaxon(taxon.id),
+    // La vente ne doit jamais casser la fiche : en cas d'erreur, pas de bloc.
+    getRemedes({ taxonId: taxon.id }).catch(() => []),
+  ]);
 
   const nomPrincipal =
     taxon.noms_vernaculaires.find((n) => n.est_principal)?.libelle ?? taxon.nom_scientifique;
@@ -27,7 +34,7 @@ export default async function PlantDetailPage({
   return (
     <div className="mx-auto max-w-[880px] px-4 py-8">
       <Link
-        href="/plants"
+        href="/decouverte"
         className="mb-6 inline-block text-sm text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
       >
         ← Toutes les plantes
@@ -74,7 +81,7 @@ export default async function PlantDetailPage({
       )}
 
       <h2 className="mb-3 mt-8 text-sm font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
-        Maladies traitées
+        Usages documentés
       </h2>
       <IndicationsList claims={claims} />
 
@@ -83,6 +90,27 @@ export default async function PlantDetailPage({
         Ce que dit la science
       </h2>
       <ScienceSection composes={composes} />
+
+      {/* Séparé de l'information santé : la fiche dit ce qui est documenté,
+          ce bloc dit seulement où des tradipraticiens vendent une préparation
+          à base de cette plante. Le chat, lui, ne vend rien. */}
+      {remedes.length > 0 && (
+        <section className="mt-12 rounded-3xl border border-neutral-200/70 bg-neutral-50 p-5 dark:border-neutral-800/70 dark:bg-neutral-900/40">
+          <h2 className="font-semibold text-neutral-900 dark:text-neutral-100">Remèdes disponibles chez des tradipraticiens</h2>
+          <p className="mt-1 text-xs text-neutral-500">
+            Préparations vendues par des tradipraticiens, sous leur responsabilité. Lafi ne les a pas évaluées : les
+            usages et les précautions ci-dessus restent la référence.
+          </p>
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {remedes.slice(0, 6).map((r) => (
+              <CarteRemede key={r.id} remede={r} />
+            ))}
+          </div>
+          <Link href={`/remedes?plante=${taxon.slug}`} className="mt-4 inline-block text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400">
+            Voir tous les remèdes à base de {nomPrincipal} →
+          </Link>
+        </section>
+      )}
     </div>
   );
 }
