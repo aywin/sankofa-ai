@@ -1,0 +1,55 @@
+[
+  {
+    "table": "indications",
+    "ligne": {
+      "nom": "Affections du foie (catégorie ethnobotanique)",
+      "categorie": "autre",
+      "symptomes": "",
+      "description": "Catégorie documentaire de l’enquête. Elle ne correspond pas à un diagnostic confirmé d’hépatite. Source : https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2020.563751/full | https://www.nhs.uk/conditions/jaundice/",
+      "signes_de_gravite": "Une jaunisse demande une évaluation médicale rapide.",
+      "source": ""
+    },
+    "motif": "La source ne décrit pas explicitement un ictère pour cette ligne. Suppression, sans rattachement automatique."
+  },
+  {
+    "table": "usages",
+    "ligne": {
+      "nom_scientifique": "Cochlospermum tinctorium",
+      "partie": "racine",
+      "mode": "decoction",
+      "solvant": "eau",
+      "preparation_description": "Décoction du rhizome jaune, désigné comme racine dans le recueil.",
+      "etapes_preparation": "",
+      "voie": "orale",
+      "mode_usage_rapporte": "",
+      "public_deconseille": "",
+      "signes_arret": "",
+      "indication": "Affections du foie (catégorie ethnobotanique)",
+      "precautions_specifiques": "",
+      "contre_indication_forte": "non",
+      "pays_region_usage": "Burkina Faso",
+      "nombre_sources_tradition": "1",
+      "qualite_preuve_scientifique": "tres_faible",
+      "resume_science": "Une étude chez le rat ne démontre pas une efficacité sur les hépatites humaines.",
+      "sources_tradition": "https://www.researchgate.net/publication/369625579_20_Recueil_de_fiches_ethnobotaniques_plantes_medicinales_du_Burkina_Faso_et_d%27Afrique_de_l%27Ouest_Jean-Pierre_Nicolas",
+      "ambigu": "",
+      "acces_source": "",
+      "localisation_source": ""
+    },
+    "motif": "La source ne décrit pas explicitement un ictère pour cette ligne. Suppression, sans rattachement automatique."
+  },
+  {
+    "table": "etudes",
+    "ligne": {
+      "nom_scientifique": "Cochlospermum tinctorium",
+      "indication": "Affections du foie (catégorie ethnobotanique)",
+      "titre": "Evaluation of the Hepatoprotective Properties of Traditional Formulations Based on Cochlospermum tinctorium Used in Benin",
+      "doi": "10.1155/2024/7753008",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39220825/",
+      "annee": "2024",
+      "type": "preclinique_animal",
+      "resume": "Formulations testées chez des rats avec atteinte hépatique induite par paracétamol. Résultats précliniques sans preuve de traitement d’une hépatite virale humaine."
+    },
+    "motif": "La source ne décrit pas explicitement un ictère pour cette ligne. Suppression, sans rattachement automatique."
+  }
+]

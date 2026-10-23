@@ -1,0 +1,51 @@
+{
+  "cle": [
+    "nom_scientifique",
+    "partie",
+    "mode",
+    "indication"
+  ],
+  "fusions": [
+    {
+      "cle": {
+        "nom_scientifique": "Terminalia leiocarpa",
+        "partie": "feuille",
+        "mode": "decoction",
+        "indication": "Paludisme"
+      },
+      "lignes_avant": 2,
+      "voies": [
+        "orale",
+        "bain"
+      ]
+    },
+    {
+      "cle": {
+        "nom_scientifique": "Mitragyna inermis",
+        "partie": "feuille",
+        "mode": "decoction",
+        "indication": "Rhumatismes"
+      },
+      "lignes_avant": 2,
+      "voies": [
+        "orale",
+        "cutanee"
+      ]
+    },
+    {
+      "cle": {
+        "nom_scientifique": "Sclerocarya birrea",
+        "partie": "feuille",
+        "mode": "decoction",
+        "indication": "Infections urinaires"
+      },
+      "lignes_avant": 2,
+      "voies": [
+        "orale",
+        "bain"
+      ]
+    }
+  ],
+  "doublons_restants": 0,
+  "total_final": 20
+}

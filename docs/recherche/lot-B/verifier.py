@@ -1,50 +1,38 @@
-import csv
-import json
-import re
+"""Contrôle reproductible : python verifier.py (aucune dépendance externe)."""
+import csv,json,collections,unicodedata
 from pathlib import Path
-
-P = Path(__file__).resolve().parent
-names = ['taxons', 'noms_vernaculaires', 'indications', 'usages', 'etudes', 'composes', 'medias', 'remedes_non_vegetaux', 'produits_homologues', 'structures', 'contexte']
-data = {}
-for name in names:
-    with (P / (name + '.csv')).open(encoding='utf-8', newline='') as f:
-        reader = csv.DictReader(f, delimiter=';')
-        data[name] = list(reader)
-        assert reader.fieldnames and len(set(reader.fieldnames)) == len(reader.fieldnames)
-        for row in data[name]:
-            assert None not in row and None not in row.values(), (name, row)
-taxa = {r['nom_scientifique'] for r in data['taxons']}
-existing = {'paludisme', 'fièvre typhoïde', 'diarrhée', 'toux et affections respiratoires', 'maux de tête', 'hypertension', 'plaies et infections cutanées', 'insomnie'}
-indications = existing | {r['nom'] for r in data['indications']}
-assert len(taxa) == len(data['taxons'])
-assert not existing & {r['nom'] for r in data['indications']}
-source_columns = {'taxons': 'sources', 'noms_vernaculaires': 'source', 'indications': 'description', 'usages': 'sources_tradition', 'etudes': 'url', 'composes': 'source', 'medias': 'source_url', 'remedes_non_vegetaux': 'sources', 'produits_homologues': 'sources', 'structures': 'sources', 'contexte': 'source'}
-for table, rows in data.items():
-    seen = set()
-    for row in rows:
-        assert 'https://' in row[source_columns[table]], (table, 'source absente')
-        key = tuple(row.values())
-        assert key not in seen, (table, 'doublon exact')
-        seen.add(key)
-        if 'nom_scientifique' in row:
-            assert row['nom_scientifique'] in taxa
-        if 'indication' in row:
-            assert row['indication'] in indications, (table, row['indication'])
-        assert '—' not in ' '.join(row.values())
-        assert not re.search(r'\b(prendre|buvez|prenez|avaler)\s+\d', ' '.join(row.values()), re.I)
-for row in data['usages']:
-    assert row['mode'] in {'decoction','infusion','maceration','poudre','cataplasme','application_directe','autre'}
-    assert row['voie'] in {'orale','cutanée','bain','inhalation','gargarisme','collyre','autre'}
-    assert row['contre_indication_forte'] in {'oui','non'}
-    assert row['qualite_preuve_scientifique'] in {'','elevee','moderee','faible','tres_faible'}
-    assert int(row['nombre_sources_tradition']) >= 1
-for row in data['etudes']:
-    assert row['type'] in {'revue_systematique','essai_clinique_humain','etude_experimentale_humaine','preclinique_animal','preclinique_in_vitro','revue_narrative'}
-for row in data['taxons']:
-    assert row['toxicite_connue'].startswith(('oui :','non :'))
-for row in data['noms_vernaculaires']:
-    assert row['est_principal'] in {'oui','non'}
-counts = {name:len(rows) for name,rows in data.items()}
-result = {'date':'2026-10-23','controles_structurels':'réussis','validation_clinique':'non réalisée','corpus':'partiel','lignes':counts}
-(P / 'controle.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')
-print(json.dumps(result,ensure_ascii=False,indent=2))
+p=Path(__file__).resolve().parent
+s=json.loads((p/'schema.json').read_text()); errors=[];data={}
+for name,cols in s['colonnes'].items():
+ with (p/(name+'.csv')).open(encoding='utf-8',newline='') as f:
+  rd=csv.DictReader(f,delimiter=';'); rows=list(rd)
+  if rd.fieldnames!=cols:errors.append(name+': colonnes différentes du schéma')
+  data[name]=rows
+ for i,r in enumerate(rows,2):
+  if None in r:errors.append(f'{name}:{i}: nombre de cellules incorrect')
+  for k,allowed in s['valeurs_autorisees'].items():
+   if k in r and not (name=='medias' and k=='partie' and not r[k]) and r[k] not in allowed:errors.append(f'{name}:{i}: {k}={r[k]}')
+  if 'indication' in r and r['indication'] not in s['indications_fermees']:errors.append(f'{name}:{i}: indication hors liste')
+for r in data['indications']:
+ if r['nom'] not in s['indications_fermees']:errors.append('indication hors liste : '+r['nom'])
+checks={'taxons':['precautions','toxicite_connue','interactions_medicaments','confusions_possibles','statut_protection'],'usages':['public_deconseille','signes_arret','precautions_specifiques','contre_indication_forte','qualite_preuve_scientifique','resume_science']}
+for name,cols in checks.items():
+ for i,r in enumerate(data[name],2):
+  for col in cols:
+   if not r[col].strip():errors.append(f'{name}:{i}: sécurité/preuve vide : {col}')
+taxa=[r['nom_scientifique'] for r in data['taxons']]
+if len(set(taxa))!=len(taxa):errors.append('taxons dupliqués')
+for name in ['noms_vernaculaires','usages','etudes','composes','medias']:
+ for r in data[name]:
+  if r['nom_scientifique'] not in taxa:errors.append(name+': taxon absent '+r['nom_scientifique'])
+for name,field in [('noms_vernaculaires','source'),('usages','sources_tradition'),('indications','source')]:
+ for r in data[name]:
+  if 'https://' not in r[field] and 'http://' not in r[field]:errors.append(name+': source absente')
+keys=['nom_scientifique','partie','mode','indication'];counter=collections.Counter(tuple(r[k].casefold().strip() for k in keys) for r in data['usages']);dups=sum(n-1 for n in counter.values() if n>1)
+if dups:errors.append('doublons usages : '+str(dups))
+coverage=collections.Counter(r['indication'] for r in data['usages'])
+for disease in ['Règles douloureuses','Anémie','Infections urinaires','Diabète','Drépanocytose']:
+ if not coverage[disease]:errors.append('couverture manquante : '+disease)
+result={'statut':'ok' if not errors else 'echec','erreurs':errors,'lignes':{k:len(v) for k,v in data.items()},'cle_doublons':keys,'doublons_usages':dups,'couverture_usages':dict(coverage)}
+(p/'controle.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(result,ensure_ascii=False,indent=2));raise SystemExit(bool(errors))

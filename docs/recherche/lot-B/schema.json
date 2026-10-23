@@ -1,0 +1,243 @@
+{
+  "encodage": "UTF-8",
+  "separateur": ";",
+  "colonnes": {
+    "produits_homologues": [
+      "nom_produit",
+      "plantes",
+      "indication",
+      "fabricant_ou_structure",
+      "statut",
+      "annee",
+      "sources",
+      "pays"
+    ],
+    "structures": [
+      "nom",
+      "type",
+      "ville",
+      "role",
+      "contact_public",
+      "sources"
+    ],
+    "etudes": [
+      "nom_scientifique",
+      "indication",
+      "titre",
+      "doi",
+      "url",
+      "annee",
+      "type",
+      "resume"
+    ],
+    "taxons": [
+      "nom_scientifique",
+      "autorite",
+      "famille",
+      "description",
+      "habitat_region",
+      "regions_burkina",
+      "localites",
+      "pays_presence",
+      "abondance",
+      "ou_la_trouver",
+      "saison_recolte",
+      "prix_marche",
+      "conservation",
+      "confusions_possibles",
+      "statut_protection",
+      "precautions",
+      "toxicite_connue",
+      "interactions_medicaments",
+      "sources",
+      "nom_dans_lafi",
+      "synonymes"
+    ],
+    "noms_vernaculaires": [
+      "nom_scientifique",
+      "libelle",
+      "langue",
+      "region",
+      "est_principal",
+      "source",
+      "ambigu",
+      "acces_source",
+      "localisation_source"
+    ],
+    "usages": [
+      "nom_scientifique",
+      "partie",
+      "mode",
+      "solvant",
+      "preparation_description",
+      "etapes_preparation",
+      "voie",
+      "mode_usage_rapporte",
+      "public_deconseille",
+      "signes_arret",
+      "indication",
+      "precautions_specifiques",
+      "contre_indication_forte",
+      "pays_region_usage",
+      "nombre_sources_tradition",
+      "qualite_preuve_scientifique",
+      "resume_science",
+      "sources_tradition",
+      "ambigu",
+      "acces_source",
+      "localisation_source"
+    ],
+    "contexte": [
+      "sujet",
+      "fait",
+      "source"
+    ],
+    "indications": [
+      "nom",
+      "categorie",
+      "symptomes",
+      "description",
+      "signes_de_gravite",
+      "source"
+    ],
+    "composes": [
+      "nom_scientifique",
+      "nom",
+      "partie",
+      "concentration",
+      "methode_identification",
+      "source_base",
+      "source"
+    ],
+    "medias": [
+      "nom_scientifique",
+      "url",
+      "label",
+      "partie",
+      "credit_auteur",
+      "licence",
+      "source_url"
+    ],
+    "remedes_non_vegetaux": [
+      "nom",
+      "origine",
+      "matiere",
+      "indication",
+      "preparation_description",
+      "risques",
+      "pays_region_usage",
+      "sources"
+    ]
+  },
+  "indications_fermees": [
+    "Paludisme",
+    "Fièvre",
+    "Drépanocytose",
+    "Hypertension",
+    "Diabète",
+    "Anémie",
+    "Ictère et hépatite",
+    "Ulcère d'estomac",
+    "Hémorroïdes",
+    "Infections urinaires",
+    "Règles douloureuses",
+    "Rhumatismes",
+    "Fièvre typhoïde",
+    "Diarrhée",
+    "Toux et affections respiratoires",
+    "Maux de tête",
+    "Plaies et infections cutanées",
+    "Insomnie"
+  ],
+  "valeurs_autorisees": {
+    "partie": [
+      "feuille",
+      "ecorce",
+      "racine",
+      "fruit",
+      "graine",
+      "fleur",
+      "calice",
+      "tige",
+      "plante entiere",
+      "gomme",
+      "seve"
+    ],
+    "mode": [
+      "decoction",
+      "infusion",
+      "maceration",
+      "poudre",
+      "cataplasme",
+      "application_directe",
+      "autre"
+    ],
+    "voie": [
+      "orale",
+      "cutanee",
+      "bain",
+      "inhalation",
+      "gargarisme",
+      "collyre",
+      "autre"
+    ],
+    "solvant": [
+      "eau",
+      "eau chaude",
+      "lait",
+      "beurre de karite",
+      "alcool",
+      "autre",
+      "non_documente"
+    ],
+    "qualite_preuve_scientifique": [
+      "elevee",
+      "moderee",
+      "faible",
+      "tres_faible",
+      "aucune_etude",
+      "non_documente"
+    ],
+    "toxicite_connue": [
+      "oui",
+      "non",
+      "non_documente"
+    ],
+    "contre_indication_forte": [
+      "oui",
+      "non",
+      "non_documente"
+    ],
+    "ambigu": [
+      "oui",
+      "non",
+      "non_documente"
+    ],
+    "acces_source": [
+      "texte_integral",
+      "resume",
+      "base_documentaire",
+      "non_documente"
+    ],
+    "categorie": [
+      "infectieux",
+      "digestif",
+      "respiratoire",
+      "cardiovasculaire",
+      "peau",
+      "douleur",
+      "sommeil",
+      "femme et grossesse",
+      "enfant",
+      "metabolique",
+      "sang",
+      "autre"
+    ],
+    "statut": [
+      "homologue",
+      "liste des medicaments essentiels",
+      "autorisation de mise sur le marche",
+      "autre"
+    ]
+  }
+}

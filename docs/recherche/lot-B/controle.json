@@ -1,19 +1,36 @@
 {
-  "date": "2026-10-23",
-  "controles_structurels": "réussis",
-  "validation_clinique": "non réalisée",
-  "corpus": "partiel",
+  "statut": "ok",
+  "erreurs": [],
   "lignes": {
-    "taxons": 14,
-    "noms_vernaculaires": 18,
-    "indications": 8,
-    "usages": 11,
-    "etudes": 7,
-    "composes": 3,
-    "medias": 2,
-    "remedes_non_vegetaux": 0,
     "produits_homologues": 6,
     "structures": 0,
-    "contexte": 15
+    "etudes": 8,
+    "taxons": 15,
+    "noms_vernaculaires": 25,
+    "usages": 20,
+    "contexte": 15,
+    "indications": 8,
+    "composes": 3,
+    "medias": 2,
+    "remedes_non_vegetaux": 0
+  },
+  "cle_doublons": [
+    "nom_scientifique",
+    "partie",
+    "mode",
+    "indication"
+  ],
+  "doublons_usages": 0,
+  "couverture_usages": {
+    "Paludisme": 5,
+    "Rhumatismes": 1,
+    "Hémorroïdes": 1,
+    "Ulcère d'estomac": 1,
+    "Infections urinaires": 4,
+    "Anémie": 1,
+    "Drépanocytose": 1,
+    "Diabète": 3,
+    "Hypertension": 2,
+    "Règles douloureuses": 1
   }
 }
