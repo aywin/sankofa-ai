@@ -35,7 +35,7 @@ Ta mission : faire une recherche documentaire en ligne sur le **lot qui t'est at
 
 ### Ce que tu dois produire
 
-Un dossier contenant les 7 fichiers ci-dessous, encodés en UTF-8, avec le séparateur `;`. Les liens entre fichiers se font par le **nom scientifique** et par le **nom de l'indication**, jamais par un identifiant.
+Un dossier contenant les 11 fichiers ci-dessous, encodés en UTF-8, avec le séparateur `;`. Les liens entre fichiers se font par le **nom scientifique** et par le **nom de l'indication**, jamais par un identifiant.
 
 **1. `taxons.csv`** : une ligne par plante.
 
@@ -45,9 +45,16 @@ Un dossier contenant les 7 fichiers ci-dessous, encodés en UTF-8, avec le sépa
 | autorite | Ex. `J.F.Gmel.` |
 | famille | Ex. `Combretaceae` |
 | description | 2 ou 3 phrases simples : à quoi elle ressemble, où elle pousse |
-| habitat_region | Zones du Burkina où on la trouve (sahélienne, soudano-sahélienne, soudanienne), et si elle est vendue sur les marchés |
+| habitat_region | Zones du Burkina où on la trouve (sahélienne, soudano-sahélienne, soudanienne) |
+| ou_la_trouver | Où se la procurer : à l'état sauvage (milieu), cultivée, vendue sur les marchés (lesquels, si la source le dit), chez les herboristes |
+| saison_recolte | Période de récolte ou de disponibilité, par partie si possible |
+| prix_marche | Prix observé sur un marché, avec l'unité, le lieu et l'année, si une source le donne |
+| conservation | Comment on la sèche et la conserve, combien de temps |
+| confusions_possibles | Plantes avec lesquelles on peut la confondre, surtout si elles sont toxiques |
+| statut_protection | Espèce menacée ou protégée (UICN, loi burkinabè), surexploitation signalée |
 | precautions | Précautions générales connues, en phrases simples. Vide si aucune n'est trouvée, mais alors le dire dans le rapport |
 | toxicite_connue | `oui` ou `non`, plus une phrase |
+| interactions_medicaments | Interactions connues avec des médicaments (antipaludiques, antidiabétiques, anticoagulants, antihypertenseurs…) |
 | sources | URL ou DOI, séparés par ` | ` |
 
 **2. `noms_vernaculaires.csv`** : une ligne par nom.
@@ -80,6 +87,11 @@ Un dossier contenant les 7 fichiers ci-dessous, encodés en UTF-8, avec le sépa
 | mode | decoction, infusion, maceration, poudre, cataplasme, application_directe, autre |
 | solvant | eau, eau chaude, lait, beurre de karité, alcool, autre |
 | preparation_description | Comment c'est préparé et utilisé, d'après la source, en phrases simples, sans consigne de dose |
+| etapes_preparation | Les étapes dans l'ordre, séparées par ` > `. Ex. `Laver les feuilles > Faire bouillir 15 minutes dans l'eau > Filtrer > Laisser tiédir` |
+| voie | orale, cutanée, bain, inhalation, gargarisme, collyre, autre |
+| mode_usage_rapporte | Comment et combien de temps c'est utilisé selon la source, décrit et non prescrit. Ex. `rapporté en plusieurs prises sur 3 à 5 jours` |
+| public_deconseille | Enfants (âge), femme enceinte, allaitement, personnes âgées, maladies du foie ou des reins, si la source le dit |
+| signes_arret | Signes qui doivent faire arrêter et consulter |
 | indication | Nom du mal (liste existante ou indications.csv) |
 | precautions_specifiques | Précautions propres à cet usage |
 | contre_indication_forte | `oui` ou `non` |
@@ -125,6 +137,61 @@ Un dossier contenant les 7 fichiers ci-dessous, encodés en UTF-8, avec le sépa
 | licence | Ex. `CC BY-SA 4.0` |
 | source_url | Page Wikimedia de l'image |
 
+**8. `remedes_non_vegetaux.csv`** : remèdes d'origine animale, minérale ou à base d'eau (argile, kaolin, natron, sel, miel, beurre, graisses animales, eaux de source…), seulement s'ils sont décrits dans des enquêtes ethnographiques ou ethnopharmacologiques publiées.
+
+| Colonne | Contenu |
+|---|---|
+| nom | Nom du remède, avec ses noms locaux et leur langue |
+| origine | animale, minérale, eau |
+| matiere | De quoi il s'agit précisément |
+| indication | Mal traité |
+| preparation_description | Comment c'est préparé et utilisé, d'après la source |
+| risques | Contamination, métaux lourds, espèce protégée, risque infectieux… |
+| pays_region_usage | Où c'est rapporté |
+| sources | URL ou DOI |
+
+**9. `produits_homologues.csv`** : les médicaments traditionnels améliorés et les produits traditionnels homologués ou autorisés au Burkina (le ministère de la Santé en annonçait 18 en août 2026), puis dans les pays voisins.
+
+| Colonne | Contenu |
+|---|---|
+| nom_produit | Ex. `FACA` |
+| plantes | Noms scientifiques des plantes qui le composent |
+| indication | Pour quoi il est autorisé |
+| fabricant_ou_structure | Ex. IRSS, laboratoire, groupement |
+| statut | homologué, liste des médicaments essentiels, autorisation de mise sur le marché, autre |
+| annee | Année de l'autorisation |
+| sources | URL ou DOI |
+
+**10. `structures.csv`** : les structures publiques ou associatives liées à la médecine traditionnelle, **jamais des personnes privées**.
+
+| Colonne | Contenu |
+|---|---|
+| nom | Ex. Direction de la médecine et de la pharmacopée traditionnelles, IRSS, Fédération nationale sans frontière des tradipraticiens et herboristes de santé (FNSFTHS-BF), associations régionales, jardins botaniques, herbiers |
+| type | ministère, recherche, université, fédération, association, herbier, jardin botanique, laboratoire de production |
+| ville | |
+| role | Ce qu'elle fait, en une phrase |
+| contact_public | Site, adresse ou téléphone publiés officiellement, sinon vide |
+| sources | URL |
+
+**11. `contexte.csv`** : les faits qui servent à présenter Lafi (concours, partenaires). Un fait par ligne.
+
+| Colonne | Contenu |
+|---|---|
+| sujet | Ex. `recours à la médecine traditionnelle`, `accès à Internet`, `réglementation`, `concurrents`, `événements` |
+| fait | La donnée, avec son chiffre, son année et son périmètre (national, Ouagadougou…) |
+| source | URL ou DOI |
+
+Sujets à couvrir :
+- la part de la population qui recourt à la médecine traditionnelle au Burkina, la plus récente et nationale ;
+- la population et les ménages de Ouagadougou (RGPH 2019) ;
+- l'accès à Internet et aux smartphones, à Ouagadougou si possible ;
+- le cadre légal de la médecine traditionnelle au Burkina (lois, décrets, définition légale, statut des tradipraticiens, règles sur la vente des préparations) ;
+- les applications et sites qui documentent la médecine traditionnelle en Afrique de l'Ouest ;
+- les bases de données de produits naturels africains ;
+- les événements annuels (Semaine nationale de la médecine traditionnelle, Journée africaine de la médecine traditionnelle) ;
+- les prix pratiqués pour les préparations vendues en ligne ou au marché ;
+- l'histoire documentée du FACA.
+
 Ajoute un **`rapport.md`** court contenant :
 - ce que tu as couvert ;
 - ce que tu n'as pas trouvé ;
@@ -164,8 +231,11 @@ Donne **le lot A à Claude** et **le lot B à ChatGPT**. Ensuite, donne à chacu
 1. Usages pour : paludisme, fièvre, drépanocytose, hypertension, diabète, anémie, ictère et hépatite, ulcère d'estomac, hémorroïdes, infections urinaires, règles douloureuses, rhumatismes.
 2. Plantes à couvrir en priorité : Zanthoxylum zanthoxyloides (à la base du FACA), Cochlospermum tinctorium, Sarcocephalus latifolius, Anogeissus leiocarpus, Terminalia macroptera, Pteleopsis suberosa, Mitragyna inermis, Sclerocarya birrea, Trichilia emetica, Momordica charantia, Senna occidentalis, Securidaca longepedunculata (à documenter comme plante à risque).
 
-**Lot C (plus tard) : remèdes d'origine animale, minérale et l'eau**
-Seulement ce qui est publié dans des enquêtes ethnographiques ou ethnopharmacologiques, avec les mêmes règles, et une attention particulière aux risques (contamination, métaux lourds, espèces protégées).
+Chaque lot remplit les fichiers 1 à 7 pour ses plantes et ses maux. Les fichiers 8 à 11 sont partagés :
+- **Lot A (Claude)** : `remedes_non_vegetaux.csv` et `structures.csv` ;
+- **Lot B (ChatGPT)** : `produits_homologues.csv` et `contexte.csv`.
+
+Ne t'arrête pas aux plantes listées : ajoute toute plante fréquemment citée au Burkina pour les maux de ton lot. Le jugement sur ce qui manque se fera après.
 
 ---
 
