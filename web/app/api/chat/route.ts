@@ -23,7 +23,13 @@ import type { MatchClaimResult } from "@/lib/types";
 // plus court, pour que le repli documentaire ait le temps de partir.
 export const maxDuration = 60;
 
-const MODELE = "gemini-3.6-flash";
+// Mesuré le 24/10/2026 sur une même question : 3.6 Flash en réflexion par
+// défaut (moyenne) donnait le premier mot en 6,6 s et 1 228 jetons facturés ;
+// 3.8 Flash en réflexion basse, 2,4 s et 132 jetons, pour une réponse
+// équivalente. La réflexion basse suffit : le raisonnement utile (triage,
+// sélection des usages) est fait avant l'appel.
+const MODELE = "gemini-3.8-flash";
+const NIVEAU_REFLEXION = "low" as const;
 const GENERATION_TIMEOUT_MS = 40_000;
 const CHUNK_TIMEOUT_MS = 20_000;
 
@@ -266,6 +272,7 @@ export async function POST(req: Request) {
         // Gemini envoie le texte par gros blocs : on le redécoupe en mots,
         // espacés de 15 ms, pour une écriture régulière à l'écran.
         experimental_transform: smoothStream({ delayInMs: 15, chunking: "word" }),
+        providerOptions: { google: { thinkingConfig: { thinkingLevel: NIVEAU_REFLEXION } } },
         abortSignal: req.signal,
         onStepEnd: () => {
           etapes += 1;
