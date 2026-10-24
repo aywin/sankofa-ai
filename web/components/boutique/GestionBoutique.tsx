@@ -333,7 +333,7 @@ function Partage({ slug, nom }: { slug: string; nom: string }) {
           Partager sur WhatsApp
         </a>
         <Link href={`/b/${slug}`} className="rounded-xl px-3 py-1.5 text-sm font-medium text-emerald-800 hover:underline dark:text-emerald-200">
-          Voir ma boutique →
+          Voir ma boutique
         </Link>
       </div>
     </div>

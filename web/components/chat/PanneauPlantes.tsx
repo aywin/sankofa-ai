@@ -2,7 +2,6 @@
 
 import type { MatchClaimResult } from "@/lib/types";
 import { PlantCard } from "./PlantCard";
-import { LeafIcon } from "./icons";
 
 // Panneau des plantes proposées par une réponse de Lafi : à droite sur
 // ordinateur, en feuille par-dessus le chat sur téléphone. Chaque plante
@@ -13,27 +12,27 @@ export function PanneauPlantes({ usages, onFermer }: { usages: MatchClaimResult[
 
   const contenu = (
     <>
-      <div className="flex items-center justify-between gap-2 border-b border-neutral-200 px-4 py-3 dark:border-neutral-800">
-        <p className="flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-          <LeafIcon className="h-4 w-4 text-emerald-600" />
-          Sources : {plantes} plante{plantes > 1 ? "s" : ""}
+      <div className="flex items-center justify-between gap-2 px-5 pt-4 pb-2">
+        <p className="text-[15px] font-semibold text-neutral-900 dark:text-neutral-100">
+          Sources <span className="font-normal text-neutral-500">· {plantes} plante{plantes > 1 ? "s" : ""}</span>
         </p>
         <button
           type="button"
           onClick={onFermer}
           aria-label="Fermer le panneau"
-          className="rounded-full p-1.5 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          className="rounded-full p-1.5 text-neutral-500 transition hover:bg-black/5 hover:text-neutral-900 dark:hover:bg-white/10 dark:hover:text-white"
         >
-          ✕
+          <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden>
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
         </button>
       </div>
-      <div className="min-h-0 flex-1 space-y-2 overflow-y-auto p-4">
+      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 pt-2 pb-4">
         {usages.map((u) => (
           <PlantCard key={u.claim_id} usage={u} />
         ))}
-        <p className="pt-2 text-xs text-neutral-500">
-          Usages traditionnels documentés, pas une prescription. Ouvre une fiche pour les précautions complètes et les
-          remèdes disponibles chez des tradipraticiens.
+        <p className="px-1 pt-1 text-[13px] leading-relaxed text-neutral-500">
+          Des usages transmis, pas une ordonnance. Chaque fiche donne les précautions complètes.
         </p>
       </div>
     </>

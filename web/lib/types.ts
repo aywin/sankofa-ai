@@ -229,4 +229,5 @@ export interface MatchClaimResult extends AttestationStats {
   public_deconseille?: string | null;
   signes_arret?: string | null;
   origine?: "terrain" | "documentaire";
+  photo_url?: string | null;
 }

@@ -101,7 +101,7 @@ export function SourceCard({
             rel="noreferrer"
             className="mt-1 inline-block text-xs text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
           >
-            Référence vérifiable →
+            Référence vérifiable
           </a>
         )}
       </div>

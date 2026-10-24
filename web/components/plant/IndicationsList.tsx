@@ -39,7 +39,7 @@ export function IndicationsList({ claims }: { claims: ClaimDetail[] }) {
               href={`/laboratoire/${claim.id}`}
               className="text-xs text-emerald-700 hover:underline dark:text-emerald-400"
             >
-              Voir le raisonnement →
+              Voir le raisonnement
             </Link>
           </div>
 

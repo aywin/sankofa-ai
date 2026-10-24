@@ -108,7 +108,7 @@ export default async function PlantDetailPage({
             ))}
           </div>
           <Link href={`/remedes?plante=${taxon.slug}`} className="mt-4 inline-block text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400">
-            Voir tous les remèdes à base de {nomPrincipal} →
+            Voir tous les remèdes à base de {nomPrincipal}
           </Link>
         </section>
       )}

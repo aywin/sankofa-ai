@@ -43,8 +43,22 @@ export async function rechercherUsages(description: string): Promise<RechercheUs
   const resultats = candidats
     .filter((c) => c.similarity >= plancher)
     .slice(0, RETENUS_MAX)
-    .map((c) => ({ ...c, preparation_resume: resumePreparation(c) }));
-  return { resultats, ecartes: candidats.length - resultats.length };
+    .map((c) => ({ ...c, preparation_resume: resumePreparation(c) }))
+    // Les remèdes à risque passent après les autres : en tête du panneau, un
+    // "ne pas boire, très dangereux" inquiète plus qu'il n'aide.
+    .sort((a, b) => Number(a.contre_indication_forte) - Number(b.contre_indication_forte));
+
+  const { data: medias } = await supabaseServer
+    .from("taxon_media")
+    .select("taxon_id, url")
+    .in("taxon_id", [...new Set(resultats.map((r) => r.taxon_id))]);
+  const photos = new Map<string, string>();
+  for (const m of medias ?? []) if (!photos.has(m.taxon_id)) photos.set(m.taxon_id, m.url);
+
+  return {
+    resultats: resultats.map((r) => ({ ...r, photo_url: photos.get(r.taxon_id) ?? null })),
+    ecartes: candidats.length - resultats.length,
+  };
 }
 
 const MODES: Record<string, string> = {

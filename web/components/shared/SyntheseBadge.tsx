@@ -52,13 +52,13 @@ export function SyntheseBadge({
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
       {contreIndicationForte ? (
-        <span className="text-xs font-semibold text-red-700 dark:text-red-400">Risque signalé : demande un avis avant tout usage</span>
+        <span className="text-xs font-semibold text-red-700 dark:text-red-400">Usage délicat : demande un avis avant</span>
       ) : force === "contredite" || divergenceNote ? (
         <span className="text-xs font-semibold text-laterite-700 dark:text-laterite-300">Avis partagés entre praticiens</span>
       ) : (
         <>
           {niveauTradition > 0 && <Signal titre="Tradition" niveau={niveauTradition} libelle={forceLabelGrandPublic(force)} />}
-          <Signal titre="Science" niveau={qualitePreuve ? NIVEAU_SCIENCE[qualitePreuve] : 0} libelle={qualiteLabelGrandPublic(qualitePreuve)} />
+          {qualitePreuve && <Signal titre="Science" niveau={NIVEAU_SCIENCE[qualitePreuve]} libelle={qualiteLabelGrandPublic(qualitePreuve)} />}
         </>
       )}
       {!estPilote && <span className="text-xs text-neutral-400">Exemple de démonstration</span>}
