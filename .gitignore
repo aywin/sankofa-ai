@@ -1,0 +1,4 @@
+
+# Sources documentaires (livres sous droits) : jamais dans le dépôt
+docs/**/*.pdf
+docs/**/*.zip
