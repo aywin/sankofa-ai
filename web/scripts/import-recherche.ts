@@ -19,7 +19,12 @@ import { slugify } from "../lib/slug";
 const APPLIQUER = process.argv.includes("--appliquer");
 // Lancé depuis web/.
 const RACINE = path.resolve(process.cwd(), "../docs/recherche");
-const LOTS = ["lot-A", "lot-B"];
+// --lot=lot-sedelan (répétable) : n'importe que ces lots. Par défaut, les
+// lots A et B. Ne jamais réimporter un lot déjà importé : les usages et noms
+// sont dédoublonnés, mais pas les produits homologués ni les remèdes non
+// végétaux.
+const LOTS = process.argv.filter((a) => a.startsWith("--lot=")).map((a) => a.slice(6));
+if (LOTS.length === 0) LOTS.push("lot-A", "lot-B");
 
 type Ligne = Record<string, string>;
 
@@ -80,6 +85,7 @@ const PARTIES: Record<string, string> = {
   "plante entiere": "plante entière",
   gomme: "gomme",
   seve: "sève",
+  bulbe: "bulbe",
 };
 
 const LANGUES: Record<string, string> = {
@@ -94,6 +100,8 @@ const LANGUES: Record<string, string> = {
   lobiri: "lobiri",
   san: "san",
   gourounsi: "gourounsi",
+  lyele: "lyélé",
+  nuni: "nuni",
   "francais local": "français",
   turka: "turka",
   twi: "twi",
