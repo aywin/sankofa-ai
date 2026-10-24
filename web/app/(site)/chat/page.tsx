@@ -8,7 +8,6 @@ import { DisclaimerBanner } from "@/components/chat/DisclaimerBanner";
 import { ChatMessages, plantesProposees } from "@/components/chat/ChatMessages";
 import { PanneauPlantes } from "@/components/chat/PanneauPlantes";
 import { ChatInput } from "@/components/chat/ChatInput";
-import { ContributeModal } from "@/components/chat/ContributeModal";
 import { EVENEMENT_CONVERSATIONS } from "@/components/app/Sidebar";
 import { useAuth } from "@/lib/useAuth";
 import { loadConversations, newConversationId, saveConversation, type StoredConversation } from "@/lib/conversations";
@@ -29,14 +28,12 @@ function ChatSession({
   initialQuery,
   userId,
   onMessagesChange,
-  onContribute,
 }: {
   conversationId: string;
   initialMessages: UIMessage[];
   initialQuery: string | null;
   userId: string | null;
   onMessagesChange: (nombre: number) => void;
-  onContribute: () => void;
 }) {
   const { messages, sendMessage, regenerate, clearError, status, stop, error } = useChat({
     id: conversationId,
@@ -100,7 +97,6 @@ function ChatSession({
             messages={messages}
             status={status}
             onExampleClick={handleExampleClick}
-            onContribute={onContribute}
             panneauId={panneauId}
             onBasculerPanneau={(id) => setPanneauId((actuel) => (actuel === id ? null : id))}
           />
@@ -141,7 +137,6 @@ function ChatPageContenu() {
 
   const [conversations, setConversations] = useState<StoredConversation[] | null>(null);
   const [chargement, setChargement] = useState(true);
-  const [contributeModalOpen, setContributeModalOpen] = useState(false);
   // La conversation affichée est un état de la page, pas une valeur
   // recalculée depuis l'URL : réécrire l'URL (?c=) au premier message ne
   // doit ni changer d'identifiant ni remonter la session en cours.
@@ -216,10 +211,8 @@ function ChatPageContenu() {
         initialQuery={creees.has(activeId) ? q : null}
         userId={user?.id ?? null}
         onMessagesChange={handleMessagesChange}
-        onContribute={() => setContributeModalOpen(true)}
       />
       <DisclaimerBanner />
-      {contributeModalOpen && <ContributeModal onClose={() => setContributeModalOpen(false)} />}
     </div>
   );
 }

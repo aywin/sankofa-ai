@@ -189,8 +189,7 @@ export const ChatInput = forwardRef<
           }}
           placeholder="Décris tes symptômes, ou envoie une photo…"
           rows={1}
-          disabled={disabled}
-          className="max-h-40 flex-1 resize-none bg-transparent px-1 py-1.5 text-sm text-neutral-900 outline-none placeholder:text-neutral-500 disabled:opacity-60 dark:text-neutral-100"
+          className="max-h-40 flex-1 resize-none bg-transparent px-1 py-1.5 text-sm text-neutral-900 outline-none placeholder:text-neutral-500 dark:text-neutral-100"
         />
 
         {speechSupported && (
@@ -213,8 +212,13 @@ export const ChatInput = forwardRef<
           type={disabled ? "button" : "submit"}
           onClick={disabled ? onStop : undefined}
           disabled={!disabled && !input.trim() && !pendingFile}
-          aria-label={disabled ? "Arrêter la génération" : "Envoyer"}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
+          aria-label={disabled ? "Arrêter la réponse" : "Envoyer"}
+          title={disabled ? "Arrêter la réponse" : undefined}
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white transition disabled:cursor-not-allowed disabled:opacity-40 ${
+            disabled
+              ? "bg-neutral-900 hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
+              : "bg-emerald-600 hover:bg-emerald-700"
+          }`}
         >
           {disabled ? <StopIcon /> : <ArrowUpIcon />}
         </button>

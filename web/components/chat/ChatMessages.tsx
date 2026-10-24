@@ -5,7 +5,7 @@ import type { UIMessage } from "ai";
 import { LafiMark, LeafIcon } from "./icons";
 import { TriageBlock } from "./TriageBlock";
 import type { TriageResultat } from "@/lib/triage";
-import type { MatchClaimResult, Taxon } from "@/lib/types";
+import type { MatchClaimResult } from "@/lib/types";
 
 const EXEMPLES = [
   "J'ai de la fièvre et des frissons depuis 2 jours",
@@ -17,50 +17,8 @@ const EXEMPLES = [
 interface ToolPart {
   type: string;
   state?: string;
+  input?: { annonce?: string };
   output?: unknown;
-}
-
-interface ToolStep {
-  key: string;
-  label: string;
-  done: boolean;
-}
-
-function stepForToolPart(part: ToolPart, index: number): ToolStep {
-  const key = `${part.type}-${index}`;
-  const isDone = part.state === "output-available";
-
-  if (part.type === "tool-rechercher_par_symptome") {
-    if (isDone) {
-      const output = part.output as { resultats?: MatchClaimResult[] } | undefined;
-      const count = output?.resultats?.length ?? 0;
-      return {
-        key,
-        done: true,
-        label:
-          count > 0
-            ? `${count} usage${count > 1 ? "s" : ""} traditionnel${count > 1 ? "s" : ""} trouvé${count > 1 ? "s" : ""}`
-            : "Aucune correspondance trouvée dans le savoir traditionnel",
-      };
-    }
-    return { key, done: false, label: "Consultation du savoir traditionnel…" };
-  }
-
-  if (part.type === "tool-obtenir_details_plante") {
-    if (isDone) {
-      const output = part.output as { plante?: Taxon | null } | undefined;
-      return {
-        key,
-        done: true,
-        label: output?.plante
-          ? `Fiche de ${output.plante.nom_scientifique} consultée`
-          : "Plante introuvable",
-      };
-    }
-    return { key, done: false, label: "Vérification d'une plante…" };
-  }
-
-  return { key, done: isDone, label: isDone ? "Étape terminée" : "Étape en cours…" };
 }
 
 // Plantes proposées par une réponse — sauf en cas d'urgence : là, seul le
@@ -72,16 +30,8 @@ export function plantesProposees(message: UIMessage): MatchClaimResult[] {
   return collectPlantResults(message.parts);
 }
 
-function hasEmptySearch(parts: ToolPart[]): boolean {
-  return parts.some((part) => {
-    if (part.type !== "tool-rechercher_par_symptome" || part.state !== "output-available") return false;
-    const output = part.output as { resultats?: MatchClaimResult[] } | undefined;
-    return (output?.resultats?.length ?? 0) === 0;
-  });
-}
-
-// Les usages arrivent de deux façons : la recherche faite par le serveur
-// avant la génération (part "data-usages") et les relances par l'outil.
+// Les usages arrivent par l'outil du modèle, ou par le repli sans IA
+// (part "data-usages").
 export function collectPlantResults(parts: UIMessage["parts"]): MatchClaimResult[] {
   const seen = new Set<string>();
   const results: MatchClaimResult[] = [];
@@ -104,25 +54,22 @@ export function collectPlantResults(parts: UIMessage["parts"]): MatchClaimResult
   return results;
 }
 
+// Ce que fait le modèle, avec ses propres mots (champ "annonce" des
+// outils), en gris discret.
 function ToolSteps({ parts }: { parts: ToolPart[] }) {
   if (parts.length === 0) return null;
-  const steps = parts.map(stepForToolPart);
 
   return (
-    <div className="mb-2 space-y-1">
-      {steps.map((step) => (
-        <p
-          key={step.key}
-          className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400"
-        >
-          <span
-            className={`inline-block h-1.5 w-1.5 rounded-full ${
-              step.done ? "bg-emerald-500" : "animate-pulse bg-emerald-400"
-            }`}
-          />
-          {step.label}
-        </p>
-      ))}
+    <div className="mb-3 space-y-1">
+      {parts.map((part, i) => {
+        const fini = part.state === "output-available" || part.state === "output-error";
+        return (
+          <p key={`${part.type}-${i}`} className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
+            {!fini && <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-neutral-400" />}
+            {part.input?.annonce}
+          </p>
+        );
+      })}
     </div>
   );
 }
@@ -131,14 +78,12 @@ export function ChatMessages({
   messages,
   status,
   onExampleClick,
-  onContribute,
   panneauId,
   onBasculerPanneau,
 }: {
   messages: UIMessage[];
   status: "submitted" | "streaming" | "ready" | "error";
   onExampleClick: (text: string) => void;
-  onContribute: () => void;
   // Réponse dont les plantes sont affichées dans le panneau (null = fermé).
   panneauId: string | null;
   onBasculerPanneau: (messageId: string) => void;
@@ -190,7 +135,6 @@ export function ChatMessages({
         const triage = isUser
           ? null
           : ((message.parts.find((p) => p.type === "data-triage") as { data?: TriageResultat } | undefined)?.data ?? null);
-        const showContributeCta = !isUser && status === "ready" && hasEmptySearch(toolParts);
 
         return (
           <div
@@ -222,16 +166,6 @@ export function ChatMessages({
 
               {!isUser && <ToolSteps parts={toolParts} />}
 
-              {showContributeCta && (
-                <button
-                  type="button"
-                  onClick={onContribute}
-                  className="mb-2 rounded-xl border border-emerald-200 bg-emerald-50/60 px-3 py-2 text-xs font-medium text-emerald-700 transition hover:bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-400 dark:hover:bg-emerald-950"
-                >
-                  ➕ Tu connais un remède pour ça ? Raconte-le à Lafi
-                </button>
-              )}
-
               {textParts.map((part, i) =>
                 isUser ? (
                   <p key={i} className="whitespace-pre-wrap text-sm">
@@ -240,7 +174,7 @@ export function ChatMessages({
                 ) : (
                   <div
                     key={i}
-                    className="prose prose-neutral dark:prose-invert max-w-none text-[15px] leading-relaxed text-neutral-900 prose-p:my-2 prose-p:text-neutral-900 prose-li:text-neutral-900 prose-strong:text-neutral-900 prose-headings:mt-3 prose-headings:mb-1.5 prose-hr:my-4 dark:text-neutral-100 dark:prose-p:text-neutral-100 dark:prose-li:text-neutral-100"
+                    className="prose prose-neutral dark:prose-invert max-w-none text-[15px] leading-relaxed text-neutral-900 prose-p:my-2.5 prose-p:text-neutral-900 prose-li:text-neutral-900 prose-strong:font-semibold prose-strong:text-neutral-900 prose-em:text-neutral-700 prose-a:font-medium prose-a:text-emerald-700 prose-a:underline-offset-2 dark:text-neutral-100 dark:prose-p:text-neutral-100 dark:prose-li:text-neutral-100 dark:prose-strong:text-white dark:prose-em:text-neutral-300 dark:prose-a:text-emerald-400"
                   >
                     <ReactMarkdown>{part.text}</ReactMarkdown>
                   </div>
@@ -252,24 +186,17 @@ export function ChatMessages({
                   type="button"
                   onClick={() => onBasculerPanneau(message.id)}
                   aria-expanded={panneauId === message.id}
-                  className={`mt-3 flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-emerald-500 ${
+                  className={`mt-3 inline-flex max-w-full items-center gap-2 rounded-full border px-3 py-1.5 text-sm outline-none transition focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                     panneauId === message.id
-                      ? "border-emerald-400 bg-emerald-50 dark:border-emerald-700 dark:bg-emerald-950/50"
-                      : "border-neutral-200 bg-white hover:border-emerald-300 dark:border-neutral-800 dark:bg-neutral-900"
+                      ? "border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800"
+                      : "border-neutral-200 hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900"
                   }`}
                 >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">
-                    <LeafIcon className="h-4 w-4" />
+                  <LeafIcon className="h-3.5 w-3.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                  <span className="shrink-0 font-medium text-neutral-700 dark:text-neutral-200">
+                    {noms.length} source{noms.length > 1 ? "s" : ""}
                   </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                      Sources : {noms.length} plante{noms.length > 1 ? "s" : ""} documentée{noms.length > 1 ? "s" : ""}
-                    </span>
-                    <span className="block truncate text-xs text-neutral-500">{noms.join(", ")}</span>
-                  </span>
-                  <span className="shrink-0 text-xs font-medium text-emerald-700 dark:text-emerald-400">
-                    {panneauId === message.id ? "Fermer" : "Ouvrir"}
-                  </span>
+                  <span className="truncate text-neutral-500">{noms.join(", ")}</span>
                 </button>
               )}
             </div>
@@ -278,12 +205,7 @@ export function ChatMessages({
       })}
 
       {status === "submitted" && (
-        <div className="flex justify-start">
-          <p className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-            <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-            Lafi consulte les usages documentés…
-          </p>
-        </div>
+        <span aria-label="Lafi réfléchit" className="inline-block h-2 w-2 animate-pulse rounded-full bg-neutral-400" />
       )}
     </div>
   );

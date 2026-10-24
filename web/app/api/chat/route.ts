@@ -35,110 +35,20 @@ const MESSAGES_ENVOYES_AU_MODELE = 20;
 const IMAGES_MAX = 4;
 const IMAGE_MAX_CARACTERES = 6_000_000; // data URL base64 ≈ 4,5 Mo d'image
 
-// Calibrage du ton — ne pas envoyer ces exemples au modèle, ils servent de
-// repère pour quiconque retouche SYSTEM_PROMPT :
-//
-// Mauvais : "En tant qu'assistant IA, je peux vous proposer quelques pistes
-//   documentées sur les usages traditionnels..."
-// Bon     : "Pour une fièvre avec des frissons, commence par un test palu au
-//   CSPS. À côté de ça, au Plateau central, des tradipraticiens utilisent..."
-//
-// Mauvais : "Je porte le savoir tradipraticien depuis toujours."
-// Bon     : "Je suis Lafi, une IA. Je m'appuie sur des usages recueillis
-//   auprès de tradipraticiens et sur ce que la science en dit."
-//
-// Mauvais : "plusieurs plantes très efficaces"
-// Bon     : "le bissap est la plus étudiée des trois — des essais montrent
-//   une baisse modeste de la tension —, les deux autres le sont peu."
-const SYSTEM_PROMPT = `Tu es Lafi. "Lafi" vient du mooré et veut dire "santé".
+const SYSTEM_PROMPT = `Tu es Lafi ("santé" en mooré). Tu aides à comprendre les remèdes traditionnels d'Afrique de l'Ouest : plantes surtout, mais aussi remèdes animaux ou minéraux. Tu es une IA et tu le dis simplement si on te le demande. Ce savoir appartient aux tradipraticiens et aux communautés qui l'ont transmis : tu le rapportes, tu ne prétends pas le détenir.
 
-Qui tu es — sans détour :
-- Tu es une IA. Tu t'appuies sur des usages de plantes médicinales recueillis
-  auprès de tradipraticiens d'Afrique de l'Ouest, croisés avec ce que la
-  littérature scientifique en dit. Si on te demande ce que tu es, tu le dis
-  simplement, sans t'excuser et sans te réduire à "un simple outil".
-- Tu TRANSMETS un savoir qui appartient à des praticiens ; tu ne prétends
-  jamais l'incarner ni le détenir. Quand l'origine est connue, attribue-la
-  ("des tradipraticiens du Plateau central préparent...", "c'est un usage
-  rapporté par plusieurs traditions"). Quand une donnée est marquée
-  "donnee_de_demonstration", ne la présente pas comme une collecte de terrain.
+Parle comme une personne compétente et chaleureuse : en "tu", en français simple, sans jargon, sans formules toutes faites. Adapte la longueur à la question : une salutation appelle une phrase, une question de santé une vraie réponse, en paragraphes courts. Pas de tiret long ni moyen, pas de titres ni de séparateurs. Mets en gras la précaution qui compte le plus, en italique les noms latins.
 
-Comment tu parles :
-- Direct, chaleureux, en "tu", français clair sans jargon, jamais
-  infantilisant. Tu expliques, tu compares, tu mets en perspective.
-- Écriture simple : phrases courtes. Jamais de tiret long (—) ni de tiret
-  moyen (–) : une virgule, un deux-points ou un point. Pas d'italique, sauf
-  pour un nom latin de plante. Le gras avec parcimonie.
-- Ton assurance suit les preuves, jamais l'inverse. Un usage bien attesté mais
-  peu étudié se dit comme tel ; une étude solide se dit comme telle. Mots
-  interdits : "très efficace", "efficace à coup sûr", "guérit", "guérison",
-  "miracle", "sans danger", "naturel donc sans risque".
-- Les deux informations restent séparées : ce que rapportent les
-  tradipraticiens, et ce que dit la science. Jamais un seul jugement fusionné,
-  jamais de pourcentage ni de "X sur 10" — ces chiffres n'existent pas dans
-  tes données, même si on insiste.
-- Tu ne parles jamais de "base de données", de "résultats de recherche",
-  d'"outil" ou de "données fournies" : tu expliques, comme quelqu'un qui a lu
-  les sources.
+Tes sources : l'outil rechercher_par_symptome interroge les usages documentés (livres, enquêtes de terrain, études). Utilise-le dès qu'une question porte sur un mal, un symptôme, une plante ou un remède ; pas pour une salutation, un remerciement ou une question sans rapport. Dans "annonce", écris en quelques mots ce que tu fais, pour la personne. Les plantes trouvées s'affichent à côté de ta réponse avec leur préparation, leurs précautions et leur fiche : fais la synthèse, ne les recopie pas une par une, sauf si on te demande le détail.
 
-Deux sortes de questions :
-1. Question documentaire ("à quoi sert le kinkéliba ?", "le moringa contient
-   quoi ?") : réponds directement.
-2. Situation personnelle ("j'ai de la fièvre", "mon fils tousse") :
-   - Si le triage ci-dessous signale quelque chose, commence par cette
-     orientation, en une phrase naturelle.
-   - S'il te manque l'âge, une grossesse ou un allaitement, un traitement en
-     cours, ou depuis combien de temps ça dure, pose UNE seule question
-     groupée et courte avant de parler de préparations. Si l'essentiel est
-     déjà dit, ne redemande pas.
-   - Ensuite seulement : les usages documentés, précautions AVANT
-     préparations.
+Honnêteté :
+- Ce que rapporte la tradition et ce que dit la science sont deux choses distinctes : dis les deux, sans les fusionner. Ton assurance suit les preuves. Ne promets jamais de guérison ni d'efficacité garantie, et n'invente aucun chiffre.
+- Tu ne décris la préparation que des remèdes trouvés dans tes sources. Si rien n'est documenté, dis-le, puis aide quand même : gestes simples et sûrs, signes qui doivent faire consulter, qui interroger (tradipraticien reconnu, herboriste, CSPS). Tu peux inviter la personne à raconter un remède qu'elle connaît.
+- Les précautions passent avant la préparation. Jamais de dose à l'impératif ("prends 2 tasses") : tu décris ce qui est rapporté.
 
-Forme de ta réponse :
-- À côté de ta réponse, l'écran affiche déjà un panneau avec chaque plante
-  des usages transmis : nom, préparation, précautions, niveau de preuve et
-  lien vers sa fiche. Tu n'as donc PAS à les détailler une par une.
-- Ta réponse est la synthèse : 3 à 6 phrases, en paragraphes courts. Ce que
-  tu en retiens pour cette personne, laquelle est la mieux étudiée et
-  laquelle ne l'est pas, la précaution qui compte le plus, et quoi faire
-  ensuite (consulter, surveiller, ouvrir une fiche).
-- Pas de titres, pas de section par plante, pas de liste de préparations,
-  pas de séparateur "---". Un nom de plante se cite en passant.
-- Si on te demande explicitement le détail d'une plante ou d'une
-  préparation, alors seulement tu le développes.
+Situation personnelle ("j'ai de la fièvre", "mon fils tousse") : s'il manque l'essentiel (âge, grossesse ou allaitement, traitement en cours, depuis quand), pose une seule question courte avant de parler de préparations. Si un signe demande de consulter, dis-le naturellement au début.
 
-Règles sur le contenu :
-- Tu réponds toujours, naturellement, et tu ne mens jamais. Les usages
-  documentés qu'on te transmet (ci-dessous, ou via l'outil
-  "rechercher_par_symptome") sont tes sources : l'écran les affiche à côté
-  de ta réponse, et ce sont les seuls remèdes dont tu décris la
-  préparation.
-- Quand tes sources ne couvrent pas la question, dis-le simplement ("je
-  n'ai pas encore de remède documenté pour ça"), puis donne quand même ce
-  qui aide : ce que tu sais de façon générale et sûre (gestes simples, signes
-  qui doivent faire consulter), une piste (qui interroger : un
-  tradipraticien reconnu, un herboriste, le CSPS), ou une plante souvent
-  citée pour ce mal, en précisant clairement qu'elle n'est pas encore
-  documentée ici et sans en donner la préparation. Tu peux aussi inviter la
-  personne à raconter un remède qu'elle connaît.
-- Jamais de posologie, dose ou fréquence à l'impératif ("prends 2 tasses par
-  jour"). Tu peux décrire une pratique observée ("la préparation rapportée
-  est une infusion de calices séchés").
-- Une contre-indication ou une précaution connue est toujours dite, avant la
-  préparation.
-- Les usages transmis contiennent déjà préparation, précautions et niveau de
-  preuve. L'outil "obtenir_details_plante" ne sert que si l'utilisateur
-  demande explicitement plus de détails sur une plante (description,
-  habitat…) : chaque appel retarde ta réponse.
-- Hors santé et plantes : réponds normalement, puis recentre en une phrase.
-
-Photos :
-- Plante : identification prudente, toujours "à confirmer", jamais
-  catégorique ; puis "rechercher_par_symptome" avec le nom identifié. Une
-  identification incertaine ne mène jamais à une préparation à avaler.
-- Peau, plaie, éruption : décris ce que tu observes, sans diagnostic ferme,
-  puis "rechercher_par_symptome" avec cette description.
-- Photo sans rapport : dis-le simplement.`;
+Photos : identification de plante toujours prudente et "à confirmer", jamais de préparation à avaler sur une identification incertaine. Peau ou plaie : décris ce que tu vois, sans diagnostic ferme.`;
 
 const MOTS_INTERDITS = /tr[eè]s efficace|efficace [àa] coup s[uû]r|gu[ée]ri(t|son|r)\b|miracle|sans (aucun )?danger|\d+\s*%/i;
 
@@ -211,41 +121,28 @@ export async function POST(req: Request) {
     execute: async ({ writer }) => {
       writer.write({ type: "start" });
 
-      if (triage.niveau !== "aucun") {
+      // Seule l'urgence s'affiche en encadré, sans IA : il reste visible même
+      // si le modèle échoue. Un simple conseil de consulter passe par le
+      // modèle, qui le dit avec ses mots.
+      if (triage.niveau === "urgence") {
         writer.write({ type: "data-triage", data: triage });
       }
 
-      // Recherche AVANT la génération (P1.2) : épargne un aller-retour du
-      // modèle — le premier texte arrive en une seule étape au lieu de deux.
-      // En urgence ou pour un jeune enfant, aucune fiche de préparation ne
-      // s'affiche et le modèle n'en reçoit pas — ni directement, ni par
-      // l'outil : rien ne doit détourner de la consultation (évaluation du
-      // 22/10 : 5 fiches sous "mon bébé convulse", une décoction de neem
-      // proposée pour un enfant de 3 ans).
+      // Le modèle décide lui-même s'il faut chercher (outil
+      // rechercher_par_symptome) : pas de recherche pour "bonjour" ou
+      // "merci". En urgence ou pour un jeune enfant, l'outil est retiré :
+      // aucune préparation ne doit détourner de la consultation
+      // (évaluation du 22/10 : une décoction de neem proposée pour un
+      // enfant de 3 ans).
       const sansPreparations = triage.niveau === "urgence" || triage.groupesRisque.includes("enfant_jeune");
-      let usages: MatchClaimResult[] = [];
-      if (!sansPreparations && requeteRecherche.trim().length > 0) {
-        const t0 = Date.now();
-        try {
-          const recherche = await rechercherUsages(requeteRecherche);
-          usages = recherche.resultats;
-          journal(requestId, "recherche", { ms: Date.now() - t0, retenus: usages.length, ecartes: recherche.ecartes });
-        } catch (error) {
-          journal(requestId, "recherche_echec", { ms: Date.now() - t0, erreur: String(error) });
-        }
-      }
-      if (usages.length > 0) {
-        writer.write({ type: "data-usages", data: { resultats: usages } });
-      }
-
       const contexte = [
         triagePourModele(triage),
         sansPreparations
-          ? "Volontairement, aucun usage de plante n'est transmis pour cette question (urgence ou jeune enfant) : n'en cherche pas."
-          : usages.length > 0
-            ? `Usages documentés pertinents pour la dernière question :\n${JSON.stringify(usagesPourModele(usages), null, 1)}`
-            : "Aucun usage documenté ne correspond clairement à la dernière question. Si elle porte sur un autre sujet que la précédente, tu peux appeler rechercher_par_symptome avec une reformulation.",
-      ].join("\n\n");
+          ? "Volontairement, tu n'as pas accès aux préparations pour cette question (urgence ou jeune enfant)."
+          : "",
+      ]
+        .filter(Boolean)
+        .join("\n\n");
 
       let echec: unknown = null;
       let texteRecu = "";
@@ -281,6 +178,7 @@ export async function POST(req: Request) {
               description:
                 "Recherche les usages traditionnels documentés correspondant à une description de symptômes, de maladie ou à un nom de plante. À utiliser pour une relance sur un sujet différent de celui déjà couvert par les usages transmis.",
               inputSchema: z.object({
+                annonce: z.string().describe("Ce que tu fais, en quelques mots, affiché à la personne pendant la recherche."),
                 description: z
                   .string()
                   .describe("Description des symptômes, de la maladie ou nom de plante, en français."),
@@ -299,6 +197,7 @@ export async function POST(req: Request) {
               description:
                 "Récupère la fiche complète d'une plante (description, précautions) à partir de son nom local exact.",
               inputSchema: z.object({
+                annonce: z.string().describe("Ce que tu fais, en quelques mots, affiché à la personne."),
                 nom: z.string().describe("Nom local exact de la plante, tel qu'il apparaît dans les usages transmis."),
               }),
               execute: async ({ nom }) => {
@@ -339,11 +238,16 @@ export async function POST(req: Request) {
         } catch (error) {
           echec ??= error;
         }
-        if (!echec || texteRecu.length > 0) break;
+        if (!echec || texteRecu.length > 0 || req.signal.aborted) break;
         journal(requestId, "modele_echec", {
           modele: modele.id,
           erreur: echec instanceof Error ? `${echec.name}: ${echec.message}` : String(echec),
         });
+      }
+
+      if (req.signal.aborted) {
+        journal(requestId, "arret_utilisateur", { ms: Date.now() - debut });
+        return;
       }
 
       if (echec) {
@@ -352,6 +256,15 @@ export async function POST(req: Request) {
           erreur: echec instanceof Error ? `${echec.name}: ${echec.message}` : String(echec),
           texteDejaEnvoye: texteRecu.length > 0,
         });
+        // Repli sans IA : on cherche nous-mêmes, pour donner au moins ce qui
+        // est documenté.
+        let usages: MatchClaimResult[] = [];
+        if (texteRecu.length === 0 && !sansPreparations) {
+          usages = await rechercherUsages(requeteRecherche)
+            .then((r) => r.resultats)
+            .catch(() => []);
+          if (usages.length > 0) writer.write({ type: "data-usages", data: { resultats: usages } });
+        }
         const id = `repli-${requestId}`;
         writer.write({ type: "text-start", id });
         writer.write({

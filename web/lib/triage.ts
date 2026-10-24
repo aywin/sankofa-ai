@@ -191,17 +191,19 @@ export function evaluerTriage(texteUtilisateur: string): TriageResultat {
   return { niveau, titre, conseils: [...new Set(conseils)], groupesRisque };
 }
 
-// Résumé destiné au modèle — pour qu'il ne contredise jamais le bloc.
+// Résumé destiné au modèle : seule l'urgence s'affiche en encadré, le
+// reste, c'est le modèle qui le dit.
 export function triagePourModele(r: TriageResultat): string {
   if (r.niveau === "aucun" && r.groupesRisque.length === 0) {
     return "Triage automatique : aucun signe d'alerte repéré dans les mots de l'utilisateur (ce qui ne prouve pas l'absence de gravité).";
   }
   return [
-    `Triage automatique : niveau "${r.niveau}". L'interface affiche DÉJÀ au-dessus de ta réponse un bloc d'orientation : "${r.titre}" : ${r.conseils.join(" ")}`,
-    r.groupesRisque.length > 0 ? `Groupes à risque repérés : ${r.groupesRisque.join(", ")}.` : "",
     r.niveau === "urgence"
-      ? "Ta réponse commence par confirmer cette orientation en une phrase, sans dramatiser. Ne propose AUCUNE préparation à la place d'une consultation ; tu peux seulement dire ce qui peut accompagner une fois l'avis médical obtenu, si on te le demande."
-      : "Reste cohérent avec ce bloc : rappelle l'orientation en une phrase naturelle, sans recopier le bloc mot pour mot.",
+      ? `Triage automatique : urgence. L'écran affiche DÉJÀ au-dessus de ta réponse un encadré "${r.titre}" : ${r.conseils.join(" ")} Commence par confirmer cette orientation en une phrase, sans dramatiser et sans recopier l'encadré. Ne propose AUCUNE préparation à la place d'une consultation.`
+      : r.conseils.length > 0
+        ? `Triage automatique (repéré sur des mots-clés) : ${r.conseils.join(" ")} Si la personne décrit sa propre situation ou celle d'un proche, dis-le avec tes mots au début de ta réponse, en une ou deux phrases. Si c'est une question générale sur un remède, glisse-le seulement s'il est utile.`
+        : "",
+    r.groupesRisque.length > 0 ? `Groupes à risque repérés : ${r.groupesRisque.join(", ")}.` : "",
     // Les usages documentés décrivent des pratiques chez l'adulte : les
     // présenter pour un enfant de 3 ans revient à suggérer une dose
     // pédiatrique qu'aucune source ne donne (évaluation du 22/10).
